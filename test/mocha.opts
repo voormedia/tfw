@@ -1,0 +1,6 @@
+test/unit
+--recursive
+--compilers js:babel-register
+--require test
+--timeout 4000
+--reporter list

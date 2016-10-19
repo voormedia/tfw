@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-class-properties",
+    "transform-decorators-legacy",
+    "transform-do-expressions",
+    "transform-es2015-modules-commonjs",
+    "transform-export-extensions",
+    "transform-flow-strip-types",
+    "transform-function-bind",
+    "transform-strict-mode"
+  ]
+}
