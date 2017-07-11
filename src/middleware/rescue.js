@@ -30,7 +30,7 @@ export default function rescue({terminationGrace = 25000}: RescueOptions = {}): 
       if (req.cancelled) {
         throw new ServiceUnavailable("Please retry the request")
       } else {
-        await sleep(600000)
+        return new Promise(() => {})
       }
     }
 
