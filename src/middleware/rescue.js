@@ -48,6 +48,8 @@ export default function rescue({terminationGrace = 25000}: RescueOptions = {}): 
       ctx.body = err
       ctx.status = err.status
     } finally {
+      /* Clear timer. It frees setTimeout reference to this context, potentially
+         conserving a lot of memory if most requests are short. */
       timer.clear()
     }
   }

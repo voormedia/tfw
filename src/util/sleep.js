@@ -1,6 +1,6 @@
 /* @flow */
 export default function sleep(time: number) {
-  return new Promise(resolve => setTimeout(resolve, time))
+  return new Timer(time).sleep()
 }
 
 export class Timer {
