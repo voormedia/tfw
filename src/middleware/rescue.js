@@ -2,7 +2,7 @@
 /* eslint-disable no-ex-assign */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-import sleep from "../util/sleep"
+import {Timer} from "../util/sleep"
 
 import {ServiceUnavailable, InternalServerError} from "../errors"
 
@@ -23,8 +23,9 @@ export default function rescue({terminationGrace = 25000}: RescueOptions = {}): 
 
     /* Cancel request if server is stopping, but only after a grace period.
        This allows a request to be handled if there is enough time. */
+    const timer = new Timer(terminationGrace)
     const stop = async () => {
-      await sleep(terminationGrace)
+      await timer.sleep()
 
       let req: CancellingRequest = ctx.req
       if (req.cancelled) {
@@ -46,6 +47,8 @@ export default function rescue({terminationGrace = 25000}: RescueOptions = {}): 
 
       ctx.body = err
       ctx.status = err.status
+    } finally {
+      timer.clear()
     }
   }
 }
