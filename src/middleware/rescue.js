@@ -1,8 +1,6 @@
 /* @flow */
 /* eslint-disable no-ex-assign */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
-import {Timer} from "../util/sleep"
+import Timer from "../util/timer"
 
 import {ServiceUnavailable, InternalServerError} from "../errors"
 
