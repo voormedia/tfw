@@ -16,7 +16,6 @@ export default function write(): Middleware {
 
     let streaming = false
 
-    /* https://github.com/facebook/flow/issues/285 */
     ctx.stream = stream => {
       // if (stream instanceof Readable) throw new Error
       setHeaders()
