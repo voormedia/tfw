@@ -1,7 +1,9 @@
 /* @flow */
 import routerify from "./util/routerify"
 
-export type RouteOptions = {method: string}
+export type RouteOptions = {|
+  method: string,
+|}
 
 export function route(pattern: string, {method}: RouteOptions): Decorator {
   return (object: Object, key: ?string, descriptor: ?Descriptor) => {

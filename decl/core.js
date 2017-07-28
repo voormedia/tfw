@@ -13,6 +13,8 @@ declare type Decorator = (
 
 declare class Console {
   /* https://github.com/facebook/flow/blob/master/lib/core.js */
+  constructor(stdout: stream$Writable, stderr: stream$Writable): void;
+
   error(...data: any[]): void;
   log(...data: any[]): void;
   trace(...data: any[]): void;

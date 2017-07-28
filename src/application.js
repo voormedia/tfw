@@ -17,12 +17,12 @@ import * as middleware from "./middleware"
 import type {Next, Stack} from "./middleware"
 import type {Request, Response} from "./context"
 
-export type ApplicationOptions = {
+export type ApplicationOptions = {|
   port?: number,
   server?: http.Server,
   logger?: Logger,
   router?: Router,
-}
+|}
 
 type IdlingSocket = net$Socket & {
   idle?: boolean,
@@ -51,13 +51,13 @@ export class Application {
   requests: Set<CancellingRequest> = new Set
 
   /* Start a new application with the given options in next tick. */
-  static start(options: ApplicationOptions = {}) {
+  static start(options: ApplicationOptions = Object.seal({})) {
     const app = new Application(options)
     process.nextTick(() => {app.start()})
     return app
   }
 
-  constructor(options: ApplicationOptions = {}) {
+  constructor(options: ApplicationOptions = Object.seal({})) {
     /* Override properties. */
     Object.assign(this, options)
 

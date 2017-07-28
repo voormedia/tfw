@@ -1,7 +1,9 @@
 /* @flow */
 import {route} from "./route"
 
-export type ResourceOptions = {singular: boolean}
+export type ResourceOptions = {|
+  singular: boolean,
+|}
 
 export function resource({singular}: ResourceOptions = {singular: false}): Decorator {
   const single = [

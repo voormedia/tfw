@@ -3,7 +3,7 @@
 import http from "http"
 
 import type {Context, Next, Middleware} from "../middleware"
-import type Logger from "../util/logger"
+import type {HttpRequest, Logger} from "../util/logger"
 
 type StatsSocket = net$Socket & {
   bytesReadPreviously?: number,
@@ -26,6 +26,8 @@ export default function log(logger: Logger): Middleware {
     const bytesReadPreviously = socket.bytesReadPreviously || 0
     const bytesWrittenPreviously = socket.bytesWrittenPreviously || 0
 
+    const startTime = process.hrtime()
+
     try {
       return await next()
     } finally {
@@ -43,14 +45,17 @@ export default function log(logger: Logger): Middleware {
 
       const userAgent = ctx.req.headers["user-agent"]
       const referer = ctx.req.headers["referer"]
-      let remoteIp = ctx.req.socket.remoteAddress
 
+      const [sec, nano] = process.hrtime(startTime)
+      const latency = `${(sec + 1e-9 * nano).toFixed(3)}s`
+
+      let remoteIp = ctx.req.socket.remoteAddress
       const forwarded = ctx.req.headers["x-forwarded-for"]
       if (forwarded) {
         remoteIp = forwarded.split(",").shift()
       }
 
-      const httpRequest = {
+      const httpRequest: HttpRequest = {
         requestMethod,
         requestUrl,
         requestSize,
@@ -59,6 +64,7 @@ export default function log(logger: Logger): Middleware {
         userAgent,
         remoteIp,
         referer,
+        latency,
       }
 
       if (ctx.data.error) {

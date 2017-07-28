@@ -1,5 +1,5 @@
 /* @flow */
-export type HttpRequest = {
+export type HttpRequest = {|
   requestMethod: string,
   requestUrl: string,
   requestSize: number,
@@ -8,15 +8,16 @@ export type HttpRequest = {
   userAgent?: string,
   remoteIp?: string,
   referer?: string,
+  latency?: string,
   cacheHit?: boolean,
   cacheValidatedWithOriginServer?: boolean,
-}
+|}
 
-export type ReportLocation = {
+export type ReportLocation = {|
   filePath?: string,
   lineNumber?: number,
   functionName?: string,
-}
+|}
 
 export type LogSeverity = "DEBUG" | "INFO" | "NOTICE" | "WARNING" | "ERROR" | "CRITICAL" | "ALERT" | "EMERGENCY"
 
@@ -24,20 +25,20 @@ export type LogSeverity = "DEBUG" | "INFO" | "NOTICE" | "WARNING" | "ERROR" | "C
 /* https://github.com/GoogleCloudPlatform/fluent-plugin-google-cloud/blob/master/lib/fluent/plugin/out_google_cloud.rb */
 /* Note, this is actually the contents of jsonPayload, so it can contain
    arbitrary fields! */
-export type LogEntry = {
+export type LogEntry = {|
   time: Date,
   message: string,
   severity: LogSeverity,
   httpRequest?: HttpRequest,
-}
+|}
 
-type LogContext = {
+type LogContext = {|
   httpRequest?: HttpRequest,
-}
+|}
 
-export default class Logger {
+export class Logger {
   console: console.Console
-  formatter: Object => string
+  formatter: LogEntry => string
 
   static JSON = JSON.stringify
 
@@ -90,7 +91,7 @@ export default class Logger {
     Object.seal(this)
   }
 
-  write(severity: LogSeverity, message: mixed, context: LogContext = {}) {
+  write(severity: LogSeverity, message: mixed, context: LogContext = Object.seal({})) {
     const entry: LogEntry = {
       time: new Date,
       message: typeof message === "object" ? JSON.stringify(message) : String(message),
@@ -124,3 +125,5 @@ export default class Logger {
     this.write("CRITICAL", message, {httpRequest})
   }
 }
+
+export default Logger

@@ -56,6 +56,10 @@ describe("log", function() {
       it("should log remote ip", function() {
         assert.equal(this.entry.httpRequest.remoteIp, "::ffff:127.0.0.1")
       })
+
+      it("should log latency", function() {
+        assert.match(this.entry.httpRequest.latency, /\d+\.\d{3}s/)
+      })
     })
 
     describe("with proxy", function() {
@@ -105,6 +109,10 @@ describe("log", function() {
       it("should log remote ip", function() {
         assert.equal(this.entry.httpRequest.remoteIp, "185.110.132.232")
       })
+
+      it("should log latency", function() {
+        assert.match(this.entry.httpRequest.latency, /\d+\.\d{3}s/)
+      })
     })
   })
 
@@ -153,6 +161,10 @@ describe("log", function() {
 
       it("should log remote ip", function() {
         assert.equal(this.entry.httpRequest.remoteIp, "::ffff:127.0.0.1")
+      })
+
+      it("should log latency", function() {
+        assert.match(this.entry.httpRequest.latency, /\d+\.\d{3}s/)
       })
     })
   })
