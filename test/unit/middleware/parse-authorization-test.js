@@ -97,6 +97,31 @@ describe("parse authorization", function() {
     })
   })
 
+  describe("with blank header", function() {
+    before(async function() {
+      let ctx
+      await test.request(
+        test.createStack(write(), parseAuthorization(), function() {
+          ctx = this
+        }), {
+          headers: {
+            "Authorization": "Basic"
+          }
+        }
+      )
+
+      this.ctx = ctx
+    })
+
+    it("should not assign username", function() {
+      assert.equal(this.ctx.data.username, undefined)
+    })
+
+    it("should not assign password", function() {
+      assert.equal(this.ctx.data.password, undefined)
+    })
+  })
+
   describe("without non basic authorization", function() {
     before(async function() {
       let ctx

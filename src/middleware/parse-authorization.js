@@ -10,8 +10,8 @@ export default function parseAuthorization(): Middleware {
     if (auth) {
       const [type, credentials] = auth.split(/\s+/)
 
-      if (type.toLowerCase() === "basic") {
-        const [username, password] = new Buffer(credentials, "base64").toString().split(":")
+      if (type.toLowerCase() === "basic" && credentials) {
+        const [username, password] = Buffer.from(credentials, "base64").toString().split(":")
         ctx.data.username = username || ""
         ctx.data.password = password || ""
       }

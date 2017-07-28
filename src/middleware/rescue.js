@@ -25,7 +25,7 @@ export default function rescue({terminationGrace = 25000}: RescueOptions = {}): 
     const stop = async () => {
       await timer.sleep()
 
-      let req: CancellingRequest = ctx.req
+      const req: CancellingRequest = ctx.req
       if (req.cancelled) {
         throw new ServiceUnavailable("Please retry the request")
       } else {
