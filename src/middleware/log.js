@@ -70,7 +70,11 @@ export default function log(logger: Logger): Middleware {
       if (ctx.data.error) {
         logger.error(ctx.data.error.stack || ctx.data.error.toString(), httpRequest)
       } else {
-        logger.info(statusCodes.get(status), httpRequest)
+        if (status >= 500) {
+          logger.warning(statusCodes.get(status), httpRequest)
+        } else {
+          logger.info(statusCodes.get(status), httpRequest)
+        }
       }
     }
   }
