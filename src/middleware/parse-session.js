@@ -73,8 +73,10 @@ export default function parseSession({name = "sess", keys, maxAge = 90 * day}: S
           /* Only set session if it has changed. */
           cookies.set(name, encoded, {maxAge})
         }
-      } else if (cookie) {
-        cookies.set(name, "")
+      } else if (cookies.get(name, {signed: false})) {
+        /* Session cookies were invalid. Clear session & signature. */
+        cookies.set(name, null, {signed: false})
+        cookies.set(name + ".sig", null, {signed: false})
       }
     }
   }

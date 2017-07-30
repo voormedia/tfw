@@ -110,7 +110,7 @@ describe("parse session", function() {
     })
 
     it("should clear session signature", function() {
-      // assert.equal(this.res.headers["set-cookie"][1], "sess.sig=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly")
+      assert.equal(this.res.headers["set-cookie"][1], "sess.sig=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly")
     })
   })
 
@@ -142,7 +142,7 @@ describe("parse session", function() {
     })
 
     it("should clear session", function() {
-      // assert.equal(this.res.headers["set-cookie"][1], "sess=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly")
+      assert.equal(this.res.headers["set-cookie"][1], "sess=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly")
     })
   })
 
