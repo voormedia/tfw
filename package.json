@@ -19,7 +19,7 @@
     "build": "rm -rf lib && node_modules/.bin/babel src --out-dir lib --source-maps inline --ignore node_modules"
   },
   "dependencies": {
-    "ajv": "^4.11.5",
+    "ajv": "^5.2.2",
     "content-type": "^1.0.2",
     "cookies": "^0.7.0"
   },
@@ -40,7 +40,7 @@
     "babel-plugin-transform-strict-mode": "^6.8.0",
     "babel-plugin-undeclared-variables-check": "^6.8.0",
     "benchmark": "^2.1.0",
-    "chai": "^3.5.0",
+    "chai": "^4.1.0",
     "eslint": ">= 0",
     "eslint-plugin-flowtype": "^2.30.4",
     "flow-bin": ">= 0",

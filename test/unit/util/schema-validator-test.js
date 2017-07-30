@@ -111,8 +111,15 @@ describe("schema validator", function() {
 
     describe("failing", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: "x", bar: "y"})
+        const errors = validator.validate(this.schema, {foo: "//example.com/foo/bar", bar: "y"})
         assert.deepEqual(errors, ["'foo' should be formatted as url", "'bar' should be formatted as email address"])
+      })
+    })
+
+    describe("succeeding", function() {
+      it("should not report error", function() {
+        const errors = validator.validate(this.schema, {foo: "https://example.com/foo/bar", bar: "john+doe@foo.example.com"})
+        assert.deepEqual(errors, [])
       })
     })
   })
@@ -121,8 +128,8 @@ describe("schema validator", function() {
     before(function() {
       this.schema = {
         properties: {
-          foo: {minimum: 1, exclusiveMinimum: true},
-          bar: {minimum: 1, exclusiveMinimum: false},
+          foo: {exclusiveMinimum: 1},
+          bar: {minimum: 1},
         },
       }
     })
@@ -139,8 +146,8 @@ describe("schema validator", function() {
     before(function() {
       this.schema = {
         properties: {
-          foo: {maximum: 1, exclusiveMaximum: true},
-          bar: {maximum: 1, exclusiveMaximum: false},
+          foo: {exclusiveMaximum: 1},
+          bar: {maximum: 1},
         },
       }
     })

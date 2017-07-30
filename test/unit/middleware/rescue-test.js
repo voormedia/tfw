@@ -72,7 +72,7 @@ describe("rescue", function() {
     })
 
     it("should save error", function() {
-      assert.deepEqual(this.ctx.data.error, new Error)
+      assert.equal(this.ctx.data.error.constructor, Error)
     })
   })
 

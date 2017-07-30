@@ -1,17 +1,10 @@
 /* @flow */
 import ajv from "ajv"
-import url from "url"
 
 export function validate(schema: Object, body: mixed) {
   const validator = ajv({
     allErrors: true,
     v5: true,
-  })
-
-  validator.addFormat("url", data => {
-    const parts = url.parse(data)
-    if (!(parts.protocol && parts.protocol.startsWith("http"))) return false
-    return true
   })
 
   if (validator.validate(schema, body)) return []
@@ -59,16 +52,26 @@ export function validate(schema: Object, body: mixed) {
       }
 
       case "minimum": {
-        const comparison = errors[0].params.exclusive ? "more than" : "at least"
         const limit = errors[0].params.limit
-        messages.add(`${path} should be ${comparison} ${limit}`)
+        messages.add(`${path} should be at least ${limit}`)
+        break
+      }
+
+      case "exclusiveMinimum": {
+        const limit = errors[0].params.limit
+        messages.add(`${path} should be more than ${limit}`)
         break
       }
 
       case "maximum": {
-        const comparison = errors[0].params.exclusive ? "less than" : "at most"
         const limit = errors[0].params.limit
-        messages.add(`${path} should be ${comparison} ${limit}`)
+        messages.add(`${path} should be at most ${limit}`)
+        break
+      }
+
+      case "exclusiveMaximum": {
+        const limit = errors[0].params.limit
+        messages.add(`${path} should be less than ${limit}`)
         break
       }
 
