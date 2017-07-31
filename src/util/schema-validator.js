@@ -1,11 +1,14 @@
 /* @flow */
 import ajv from "ajv"
+import keywordSwitch from "ajv-keywords/keywords/switch"
 
 export function validate(schema: Object, body: mixed) {
   const validator = ajv({
     allErrors: true,
     v5: true,
   })
+
+  keywordSwitch(validator)
 
   if (validator.validate(schema, body)) return []
 

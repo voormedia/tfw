@@ -193,4 +193,33 @@ describe("schema validator", function() {
       })
     })
   })
+
+  describe("switch", function() {
+    before(function() {
+      this.schema = {
+        properties: {
+          foo: {enum: ["bar", "baz"]},
+          bar: {},
+          baz: {},
+        },
+        switch: [
+          {
+            "if": {properties: {foo: {const: "bar"}}},
+            "then": {required: ["bar"]},
+          },
+          {
+            "if": {properties: {foo: {const: "baz"}}},
+            "then": {required: ["baz"]},
+          },
+        ],
+      }
+    })
+
+    describe("failing", function() {
+      it("should report error", function() {
+        const errors = validator.validate(this.schema, {foo: "bar"})
+        assert.deepEqual(errors, ["request body requires key 'bar'"])
+      })
+    })
+  })
 })

@@ -2,7 +2,7 @@
   "private": true,
   "author": "Rolf Timmermans",
   "name": "tfw",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "main": "application.js",
   "license": "UNLICENSED",
   "engines": {
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "ajv": "^5.2.2",
+    "ajv-keywords": "^2.1.0",
     "content-type": "^1.0.2",
     "cookies": "^0.7.0"
   },
