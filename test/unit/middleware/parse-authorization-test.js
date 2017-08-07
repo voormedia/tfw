@@ -1,4 +1,4 @@
-import {write, parseAuthorization} from "src/middleware"
+import {write, rescue, parseAuthorization} from "src/middleware"
 
 describe("parse authorization", function() {
   describe("with username and password", function() {
@@ -122,7 +122,7 @@ describe("parse authorization", function() {
     })
   })
 
-  describe("without non basic authorization", function() {
+  describe("with non basic authorization", function() {
     before(async function() {
       let ctx
       await test.request(
@@ -144,6 +144,52 @@ describe("parse authorization", function() {
 
     it("should not assign password", function() {
       assert.equal(this.ctx.data.password, undefined)
+    })
+  })
+
+  describe("with null byte in credentials", function() {
+    before(async function() {
+      const {res, body} = await test.request(
+        test.createStack(write(), rescue(), parseAuthorization()), {
+          headers: {
+            "Authorization": "Basic AEE6AEE"
+          }
+        }
+      )
+
+      this.res = res
+      this.body = body
+    })
+
+    it("should render error", function() {
+      assert.equal(this.body, '{"error":"Bad request","message":"Bad authorization header"}')
+    })
+
+    it("should return http unsupported media type", function() {
+      assert.equal(this.res.statusCode, 400)
+    })
+  })
+
+  describe("with control byte in credentials", function() {
+    before(async function() {
+      const {res, body} = await test.request(
+        test.createStack(write(), rescue(), parseAuthorization()), {
+          headers: {
+            "Authorization": "Basic B0E6ATVB"
+          }
+        }
+      )
+
+      this.res = res
+      this.body = body
+    })
+
+    it("should render error", function() {
+      assert.equal(this.body, '{"error":"Bad request","message":"Bad authorization header"}')
+    })
+
+    it("should return http unsupported media type", function() {
+      assert.equal(this.res.statusCode, 400)
     })
   })
 })
