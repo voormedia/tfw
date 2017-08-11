@@ -80,7 +80,7 @@ describe("rescue", function() {
     describe("with slow request", function() {
       before(async function() {
        const {res, body} = await test.request(
-          test.createStack(write(), rescue({terminationGrace: 20}), async function() {
+          test.createStack(write(), rescue({terminationGrace: 0.02}), async function() {
             this.app.stop()
             await new Promise(resolve => setTimeout(resolve, 5000))
             this.body = "ok"
@@ -103,7 +103,7 @@ describe("rescue", function() {
     describe("with fast request", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), rescue({terminationGrace: 20}), async function() {
+          test.createStack(write(), rescue({terminationGrace: 0.02}), async function() {
             this.app.stop()
             await new Promise(resolve => setTimeout(resolve, 1))
             this.body = "ok"

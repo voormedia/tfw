@@ -7,7 +7,6 @@ import http from "http"
 import hostPkg from "./util/host-pkg"
 
 import Logger from "./util/logger"
-import MemoryConsole from "./util/memory-console"
 import Router from "./router"
 import Context from "./context"
 
@@ -19,9 +18,9 @@ import type {Request, Response} from "./context"
 
 export type ApplicationOptions = {|
   port?: number,
-  server?: http.Server,
   logger?: Logger,
   router?: Router,
+  terminationGrace?: number,
 |}
 
 type IdlingSocket = net$Socket & {
@@ -39,8 +38,7 @@ type ClosingServer = http.Server & {
 const description = `${hostPkg.name} service ${process.env.HOSTNAME || ""}`.trim()
 
 export class Application {
-  port: number = 3000
-
+  port: number
   router: Router
   logger: Logger
   stack: Stack
@@ -58,30 +56,28 @@ export class Application {
   }
 
   constructor(options: ApplicationOptions = Object.seal({})) {
-    /* Override properties. */
-    Object.assign(this, options)
+    const {
+      port = 3000,
+      router = new Router,
+      logger = new Logger,
+      terminationGrace = 25,
+    } = options
 
     /* Assign default env. */
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = "development"
     }
 
-    if (!this.router) {
-      this.router = new Router
-    }
-
-    if (!this.logger) {
-      const formatter = process.env.NODE_ENV === "development" ? Logger.PRETTY : Logger.JSON
-      const target = process.env.NODE_ENV === "test" ? new MemoryConsole : console
-      this.logger = new Logger(target, formatter)
-    }
+    this.port = port
+    this.router = router
+    this.logger = logger
 
     /* Bare minimum stack to do anything useful. */
     this.stack = [
-      middleware.log(this.logger),
+      middleware.log(logger),
       middleware.write(),
-      middleware.rescue(),
-      middleware.route(this.router),
+      middleware.rescue({terminationGrace}),
+      middleware.route(router),
     ]
 
     Object.freeze(this)

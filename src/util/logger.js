@@ -1,4 +1,6 @@
 /* @flow */
+import MemoryConsole from "./memory-console"
+
 export type HttpRequest = {|
   requestMethod: string,
   requestUrl: string,
@@ -84,7 +86,7 @@ export class Logger {
     return `${time} ${styles[entry.severity]}${http}${entry.message}${reset}`
   }
 
-  constructor(console: console.Console, formatter: LogEntry => string = Logger.JSON) {
+  constructor(console: console.Console = defaultConsole(), formatter: LogEntry => string = defaultFormatter()) {
     this.console = console
     this.formatter = formatter
 
@@ -124,6 +126,14 @@ export class Logger {
   critical(message: mixed, httpRequest: HttpRequest | void) {
     this.write("CRITICAL", message, {httpRequest})
   }
+}
+
+function defaultFormatter() {
+  return process.env.NODE_ENV === "development" ? Logger.PRETTY : Logger.JSON
+}
+
+function defaultConsole() {
+  return process.env.NODE_ENV === "test" ? new MemoryConsole : console
 }
 
 export default Logger

@@ -15,13 +15,13 @@ type RescueOptions = {
   terminationGrace: number,
 }
 
-export default function rescue({terminationGrace = 25000}: RescueOptions = {}): Middleware {
+export default function rescue({terminationGrace = 25}: RescueOptions = {}): Middleware {
   return async function rescue(next: Next) {
     const ctx: Context = this
 
     /* Cancel request if server is stopping, but only after a grace period.
        This allows a request to be handled if there is enough time. */
-    const timer = new Timer(terminationGrace)
+    const timer = new Timer(terminationGrace * 1000)
     const stop = async () => {
       await timer.sleep()
 
