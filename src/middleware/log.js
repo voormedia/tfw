@@ -68,13 +68,18 @@ export default function log(logger: Logger): Middleware {
       }
 
       if (ctx.data.error) {
-        logger.error(ctx.data.error.stack || ctx.data.error.toString(), httpRequest)
-      } else {
-        if (status >= 500) {
-          logger.warning(statusCodes.get(status), httpRequest)
+        /* An error was thrown somewhere. */
+        if (ctx.data.error.expose) {
+          /* This error is exposable, so it is to be expected. */
+          logger.warning(ctx.data.error.message || "(no message)", httpRequest)
         } else {
-          logger.info(statusCodes.get(status), httpRequest)
+          /* This was an internal error, not supposed to be exposed. Log the
+             entire stack trace so we can debug later. */
+          logger.error(ctx.data.error.stack || ctx.data.error.toString(), httpRequest)
         }
+      } else {
+        /* No error was thrown. Status code might still be in 4xx or 5xx range. */
+        logger.info(statusCodes.get(status), httpRequest)
       }
     }
   }

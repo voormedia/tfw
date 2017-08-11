@@ -36,10 +36,10 @@ export default function rescue({terminationGrace = 25000}: RescueOptions = {}): 
     try {
       return await Promise.race([stop(), next()])
     } catch (err) {
+      ctx.data.error = err
+
       if (!err.expose) {
         if (process.env.NODE_ENV === "test") throw err
-
-        ctx.data.error = err
         err = new InternalServerError
       }
 

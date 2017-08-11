@@ -37,8 +37,8 @@ describe("rescue", function() {
       assert.equal(this.body, '{"error":"Payment required","message":"Payment required"}')
     })
 
-    it("should not save error", function() {
-      assert.equal(this.ctx.data.error, undefined)
+    it("should save error", function() {
+      assert.equal(this.ctx.data.error.constructor, PaymentRequired)
     })
   })
 
