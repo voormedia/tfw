@@ -74,7 +74,8 @@ export class Application {
     /* Bare minimum stack to do anything useful. */
     this.stack = [
       middleware.log(logger),
-      middleware.write({terminationGrace}),
+      middleware.write(),
+      middleware.shutdown(terminationGrace),
       middleware.route(router),
     ]
 

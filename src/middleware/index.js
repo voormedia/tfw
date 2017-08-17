@@ -1,11 +1,13 @@
 /* @flow */
 import log from "./log"
 import route from "./route"
+import shutdown from "./shutdown"
 import write from "./write"
 
 export {
   log,
   route,
+  shutdown,
   write,
 }
 
