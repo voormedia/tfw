@@ -67,7 +67,7 @@ export default function log(logger: Logger): Middleware {
         latency,
       }
 
-      if (ctx.data.error) {
+      if (status >= 500 && ctx.data.error) {
         /* An error was thrown somewhere. */
         if (ctx.data.error.expose) {
           /* This error is exposable, so it is to be expected. */
@@ -78,7 +78,7 @@ export default function log(logger: Logger): Middleware {
           logger.error(ctx.data.error.stack || ctx.data.error.toString(), httpRequest)
         }
       } else {
-        /* No error was thrown. Status code might still be in 4xx or 5xx range. */
+        /* No error was thrown, or error was in 4xx range. */
         logger.info(statusCodes.get(status), httpRequest)
       }
     }

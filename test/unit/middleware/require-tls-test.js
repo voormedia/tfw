@@ -1,11 +1,11 @@
-import {write, rescue, requireTLS} from "src/middleware"
+import {write, requireTLS} from "src/middleware"
 
 describe("require tls", function() {
   describe("over https", function() {
     describe("without proxy", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), rescue(), requireTLS(), function() {
+          test.createStack(write(), requireTLS(), function() {
             this.body = "ok"
             this.status = 201
           }), {
@@ -32,7 +32,7 @@ describe("require tls", function() {
     describe("with proxy", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), rescue(), requireTLS(), function() {
+          test.createStack(write(), requireTLS(), function() {
             this.body = "ok"
             this.status = 201
           }), {
@@ -63,7 +63,7 @@ describe("require tls", function() {
     describe("without proxy", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), rescue(), requireTLS(), function() {
+          test.createStack(write(), requireTLS(), function() {
             this.body = "ok"
             this.status = 201
           }), {
@@ -89,7 +89,7 @@ describe("require tls", function() {
     describe("without proxy", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), rescue(), requireTLS(), function() {
+          test.createStack(write(), requireTLS(), function() {
             this.body = "ok"
             this.status = 201
           }), {

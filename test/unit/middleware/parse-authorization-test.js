@@ -1,4 +1,4 @@
-import {write, rescue, parseAuthorization} from "src/middleware"
+import {write, parseAuthorization} from "src/middleware"
 
 describe("parse authorization", function() {
   describe("with username and password", function() {
@@ -150,7 +150,7 @@ describe("parse authorization", function() {
   describe("with null byte in credentials", function() {
     before(async function() {
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseAuthorization()), {
+        test.createStack(write(), parseAuthorization()), {
           headers: {
             "Authorization": "Basic AEE6AEE"
           }
@@ -173,7 +173,7 @@ describe("parse authorization", function() {
   describe("with control byte in credentials", function() {
     before(async function() {
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseAuthorization()), {
+        test.createStack(write(), parseAuthorization()), {
           headers: {
             "Authorization": "Basic B0E6ATVB"
           }

@@ -1,6 +1,6 @@
 import timekeeper from "timekeeper"
 
-import {write, rescue, parseSession} from "src/middleware"
+import {write, parseSession} from "src/middleware"
 
 describe("parse session", function() {
   before(function() {
@@ -11,7 +11,7 @@ describe("parse session", function() {
   //   before(async function() {
   //     let ctx
   //     await test.request(
-  //       test.createStack(write(), rescue(), parseSession(), function() {
+  //       test.createStack(write(), parseSession(), function() {
   //         ctx = this
   //       }), {
   //         headers: {
@@ -34,7 +34,7 @@ describe("parse session", function() {
       let session
       const keys = ["my key"]
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseSession({keys}), function() {
+        test.createStack(write(), parseSession({keys}), function() {
           session = this.data.session
         }), {
           method: "GET",
@@ -59,7 +59,7 @@ describe("parse session", function() {
       let session
       const keys = ["my key"]
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseSession({keys}), function() {
+        test.createStack(write(), parseSession({keys}), function() {
           session = this.data.session
         }), {
           headers: {
@@ -87,7 +87,7 @@ describe("parse session", function() {
       let session
       const keys = ["my key"]
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseSession({keys}), function() {
+        test.createStack(write(), parseSession({keys}), function() {
           session = this.data.session
         }), {
           headers: {
@@ -119,7 +119,7 @@ describe("parse session", function() {
       let session
       const keys = ["my key"]
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseSession({keys}), function() {
+        test.createStack(write(), parseSession({keys}), function() {
           session = this.data.session
         }), {
           headers: {
@@ -150,7 +150,7 @@ describe("parse session", function() {
     before(async function() {
       const keys = ["my key"]
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseSession({keys}), function() {
+        test.createStack(write(), parseSession({keys}), function() {
           this.data.session.foo = "bar"
           this.data.session.baz = "qux"
         }), {
@@ -175,7 +175,7 @@ describe("parse session", function() {
       let session
       const keys = ["my key"]
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseSession({keys}), function() {
+        test.createStack(write(), parseSession({keys}), function() {
           this.data.session = null
         }), {
           headers: {

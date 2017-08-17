@@ -1,5 +1,4 @@
 /* @flow */
-/* eslint-disable no-console */
 import "./util/polyfill"
 
 import http from "http"
@@ -75,8 +74,7 @@ export class Application {
     /* Bare minimum stack to do anything useful. */
     this.stack = [
       middleware.log(logger),
-      middleware.write(),
-      middleware.rescue({terminationGrace}),
+      middleware.write({terminationGrace}),
       middleware.route(router),
     ]
 

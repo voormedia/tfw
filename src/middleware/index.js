@@ -1,12 +1,10 @@
 /* @flow */
 import log from "./log"
-import rescue from "./rescue"
 import route from "./route"
 import write from "./write"
 
 export {
   log,
-  rescue,
   route,
   write,
 }
