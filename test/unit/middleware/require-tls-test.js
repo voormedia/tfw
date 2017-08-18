@@ -77,7 +77,7 @@ describe("require tls", function() {
         this.body = body
       })
 
-      it("should render body", function() {
+      it("should render error", function() {
         assert.equal(this.body, '{"error":"Forbidden","message":"TLS required"}')
       })
 
@@ -106,7 +106,7 @@ describe("require tls", function() {
         this.body = body
       })
 
-      it("should render body", function() {
+      it("should render error", function() {
         assert.equal(this.body, '{"error":"Forbidden","message":"TLS required"}')
       })
 

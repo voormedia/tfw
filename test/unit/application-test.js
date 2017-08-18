@@ -173,7 +173,7 @@ describe("application", function() {
         this.entry = JSON.parse(app.logger.console.stdout.toString())
       })
 
-      it("should render body", function() {
+      it("should render error", function() {
         assert.equal(this.body, '{"error":"Not found","message":"Endpoint does not exist"}')
       })
 
@@ -311,7 +311,7 @@ describe("application", function() {
         this.entry = JSON.parse(app.logger.console.stdout.toString())
       })
 
-      it("should render body", function() {
+      it("should render error", function() {
         assert.equal(this.body, '{"error":"Internal server error","message":"Bad handler"}')
       })
 

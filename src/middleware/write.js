@@ -20,30 +20,38 @@ export default function write(): Middleware {
       await next()
 
       if (streaming) return
-      setHeaders(ctx)
     } catch (err) {
-      ctx.data.error = err
-
-      if (!err.expose) {
-        if (process.env.NODE_ENV === "test") throw err
-        err = new InternalServerError
-      }
-
-      ctx.body = err
-      ctx.status = err.status
+      setError(ctx, err)
     }
 
+    setHeaders(ctx)
     setResponse(ctx)
   }
 }
 
-function setHeaders(ctx) {
+function setHeaders(ctx: Context) {
   for (const [name, value] of ctx.headers) {
-    ctx.res.setHeader(name, value)
+    try {
+      ctx.res.setHeader(name, value)
+    } catch (err) {
+      setError(ctx, err)
+    }
   }
 }
 
-function setResponse(ctx) {
+function setError(ctx: Context, err: any) {
+  ctx.data.error = err
+
+  if (!err.expose) {
+    if (process.env.NODE_ENV === "test") throw err
+    err = new InternalServerError
+  }
+
+  ctx.body = err
+  ctx.status = err.status
+}
+
+function setResponse(ctx: Context) {
   if (ctx.body === null) {
     ctx.body = Buffer.alloc(0)
   } else if (typeof ctx.body === "string") {

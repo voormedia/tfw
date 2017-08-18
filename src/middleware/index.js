@@ -14,6 +14,7 @@ export {
 import parseAuthorization from "./parse-authorization"
 import parseBody from "./parse-body"
 import parseSession from "./parse-session"
+import requireHost from "./require-host"
 import requireTLS from "./require-tls"
 import validateBody from "./validate-body"
 import validateContentType from "./validate-content-type"
@@ -22,6 +23,7 @@ export {
   parseAuthorization,
   parseBody,
   parseSession,
+  requireHost,
   requireTLS,
   validateBody,
   validateContentType,

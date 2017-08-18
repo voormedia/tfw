@@ -26,7 +26,7 @@ describe("write", function() {
           test.createStack(write(), function() {
             this.body = "øk"
             this.status = 429
-            this.headers.set("foo", "bar")
+            this.headers.set("Foo", "bar")
           })
         )
 
@@ -56,7 +56,7 @@ describe("write", function() {
         const {res, body} = await test.request(
           test.createStack(write(), function() {
             this.body = "øk"
-            this.headers.set("foo", "bar")
+            this.headers.set("Foo", "bar")
           }),
           {method: "head"}
         )
@@ -90,7 +90,7 @@ describe("write", function() {
           test.createStack(write(), function() {
             this.body = Buffer.from([0x00, 0x01, 0xfe, 0xff])
             this.status = 429
-            this.headers.set("foo", "bar")
+            this.headers.set("Foo", "bar")
           })
         )
 
@@ -120,7 +120,7 @@ describe("write", function() {
         const {res, body} = await test.request(
           test.createStack(write(), function() {
             this.body = Buffer.from([0x00, 0x01, 0xfe, 0xff])
-            this.headers.set("foo", "bar")
+            this.headers.set("Foo", "bar")
           }),
           {method: "head"}
         )
@@ -153,7 +153,7 @@ describe("write", function() {
         const {res, body} = await test.request(
           test.createStack(write(), function() {
             this.status = 429
-            this.headers.set("foo", "bar")
+            this.headers.set("Foo", "bar")
             this.stream(fs.createReadStream("package.json"))
           })
         )
@@ -187,7 +187,7 @@ describe("write", function() {
       before(async function() {
         const {res, body} = await test.request(
           test.createStack(write(), function() {
-            this.headers.set("foo", "bar")
+            this.headers.set("Foo", "bar")
             this.stream(fs.createReadStream("package.json"))
           }),
           {method: "head"}
@@ -226,7 +226,7 @@ describe("write", function() {
           test.createStack(write(), function() {
             this.body = {result: "ok"}
             this.status = 429
-            this.headers.set("foo", "bar")
+            this.headers.set("Foo", "bar")
           })
         )
 
@@ -256,7 +256,7 @@ describe("write", function() {
         const {res, body} = await test.request(
           test.createStack(write(), function() {
             this.body = {result: "ok"}
-            this.headers.set("foo", "bar")
+            this.headers.set("Foo", "bar")
           }),
           {method: "head"}
         )
@@ -289,6 +289,7 @@ describe("write", function() {
       const {res, body} = await test.request(
         test.createStack(write(), function() {
           ctx = this
+          ctx.headers.set("Foo", "bar")
           throw new PaymentRequired
         })
       )
@@ -300,6 +301,10 @@ describe("write", function() {
 
     it("should write status", function() {
       assert.equal(this.res.statusCode, 402)
+    })
+
+    it("should write headers", function() {
+      assert.equal(this.res.headers["foo"], "bar")
     })
 
     it("should render error", function() {
@@ -317,6 +322,7 @@ describe("write", function() {
       const {res, body} = await test.request(
         test.createStack(write(), function() {
           ctx = this
+          ctx.headers.set("Foo", "bar")
           throw new Error
         })
       )
@@ -328,6 +334,10 @@ describe("write", function() {
 
     it("should write status", function() {
       assert.equal(this.res.statusCode, 500)
+    })
+
+    it("should write headers", function() {
+      assert.equal(this.res.headers["foo"], "bar")
     })
 
     it("should render error", function() {
@@ -346,6 +356,7 @@ describe("write", function() {
         test.createStack(write(), function() {
           ctx = this
           ctx.headers.set("Location", "\x00\x00")
+          ctx.headers.set("Foo", "bar")
         })
       )
 
@@ -356,6 +367,10 @@ describe("write", function() {
 
     it("should write status", function() {
       assert.equal(this.res.statusCode, 500)
+    })
+
+    it("should write headers", function() {
+      assert.equal(this.res.headers["foo"], "bar")
     })
 
     it("should render error", function() {
