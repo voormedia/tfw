@@ -3,7 +3,7 @@
 import http from "http"
 
 import type {Context, Next, Middleware} from "../middleware"
-import type {HttpRequest, Logger} from "../util/logger"
+import type {HttpRequest, LogContext, Logger} from "../util/logger"
 
 type StatsSocket = net$Socket & {
   bytesReadPreviously?: number,
@@ -27,6 +27,8 @@ export default function log(logger: Logger): Middleware {
     const bytesWrittenPreviously = socket.bytesWrittenPreviously || 0
 
     const startTime = process.hrtime()
+
+    ctx.data.log = {}
 
     try {
       return await next()
@@ -67,19 +69,21 @@ export default function log(logger: Logger): Middleware {
         latency,
       }
 
+      const logContext: LogContext = Object.assign({}, ctx.data.log, {httpRequest})
+
       if (status >= 500 && ctx.data.error) {
         /* An error was thrown somewhere. */
         if (ctx.data.error.expose) {
           /* This error is exposable, so it is to be expected. */
-          logger.warning(ctx.data.error.message || "(no message)", httpRequest)
+          logger.warning(ctx.data.error.message || "(no message)", logContext)
         } else {
           /* This was an internal error, not supposed to be exposed. Log the
              entire stack trace so we can debug later. */
-          logger.error(ctx.data.error.stack || ctx.data.error.toString(), httpRequest)
+          logger.error(ctx.data.error.stack || ctx.data.error.toString(), logContext)
         }
       } else {
         /* No error was thrown, or error was in 4xx range. */
-        logger.info(statusCodes.get(status), httpRequest)
+        logger.info(statusCodes.get(status), logContext)
       }
     }
   }

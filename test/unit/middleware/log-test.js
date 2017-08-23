@@ -19,6 +19,7 @@ describe("log", function() {
           test.createStack(log(this.logger), write(), function() {
             this.body = "ok"
             this.status = 201
+            this.data.log = {foo: {bar: "qux"}}
           }), {
             method: "POST",
             path: "/foo",
@@ -64,6 +65,10 @@ describe("log", function() {
       it("should log latency", function() {
         assert.match(this.entry.httpRequest.latency, /\d+\.\d{3}s/)
       })
+
+      it("should log additional data", function() {
+        assert.equal(this.entry.foo.bar, "qux")
+      })
     })
 
     describe("with proxy", function() {
@@ -73,6 +78,7 @@ describe("log", function() {
           test.createStack(log(this.logger), write(), function() {
             this.body = "ok"
             this.status = 201
+            this.data.log = {foo: {bar: "qux"}}
           }), {
             method: "POST",
             path: "/foo",
@@ -121,6 +127,10 @@ describe("log", function() {
       it("should log latency", function() {
         assert.match(this.entry.httpRequest.latency, /\d+\.\d{3}s/)
       })
+
+      it("should log additional data", function() {
+        assert.equal(this.entry.foo.bar, "qux")
+      })
     })
   })
 
@@ -132,6 +142,7 @@ describe("log", function() {
           test.createStack(log(this.logger), write(), function() {
             this.status = 500
             this.data.error = this.body = new InternalServerError("Failure")
+            this.data.log = {foo: {bar: "qux"}}
           }), {
             method: "POST",
             path: "/foo",
@@ -177,6 +188,10 @@ describe("log", function() {
       it("should log latency", function() {
         assert.match(this.entry.httpRequest.latency, /\d+\.\d{3}s/)
       })
+
+      it("should log additional data", function() {
+        assert.equal(this.entry.foo.bar, "qux")
+      })
     })
   })
 
@@ -188,6 +203,7 @@ describe("log", function() {
           test.createStack(log(this.logger), write(), function() {
             this.status = 500
             this.data.error = this.body = new InternalServerError("")
+            this.data.log = {foo: {bar: "qux"}}
           }), {
             method: "POST",
             path: "/foo",
@@ -233,6 +249,10 @@ describe("log", function() {
       it("should log latency", function() {
         assert.match(this.entry.httpRequest.latency, /\d+\.\d{3}s/)
       })
+
+      it("should log additional data", function() {
+        assert.equal(this.entry.foo.bar, "qux")
+      })
     })
   })
 
@@ -245,6 +265,7 @@ describe("log", function() {
             this.status = 500
             this.data.error = new Error
             this.body = new InternalServerError
+            this.data.log = {foo: {bar: "qux"}}
           }), {
             method: "POST",
             path: "/foo",
@@ -289,6 +310,10 @@ describe("log", function() {
 
       it("should log latency", function() {
         assert.match(this.entry.httpRequest.latency, /\d+\.\d{3}s/)
+      })
+
+      it("should log additional data", function() {
+        assert.equal(this.entry.foo.bar, "qux")
       })
     })
   })
