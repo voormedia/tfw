@@ -151,18 +151,20 @@ export class Application {
 
     this.logger.notice(`stopping ${this.description}`)
 
-    const stopped = new Promise(resolve => {
-      this.server.once("close", () => {
-        this.logger.notice(`gracefully stopped ${this.description}`)
-        resolve(this)
-      })
-    })
-
     for (const request of this.requests) {
       request.cancelled = true
     }
 
-    this.server.close()
+    const stopped = new Promise(resolve => {
+      this.server.close(err => {
+        if (err) {
+          this.logger.error(err)
+        }
+
+        this.logger.notice(`gracefully stopped ${this.description}`)
+        resolve(this)
+      })
+    })
 
     for (const socket of this.sockets) {
       if (socket.idle) {
