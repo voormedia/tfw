@@ -1,5 +1,5 @@
 /* @flow */
-/* eslint-disable no-ex-assign */
+/* eslint-disable no-unused-expressions */
 import Timer from "../util/timer"
 
 import {ServiceUnavailable} from "../errors"
@@ -13,7 +13,7 @@ type CancellingRequest = Request & {
 
 export default function shutdown(grace: number = 25): Middleware {
   return async function write(next: Next) {
-    const ctx: Context = this
+    (this: Context)
 
     /* Cancel request if server is stopping, but only after a grace period.
        This allows a request to be handled if there is enough time. */
@@ -21,7 +21,7 @@ export default function shutdown(grace: number = 25): Middleware {
     const stop = async () => {
       await timer.sleep()
 
-      const req: CancellingRequest = ctx.req
+      const req: CancellingRequest = this.request
       if (req.cancelled) {
         throw new ServiceUnavailable("Please retry the request")
       } else {

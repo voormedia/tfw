@@ -1,14 +1,15 @@
 /* @flow */
+/* eslint-disable no-unused-expressions */
 import Router from "../router"
 
 import type {Context, Next, Middleware} from "../middleware"
 
 export default function route(router: Router): Middleware {
   return function route(next: Next) {
-    const ctx: Context = this
+    (this: Context)
 
-    let {method, url} = ctx.req
-
+    const url = this.url
+    let method = this.method
     if (method === "HEAD") {
       /* Treat HEAD requests as GET. */
       method = "GET"
@@ -17,10 +18,10 @@ export default function route(router: Router): Middleware {
     const {handler, params} = router.match(method, url)
 
     if (handler) {
-      ctx.data.params = params
+      this.data.params = params
 
-      if (handler.stack) ctx.stack.push(...handler.stack)
-      ctx.stack.push(handler)
+      if (handler.stack) this.stack.push(...handler.stack)
+      this.stack.push(handler)
     }
 
     return next()

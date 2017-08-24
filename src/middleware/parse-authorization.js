@@ -1,13 +1,14 @@
 /* @flow */
+/* eslint-disable no-unused-expressions */
 import {BadRequest} from "../errors"
 
 import type {Context, Next, Middleware} from "../middleware"
 
 export default function parseAuthorization(): Middleware {
   return function parseAuthorization(next: Next) {
-    const ctx: Context = this
+    (this: Context)
 
-    const auth = this.req.headers.authorization
+    const auth = this.get("authorization")
 
     if (auth) {
       const [type, credentials] = auth.split(/\s+/)
@@ -22,8 +23,8 @@ export default function parseAuthorization(): Middleware {
         }
 
         const [username, password] = decoded.split(":")
-        ctx.data.username = username || ""
-        ctx.data.password = password || ""
+        this.data.username = username || ""
+        this.data.password = password || ""
       }
     }
 

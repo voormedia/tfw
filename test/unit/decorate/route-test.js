@@ -15,7 +15,7 @@ describe("route", function() {
         @POST("/foo")
         @PUT("/foo")
         handle() {
-          this.body = this.req.method
+          this.body = this.method
         }
       }
 
@@ -48,7 +48,7 @@ describe("route", function() {
         @POST("/{id}")
         @PUT("/{id}")
         handle() {
-          this.body = `${this.req.method} ${this.data.params.id}`
+          this.body = `${this.method} ${this.data.params.id}`
         }
       }
 
@@ -85,7 +85,7 @@ describe("mount", function() {
         @DELETE("/foo")
         @PATCH("/foo")
         handle() {
-          this.body = this.req.method
+          this.body = this.method
         }
       }
 
@@ -93,7 +93,7 @@ describe("mount", function() {
         @POST("/foo")
         @PUT("/foo")
         handle() {
-          this.body = this.req.method
+          this.body = this.method
         }
       }
 

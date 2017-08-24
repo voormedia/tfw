@@ -9,22 +9,49 @@ export type Response = ServerResponse
 export class Context {
   app: Application
   stack: Stack
-  req: Request
-  res: Response
 
-  data: Object = {}
-  status: number = 200
-  headers: Map<string, string> = new Map
+  request: Request
+  response: Response
+
   body: Object | string = ""
-  stream: Function = () => {}
+  data: Object = {}
 
-  constructor(app: Application, stack: Stack, req: Request, res: Response) {
+  constructor(app: Application, stack: Stack, req: IncomingMessage, res: ServerResponse) {
     this.app = app
     this.stack = stack
-    this.req = req
-    this.res = res
+
+    this.request = req
+    this.response = res
 
     Object.seal(this)
+  }
+
+  get(header: string) {
+    return this.request.headers[header.toLowerCase()]
+  }
+
+  get method(): string {
+    return this.request.method
+  }
+
+  get url(): string {
+    return this.request.url
+  }
+
+  set(header: string, value: string) {
+    this.response.setHeader(header.toLowerCase(), value)
+  }
+
+  set status(value: number) {
+    if (value < 100 || value > 999) {
+      throw new RangeError(`Invalid status code ${value}`)
+    }
+
+    this.response.statusCode = value
+  }
+
+  get sent(): boolean {
+    return this.response.headersSent
   }
 
   inspect() {

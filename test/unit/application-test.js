@@ -34,8 +34,8 @@ describe("application", function() {
       this.app.stack.push(
         function(next) {
           setTimeout(() => {
-            this.res.writeHead(200, {})
-            this.res.end("OK")
+            this.response.writeHead(200, {})
+            this.response.end("OK")
           }, 5)
         }
       )
@@ -288,7 +288,7 @@ describe("application", function() {
 
         /* Replace entire stack; but top handler is not async. */
         app.stack.splice(0, app.stack.length, function() {
-          this.res.end("ok")
+          this.response.end("ok")
         })
 
         const {res, body} = await test.request(app)

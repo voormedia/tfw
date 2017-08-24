@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint-disable no-unused-expressions */
 import * as validator from "../util/schema-validator"
 
 import {BadRequest} from "../errors"
@@ -14,9 +15,9 @@ type ValidationOptions = {
 
 export default function validateBody(options: ValidationOptions): Middleware {
   return function validateBody(next: Next) {
-    const ctx: Context = this
+    (this: Context)
 
-    validate(ctx.data.body, options)
+    validate(this.data.body, options)
     return next()
   }
 }

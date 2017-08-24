@@ -194,10 +194,10 @@ export class Application {
 
     const call = async () => {
       try {
-        this.requests.add(context.req)
+        this.requests.add(req)
         await handler()
       } finally {
-        this.requests.delete(context.req)
+        this.requests.delete(req)
       }
     }
 

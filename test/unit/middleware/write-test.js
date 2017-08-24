@@ -26,7 +26,7 @@ describe("write", function() {
           test.createStack(write(), function() {
             this.body = "øk"
             this.status = 429
-            this.headers.set("Foo", "bar")
+            this.set("Foo", "bar")
           })
         )
 
@@ -56,7 +56,7 @@ describe("write", function() {
         const {res, body} = await test.request(
           test.createStack(write(), function() {
             this.body = "øk"
-            this.headers.set("Foo", "bar")
+            this.set("Foo", "bar")
           }),
           {method: "head"}
         )
@@ -90,7 +90,7 @@ describe("write", function() {
           test.createStack(write(), function() {
             this.body = Buffer.from([0x00, 0x01, 0xfe, 0xff])
             this.status = 429
-            this.headers.set("Foo", "bar")
+            this.set("Foo", "bar")
           })
         )
 
@@ -120,7 +120,7 @@ describe("write", function() {
         const {res, body} = await test.request(
           test.createStack(write(), function() {
             this.body = Buffer.from([0x00, 0x01, 0xfe, 0xff])
-            this.headers.set("Foo", "bar")
+            this.set("Foo", "bar")
           }),
           {method: "head"}
         )
@@ -153,8 +153,8 @@ describe("write", function() {
         const {res, body} = await test.request(
           test.createStack(write(), function() {
             this.status = 429
-            this.headers.set("Foo", "bar")
-            this.stream(fs.createReadStream("package.json"))
+            this.set("Foo", "bar")
+            this.body = fs.createReadStream("package.json")
           })
         )
 
@@ -187,8 +187,8 @@ describe("write", function() {
       before(async function() {
         const {res, body} = await test.request(
           test.createStack(write(), function() {
-            this.headers.set("Foo", "bar")
-            this.stream(fs.createReadStream("package.json"))
+            this.set("Foo", "bar")
+            this.body = fs.createReadStream("package.json")
           }),
           {method: "head"}
         )
@@ -217,6 +217,138 @@ describe("write", function() {
         assert.equal(this.res.headers["transfer-encoding"], undefined)
       })
     })
+
+    describe("with early error", function() {
+      before(async function() {
+        let ctx
+        const {res, body} = await test.request(
+          test.createStack(write(), function() {
+            ctx = this
+            this.status = 429
+            this.set("Foo", "bar")
+            this.body = fs.createReadStream("doesnotexist")
+          })
+        )
+
+        this.res = res
+        this.body = body
+        this.ctx = ctx
+      })
+
+      it("should write status", function() {
+        assert.equal(this.res.statusCode, 500)
+      })
+
+      it("should write headers", function() {
+        assert.equal(this.res.headers["foo"], "bar")
+      })
+
+      it("should render error", function() {
+        assert.equal(this.body, '{"error":"Internal server error","message":"Internal server error"}')
+      })
+
+      it("should save error", function() {
+        assert.equal(this.ctx.data.error.constructor, Error)
+      })
+    })
+
+    describe("with late error", function() {
+      before(async function() {
+        let ctx
+        const {res, body} = await test.request(
+          test.createStack(write(), function() {
+            ctx = this
+            this.status = 429
+            this.set("Foo", "bar")
+            this.body = fs.createReadStream("package.json")
+            this.body.on("data", data => {
+              process.nextTick(() => {
+                this.body.emit("error", new Error)
+              })
+            })
+          })
+        )
+
+        this.res = res
+        this.body = body
+        this.ctx = ctx
+      })
+
+      it("should write status", function() {
+        assert.equal(this.res.statusCode, 429)
+      })
+
+      it("should write headers", function() {
+        assert.equal(this.res.headers["foo"], "bar")
+      })
+
+      it("should write body", function() {
+        assert.deepEqual(this.body.toString().substr(0, 20), "{\n  \"private\": true,")
+      })
+
+      it("should not set content length", function() {
+        assert.equal(this.res.headers["content-length"], undefined)
+      })
+
+      it("should set transfer encoding", function() {
+        assert.equal(this.res.headers["transfer-encoding"], "chunked")
+      })
+
+      it("should save error", function() {
+        assert.equal(this.ctx.data.error.constructor, Error)
+      })
+    })
+
+    describe("with manual pipe error", function() {
+      before(async function() {
+        let ctx
+        const {res, body} = await test.request(
+          test.createStack(write(), function() {
+            ctx = this
+            this.status = 429
+            this.set("Foo", "bar")
+
+            const stream = fs.createReadStream("package.json")
+
+            stream.pipe(this.response)
+
+            stream.on("data", data => {
+              process.nextTick(() => {
+                stream.emit("error", new Error)
+              })
+            })
+          })
+        )
+
+        this.res = res
+        this.body = body
+        this.ctx = ctx
+      })
+
+      it("should write status", function() {
+        assert.equal(this.res.statusCode, 429)
+      })
+
+      it("should write headers", function() {
+        assert.equal(this.res.headers["foo"], "bar")
+      })
+
+      it("should write body", function() {
+        assert.deepEqual(this.body.toString().substr(0, 20), "{\n  \"private\": true,")
+      })
+
+      it("should not set content length", function() {
+        assert.equal(this.res.headers["content-length"], undefined)
+      })
+
+      it("should set transfer encoding", function() {
+        assert.equal(this.res.headers["transfer-encoding"], "chunked")
+      })
+
+      it("should save error", function() {
+        assert.equal(this.ctx.data.error.constructor, Error)
+      })
+    })
   })
 
   describe("json", function() {
@@ -226,7 +358,7 @@ describe("write", function() {
           test.createStack(write(), function() {
             this.body = {result: "ok"}
             this.status = 429
-            this.headers.set("Foo", "bar")
+            this.set("Foo", "bar")
           })
         )
 
@@ -256,7 +388,7 @@ describe("write", function() {
         const {res, body} = await test.request(
           test.createStack(write(), function() {
             this.body = {result: "ok"}
-            this.headers.set("Foo", "bar")
+            this.set("Foo", "bar")
           }),
           {method: "head"}
         )
@@ -289,7 +421,7 @@ describe("write", function() {
       const {res, body} = await test.request(
         test.createStack(write(), function() {
           ctx = this
-          ctx.headers.set("Foo", "bar")
+          ctx.set("Foo", "bar")
 
           const error = new Error
           error.expose = true
@@ -326,7 +458,7 @@ describe("write", function() {
       const {res, body} = await test.request(
         test.createStack(write(), function() {
           ctx = this
-          ctx.headers.set("Foo", "bar")
+          ctx.set("Foo", "bar")
           throw new PaymentRequired
         })
       )
@@ -359,7 +491,7 @@ describe("write", function() {
       const {res, body} = await test.request(
         test.createStack(write(), function() {
           ctx = this
-          ctx.headers.set("Foo", "bar")
+          ctx.set("Foo", "bar")
           throw new Error
         })
       )
@@ -392,8 +524,9 @@ describe("write", function() {
       const {res, body} = await test.request(
         test.createStack(write(), function() {
           ctx = this
-          ctx.headers.set("Location", "\x00\x00")
-          ctx.headers.set("Foo", "bar")
+          ctx.set("Foo", "bar")
+          ctx.set("Location", "\x00\x00")
+          ctx.set("Foo", "never reached")
         })
       )
 
@@ -419,14 +552,15 @@ describe("write", function() {
     })
   })
 
-  describe.skip("with bad status code", function() {
+  describe("with bad status code", function() {
     before(async function() {
       let ctx
       const {res, body} = await test.request(
         test.createStack(write(), function() {
           ctx = this
+          ctx.set("Foo", "bar")
           ctx.status = 0
-          ctx.headers.set("Foo", "bar")
+          ctx.set("Foo", "never reached")
         })
       )
 
@@ -448,7 +582,7 @@ describe("write", function() {
     })
 
     it("should save error", function() {
-      assert.equal(this.ctx.data.error.constructor, TypeError)
+      assert.equal(this.ctx.data.error.constructor, RangeError)
     })
   })
 })

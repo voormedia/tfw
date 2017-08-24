@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint-disable no-unused-expressions */
 import type {Context, Next, Middleware} from "../middleware"
 
 import Cookies from "cookies"
@@ -23,15 +24,15 @@ const day = 24 * 60 * 60 * 1000
 
 export default function parseSession({name = "sess", keys, maxAge = 90 * day}: SessionOptions = {}): Middleware {
   return async function parseSession(next: Next) {
-    const ctx: Context = this
+    (this: Context)
 
     let session, cookie
-    const socket: tls$TLSSocket | net$Socket = ctx.req.socket
-    const secure = socket.encrypted || ctx.req.headers["x-forwarded-proto"] === "https"
-    const cookies = new Cookies(ctx.req, ctx.res, {keys, secure})
+    const socket: tls$TLSSocket | net$Socket = this.request.socket
+    const secure = socket.encrypted || this.request.headers["x-forwarded-proto"] === "https"
+    const cookies = new Cookies(this.request, this.response, {keys, secure})
 
     /* https://github.com/facebook/flow/issues/285 */
-    Object.defineProperty(ctx.data, "session", ({
+    Object.defineProperty(this.data, "session", ({
       get: () => {
         if (session !== undefined) return session
 

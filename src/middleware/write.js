@@ -1,73 +1,78 @@
 /* @flow */
-/* eslint-disable no-ex-assign */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-console */
+import {Readable} from "stream"
+
 import {InternalServerError} from "../errors"
 
 import type {Context, Next, Middleware} from "../middleware"
 
 export default function write(): Middleware {
   return async function write(next: Next) {
-    const ctx: Context = this
+    (this: Context)
+
+    this.response.on("pipe", stream => {
+      this.body = stream
+
+      stream.on("error", err => {
+        stream.unpipe()
+
+        // ES7 this::error(err)
+        error.call(this, err)
+
+        // ES7 this::send()
+        send.call(this)
+
+        this.response.end()
+      })
+    })
 
     try {
-      let streaming = false
-      ctx.stream = stream => {
-        setHeaders(ctx)
-        ctx.res.writeHead(ctx.status)
-        stream.pipe(ctx.res)
-        streaming = true
-      }
-
       await next()
-
-      if (streaming) return
     } catch (err) {
-      setError(ctx, err)
+      // ES7 this::error(err)
+      error.call(this, err)
     }
 
-    setHeaders(ctx)
-    setResponse(ctx)
+    // ES7 this::send()
+    send.call(this)
   }
 }
 
-function setHeaders(ctx: Context) {
-  for (const [name, value] of ctx.headers) {
-    try {
-      ctx.res.setHeader(name, value)
-    } catch (err) {
-      setError(ctx, err)
-    }
-  }
-}
+function error(err: Error) {
+  (this: Context)
 
-function setError(ctx: Context, err: any) {
-  ctx.data.error = err
+  this.data.error = err
 
   if (!err.expose) {
     if (process.env.NODE_ENV === "test") throw err
     err = new InternalServerError
   }
 
-  ctx.body = err
-  ctx.status = err.status || 500
+  this.body = err
+  this.status = err.status || 500
 }
 
-function setResponse(ctx: Context) {
-  if (ctx.body === null) {
-    ctx.body = Buffer.alloc(0)
-  } else if (typeof ctx.body === "string") {
-    ctx.body = Buffer.from(ctx.body, "utf8")
-  } else if (ctx.body instanceof Buffer) {
+function send() {
+  (this: Context)
+
+  if (this.sent) return
+
+  if (this.body === null) {
+    this.body = Buffer.alloc(0)
+  } else if (this.body instanceof Buffer) {
     /* Use as is. */
+  } else if (this.body instanceof Readable) {
+    this.body.pipe(this.response)
+    return
+  } else if (typeof this.body === "string") {
+    this.body = Buffer.from(this.body, "utf8")
   } else {
     /* Treat as JSON. */
-    ctx.res.setHeader("Content-Type", "application/json")
-    ctx.body = Buffer.from(JSON.stringify(ctx.body), "utf8")
+    this.set("content-type", "application/json")
+    this.body = Buffer.from(JSON.stringify(this.body), "utf8")
   }
 
-  if (ctx.body.length) {
-    ctx.res.setHeader("Content-Length", Buffer.byteLength(ctx.body).toString())
-  }
-
-  ctx.res.writeHead(ctx.status)
-  ctx.res.end(ctx.body)
+  this.set("content-length", Buffer.byteLength(this.body))
+  this.response.end(this.body)
 }

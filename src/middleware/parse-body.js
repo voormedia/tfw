@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint-disable no-unused-expressions */
 import querystring from "querystring"
 import contentType from "content-type"
 
@@ -8,16 +9,16 @@ import type {Context, Next, Middleware} from "../middleware"
 
 export default function parseBody(): Middleware {
   return async function parseBody(next: Next) {
-    const ctx: Context = this
+    (this: Context)
 
     const buffers = []
 
-    ctx.req.on("data", chunk => {
+    this.request.on("data", chunk => {
       buffers.push(chunk)
     })
 
     await new Promise(resolve => {
-      ctx.req.on("end", resolve)
+      this.request.on("end", resolve)
     })
 
     const body = Buffer.concat(buffers)
@@ -28,7 +29,7 @@ export default function parseBody(): Middleware {
         /* Guess the type of the content based on magic headers.
            This is a workaround for clients that accidentally set application/json
            Content-Type header when uploading images. */
-        parsed = contentType.parse(guessType(ctx.req, body))
+        parsed = contentType.parse(guessType(this.request, body))
       } catch (err) {
         throw new BadRequest("Bad Content-Type header")
       }
@@ -43,23 +44,23 @@ export default function parseBody(): Middleware {
         case "application/x-www-form-urlencoded":
           try {
             /* Validate query string? */
-            ctx.data.body = querystring.parse(body.toString(), null, null, {maxKeys: 0})
+            this.data.body = querystring.parse(body.toString(), null, null, {maxKeys: 0})
           } catch (err) {
             /* TODO: Throw error to client? */
-            ctx.data.body = {}
+            this.data.body = {}
           }
           break
 
         case "application/json":
           try {
-            ctx.data.body = JSON.parse(body.toString())
+            this.data.body = JSON.parse(body.toString())
           } catch (err) {
             throw new BadRequest(err.message)
           }
           break
 
         default:
-          ctx.data.body = body
+          this.data.body = body
       }
     }
 
