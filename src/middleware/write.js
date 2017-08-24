@@ -39,7 +39,7 @@ export default function write(): Middleware {
       this.response.end(this.body, "utf8")
     } else {
       /* Treat as JSON. */
-      this.set("content-type", "application/json")
+      this.set("Content-Type", "application/json")
       this.response.end(JSON.stringify(this.body), "utf8")
     }
   }
@@ -60,7 +60,7 @@ function error(err: Error) {
     return
   }
 
-  this.set("content-type", "application/json")
+  this.set("Content-Type", "application/json")
 
   this.status = err.status || 500
   this.response.end(JSON.stringify(err), "utf8")

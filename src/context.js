@@ -39,7 +39,7 @@ export class Context {
   }
 
   set(header: string, value: string) {
-    this.response.setHeader(header.toLowerCase(), value)
+    this.response.setHeader(header, value)
   }
 
   set status(value: number) {
