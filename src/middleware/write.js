@@ -11,31 +11,37 @@ export default function write(): Middleware {
   return async function write(next: Next) {
     (this: Context)
 
-    this.response.on("pipe", stream => {
-      this.body = stream
-
-      stream.on("error", err => {
-        stream.unpipe()
-
-        // ES7 this::error(err)
-        error.call(this, err)
-
-        // ES7 this::send()
-        send.call(this)
-
-        this.response.end()
-      })
-    })
-
     try {
       await next()
     } catch (err) {
       // ES7 this::error(err)
-      error.call(this, err)
+      return error.call(this, err)
     }
 
-    // ES7 this::send()
-    send.call(this)
+    Object.freeze(this)
+
+    if (this.sent) return
+
+    if (this.body === null) {
+      this.response.end()
+    } else if (this.body instanceof Buffer) {
+      this.response.end(this.body)
+    } else if (this.body instanceof Readable) {
+      this.body.on("error", err => {
+        this.body.unpipe()
+
+        // ES7 this::error(err)
+        return error.call(this, err)
+      })
+
+      this.body.pipe(this.response)
+    } else if (typeof this.body === "string") {
+      this.response.end(this.body, "utf8")
+    } else {
+      /* Treat as JSON. */
+      this.set("content-type", "application/json")
+      this.response.end(JSON.stringify(this.body), "utf8")
+    }
   }
 }
 
@@ -49,30 +55,13 @@ function error(err: Error) {
     err = new InternalServerError
   }
 
-  this.body = err
-  this.status = err.status || 500
-}
-
-function send() {
-  (this: Context)
-
-  if (this.sent) return
-
-  if (this.body === null) {
-    this.body = Buffer.alloc(0)
-  } else if (this.body instanceof Buffer) {
-    /* Use as is. */
-  } else if (this.body instanceof Readable) {
-    this.body.pipe(this.response)
+  if (this.sent) {
+    if (!this.finished) this.response.end()
     return
-  } else if (typeof this.body === "string") {
-    this.body = Buffer.from(this.body, "utf8")
-  } else {
-    /* Treat as JSON. */
-    this.set("content-type", "application/json")
-    this.body = Buffer.from(JSON.stringify(this.body), "utf8")
   }
 
-  this.set("content-length", Buffer.byteLength(this.body))
-  this.response.end(this.body)
+  this.set("content-type", "application/json")
+
+  this.status = err.status || 500
+  this.response.end(JSON.stringify(err), "utf8")
 }
