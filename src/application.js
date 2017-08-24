@@ -15,6 +15,8 @@ import * as middleware from "./middleware"
 import type {Next, Stack} from "./middleware"
 import type {Request, Response} from "./context"
 
+import sleep from "./util/sleep"
+
 export type ApplicationOptions = {|
   port?: number,
   logger?: Logger,
@@ -97,7 +99,16 @@ export class Application {
 
     process.on("uncaughtException", async (err: Error) => {
       this.logger.critical(`uncaught ${err.stack}`)
-      await this.stop()
+
+      /* Don't wait for server to quite gracefully, but quit after short delay.
+         This avoids processes hanging for a long time because a
+         request failed to finish. We sacrifice all running requests for a
+         more speedy recovery because the server will restart. */
+      this.stop()
+
+      await sleep(500)
+      this.logger.warning(`forcefully stopped ${this.description}`)
+
       process.exit(1)
     })
 

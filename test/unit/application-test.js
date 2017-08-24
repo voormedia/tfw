@@ -1,6 +1,10 @@
+import mocha from "mocha"
+
 import Application from "src/application"
 import Logger from "src/util/logger"
 import {TooManyRequests} from "src/errors"
+
+import sleep from "src/util/sleep"
 
 let exitCode = 0
 const exitHandler = process.exit
@@ -8,11 +12,16 @@ const nullHandler = (code) => {exitCode = code}
 
 describe("application", function() {
   before(function() {
+    this.uncaughtExceptionListeners = process.listeners("uncaughtException")
     process.exit = nullHandler
   })
 
   after(function() {
     process.exit = exitHandler
+    process.removeAllListeners("uncaughtException")
+    for (const listener of this.uncaughtExceptionListeners) {
+      process.on("uncaughtException", listener)
+    }
   })
 
   describe("start", function() {
@@ -139,6 +148,7 @@ describe("application", function() {
 
       this.app.logger.console.clear()
       process.emit("uncaughtException", new Error())
+      await sleep(550)
       this.entry = JSON.parse(this.app.logger.console.stdout.toString().split("\n").shift())
     })
 
