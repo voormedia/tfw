@@ -144,6 +144,7 @@ describe("application", function() {
         port: test.nextPort,
       })
 
+      process.env.NODE_ENV = "production"
       this.app.start()
 
       this.app.logger.console.clear()
@@ -153,6 +154,7 @@ describe("application", function() {
     })
 
     after(function() {
+      process.env.NODE_ENV = "test"
       this.app.stop()
     })
 

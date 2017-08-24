@@ -97,20 +97,22 @@ export class Application {
       process.exit(0)
     })
 
-    process.on("uncaughtException", async (err: Error) => {
-      this.logger.critical(`uncaught ${err.stack}`)
+    if (process.env.NODE_ENV !== "test") {
+      process.on("uncaughtException", async (err: Error) => {
+        this.logger.critical(`uncaught ${err.stack}`)
 
-      /* Don't wait for server to quite gracefully, but quit after short delay.
-         This avoids processes hanging for a long time because a
-         request failed to finish. We sacrifice all running requests for a
-         more speedy recovery because the server will restart. */
-      this.stop()
+        /* Don't wait for server to quite gracefully, but quit after short delay.
+           This avoids processes hanging for a long time because a
+           request failed to finish. We sacrifice all running requests for a
+           more speedy recovery because the server will restart. */
+        this.stop()
 
-      await sleep(500)
-      this.logger.warning(`forcefully stopped ${this.description}`)
+        await sleep(500)
+        this.logger.warning(`forcefully stopped ${this.description}`)
 
-      process.exit(1)
-    })
+        process.exit(1)
+      })
+    }
 
     this.server.on("connection", (socket: IdlingSocket) => {
       socket.idle = true
