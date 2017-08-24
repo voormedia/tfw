@@ -48,7 +48,7 @@ function setError(ctx: Context, err: any) {
   }
 
   ctx.body = err
-  ctx.status = err.status
+  ctx.status = err.status || 500
 }
 
 function setResponse(ctx: Context) {

@@ -283,6 +283,43 @@ describe("write", function() {
     })
   })
 
+  describe("with exposable error", function() {
+    before(async function() {
+      let ctx
+      const {res, body} = await test.request(
+        test.createStack(write(), function() {
+          ctx = this
+          ctx.headers.set("Foo", "bar")
+
+          const error = new Error
+          error.expose = true
+          error.toJSON = () => ({foo: "bar"})
+          throw error
+        })
+      )
+
+      this.res = res
+      this.body = body
+      this.ctx = ctx
+    })
+
+    it("should write status", function() {
+      assert.equal(this.res.statusCode, 500)
+    })
+
+    it("should write headers", function() {
+      assert.equal(this.res.headers["foo"], "bar")
+    })
+
+    it("should render error", function() {
+      assert.equal(this.body, '{"foo":"bar"}')
+    })
+
+    it("should save error", function() {
+      assert.equal(this.ctx.data.error.constructor, Error)
+    })
+  })
+
   describe("with service error", function() {
     before(async function() {
       let ctx
@@ -356,6 +393,39 @@ describe("write", function() {
         test.createStack(write(), function() {
           ctx = this
           ctx.headers.set("Location", "\x00\x00")
+          ctx.headers.set("Foo", "bar")
+        })
+      )
+
+      this.res = res
+      this.body = body
+      this.ctx = ctx
+    })
+
+    it("should write status", function() {
+      assert.equal(this.res.statusCode, 500)
+    })
+
+    it("should write headers", function() {
+      assert.equal(this.res.headers["foo"], "bar")
+    })
+
+    it("should render error", function() {
+      assert.equal(this.body, '{"error":"Internal server error","message":"Internal server error"}')
+    })
+
+    it("should save error", function() {
+      assert.equal(this.ctx.data.error.constructor, TypeError)
+    })
+  })
+
+  describe.skip("with bad status code", function() {
+    before(async function() {
+      let ctx
+      const {res, body} = await test.request(
+        test.createStack(write(), function() {
+          ctx = this
+          ctx.status = 0
           ctx.headers.set("Foo", "bar")
         })
       )
