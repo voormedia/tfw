@@ -195,16 +195,12 @@ export class Application {
     const context = new Context(stack, req, res)
     const handler = compose(stack, context)
 
-    const call = async () => {
-      try {
-        this.requests.add(req)
-        await handler()
-      } finally {
-        this.requests.delete(req)
-      }
-    }
+    this.requests.add(req)
+    res.on("finish", () => {
+      this.requests.delete(req)
+    })
 
-    Promise.resolve(call()).catch(err => {
+    Promise.resolve(handler()).catch(err => {
       process.nextTick(() => {throw err})
     })
   }

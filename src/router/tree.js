@@ -39,7 +39,11 @@ export default class Tree {
       const path = stack.pop()
       const node = path[path.length - 1]
 
-      const children = [...Array.from(node.children.values()), ...Array.from(node.patterns.values())]
+      const children = [
+        ...Array.from(node.children.values()),
+        ...Array.from(node.patterns.values()),
+      ]
+
       for (const node of children) {
         stack.push(path.concat([node]))
       }

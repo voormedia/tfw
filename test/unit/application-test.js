@@ -172,6 +172,31 @@ describe("application", function() {
   })
 
   describe("dispatch", function() {
+    describe("with request tracking", function() {
+      before(async function() {
+        const app = this.app = new Application({
+          port: test.nextPort,
+        })
+
+        let tracked
+        this.app.stack.push(function(next) {
+          tracked = new Set(app.requests)
+          return next()
+        })
+
+        await test.request(this.app)
+        this.tracked = tracked
+      })
+
+      it("should track request", function() {
+        assert.equal(this.tracked.size, 1)
+      })
+
+      it("should release request", function() {
+        assert.equal(this.app.requests.size, 0)
+      })
+    })
+
     describe("without handler", function() {
       before(async function() {
         const app = new Application({
@@ -398,6 +423,39 @@ describe("application", function() {
 
       it("should log request", function() {
         assert.equal(this.entry.httpRequest.status, 500)
+      })
+    })
+
+    describe("with uncaught error", function() {
+      before(async function() {
+        this.app = new Application({
+          port: test.nextPort,
+        })
+
+        this.app.stack.length = 0
+        this.app.stack.push(async () => {
+          throw new Error("Something went wrong")
+        })
+
+        process.env.NODE_ENV = "production"
+        this.app.start()
+
+        process.removeAllListeners("uncaughtException")
+        process.on("uncaughtException", err => {
+          this.error = err
+        })
+
+        this.client = await test.createConnection(test.thisPort)
+        this.client.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n")
+      })
+
+      after(function() {
+        this.app.stop()
+        process.env.NODE_ENV = "test"
+      })
+
+      it("should rethrow error", function() {
+        assert.equal(this.error.message, "Something went wrong")
       })
     })
   })
