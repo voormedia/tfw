@@ -1,27 +1,22 @@
 /* @flow */
 import type {Stack} from "./middleware"
-import type {Application} from "./application"
 import type {IncomingMessage, ServerResponse} from "http"
 
 export type Request = IncomingMessage
 export type Response = ServerResponse
 
 export class Context {
-  app: Application
   stack: Stack
-
   request: Request
   response: Response
 
   body: Object | string = ""
   data: Object = {}
 
-  constructor(app: Application, stack: Stack, req: IncomingMessage, res: ServerResponse) {
-    this.app = app
+  constructor(stack: Stack, request: IncomingMessage, response: ServerResponse) {
     this.stack = stack
-
-    this.request = req
-    this.response = res
+    this.request = request
+    this.response = response
 
     Object.seal(this)
   }
@@ -58,7 +53,6 @@ export class Context {
     return {
       stack: this.stack,
       data: this.data,
-      app: "<app>",
       req: "<node req>",
       res: "<node res>",
     }

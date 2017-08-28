@@ -15,7 +15,7 @@ describe("validate body", function() {
       }
 
 
-      this.stack = test.createStack(
+      this.app = test.createStack(
         write(),
         rescue(),
         parseBody(),
@@ -25,7 +25,7 @@ describe("validate body", function() {
     })
 
     it("should return error on validation failure", async function() {
-      const {res, body} = await test.request(this.stack, {
+      const {res, body} = await test.request(this.app, {
         headers: {
           "Content-Type": "application/json; charset=utf-8"
         },
@@ -40,7 +40,7 @@ describe("validate body", function() {
     })
 
     it("should return error if body is missing", async function() {
-      const {res, body} = await test.request(this.stack, {
+      const {res, body} = await test.request(this.app, {
         headers: {
           "Content-Type": "application/json; charset=utf-8"
         },

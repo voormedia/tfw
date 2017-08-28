@@ -69,6 +69,7 @@ export default function log(logger: Logger): Middleware {
         remoteIp,
         referer,
         latency,
+        // protocol, TODO
       }
 
       const logContext: LogContext = Object.assign({}, this.data.log, {httpRequest})

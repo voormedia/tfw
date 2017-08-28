@@ -192,7 +192,7 @@ export class Application {
 
   dispatch(req: Request, res: Response): void {
     const stack = this.stack.slice(0)
-    const context = new Context(this, stack, req, res)
+    const context = new Context(stack, req, res)
     const handler = compose(stack, context)
 
     const call = async () => {

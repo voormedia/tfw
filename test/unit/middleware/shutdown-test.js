@@ -66,13 +66,13 @@ describe("shutdown", function() {
   describe("with closing server", function() {
     describe("with slow request", function() {
       before(async function() {
-       const {res, body} = await test.request(
-          test.createStack(write(), rescue(), shutdown(0.02), async function() {
-            this.app.stop()
-            await new Promise(resolve => setTimeout(resolve, 100))
-            this.body = "ok"
-          })
-        )
+        const app = test.createStack(write(), rescue(), shutdown(0.02), async function() {
+          app.stop()
+          await new Promise(resolve => setTimeout(resolve, 100))
+          this.body = "ok"
+        })
+
+        const {res, body} = await test.request(app)
 
         this.res = res
         this.body = body
@@ -89,13 +89,13 @@ describe("shutdown", function() {
 
     describe("with fast request", function() {
       before(async function() {
-        const {res, body} = await test.request(
-          test.createStack(write(), rescue(), shutdown(0.02), async function() {
-            this.app.stop()
-            await new Promise(resolve => setTimeout(resolve, 1))
-            this.body = "ok"
-          })
-        )
+        const app = test.createStack(write(), rescue(), shutdown(0.02), async function() {
+          app.stop()
+          await new Promise(resolve => setTimeout(resolve, 1))
+          this.body = "ok"
+        })
+
+        const {res, body} = await test.request(app)
 
         this.res = res
         this.body = body
