@@ -2,12 +2,14 @@
 import log from "./log"
 import route from "./route"
 import shutdown from "./shutdown"
+import rescue from "./rescue"
 import write from "./write"
 
 export {
   log,
   route,
   shutdown,
+  rescue,
   write,
 }
 

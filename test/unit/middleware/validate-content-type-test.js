@@ -1,4 +1,4 @@
-import {write, validateContentType} from "src/middleware"
+import {write, rescue, validateContentType} from "src/middleware"
 
 describe("validate content type", function() {
   describe("without body", function() {
@@ -6,7 +6,7 @@ describe("validate content type", function() {
       before(async function() {
         let ctx
         const {res, body} = await test.request(
-          test.createStack(write(), validateContentType("foo/bar"), function() {}), {
+          test.createStack(write(), rescue(), validateContentType("foo/bar"), function() {}), {
             method: "GET",
             headers: {
               "Content-Type": "foo/bar; charset=utf-8"
@@ -27,7 +27,7 @@ describe("validate content type", function() {
       before(async function() {
         let ctx
         const {res, body} = await test.request(
-          test.createStack(write(), validateContentType("foo/bar"), function() {}), {
+          test.createStack(write(), rescue(), validateContentType("foo/bar"), function() {}), {
             method: "GET",
           }
         )
@@ -45,7 +45,7 @@ describe("validate content type", function() {
       before(async function() {
         let ctx
         const {res, body} = await test.request(
-          test.createStack(write(), validateContentType("foo/bar"), function() {}), {
+          test.createStack(write(), rescue(), validateContentType("foo/bar"), function() {}), {
             method: "GET",
             headers: {
               "Content-Type": "foo/qux; charset=utf-8"
@@ -70,7 +70,7 @@ describe("validate content type", function() {
       before(async function() {
         let ctx
         const {res, body} = await test.request(
-          test.createStack(write(), validateContentType("foo/bar"), function() {}), {
+          test.createStack(write(), rescue(), validateContentType("foo/bar"), function() {}), {
             method: "POST",
             body: "foobar",
             headers: {
@@ -92,7 +92,7 @@ describe("validate content type", function() {
       before(async function() {
         let ctx
         const {res, body} = await test.request(
-          test.createStack(write(), validateContentType("foo/bar"), function() {}), {
+          test.createStack(write(), rescue(), validateContentType("foo/bar"), function() {}), {
             method: "POST",
             body: "foobar",
           }
@@ -118,7 +118,7 @@ describe("validate content type", function() {
       before(async function() {
         let ctx
         const {res, body} = await test.request(
-          test.createStack(write(), validateContentType("foo/bar"), function() {}), {
+          test.createStack(write(), rescue(), validateContentType("foo/bar"), function() {}), {
             method: "POST",
             body: "foobar",
             headers: {

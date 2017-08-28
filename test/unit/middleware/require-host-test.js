@@ -1,14 +1,14 @@
 import net from "net"
 import http from "http"
 
-import {write, requireHost} from "src/middleware"
+import {write, rescue, requireHost} from "src/middleware"
 
 describe("require host", function() {
   describe("without allowed hosts", function() {
     describe("with any host", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), requireHost(), function() {
+          test.createStack(write(), rescue(), requireHost(), function() {
             this.body = "ok"
             this.status = 201
           }), {
@@ -36,7 +36,7 @@ describe("require host", function() {
   describe("with single allowed host", function() {
     describe("without host", function() {
       before(async function() {
-        const app = test.createStack(write(), requireHost(), function() {
+        const app = test.createStack(write(), rescue(), requireHost(), function() {
           this.body = "ok"
           this.status = 201
         })
@@ -71,7 +71,7 @@ describe("require host", function() {
     describe("with good host", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), requireHost("example.com"), function() {
+          test.createStack(write(), rescue(), requireHost("example.com"), function() {
             this.body = "ok"
             this.status = 201
           }), {
@@ -98,7 +98,7 @@ describe("require host", function() {
     describe("with bad host", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), requireHost("example.com"), function() {
+          test.createStack(write(), rescue(), requireHost("example.com"), function() {
             this.body = "ok"
             this.status = 201
           }), {
@@ -127,7 +127,7 @@ describe("require host", function() {
     describe("without host", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), requireHost(), function() {
+          test.createStack(write(), rescue(), requireHost(), function() {
             this.body = "ok"
             this.status = 201
           }), {
@@ -153,7 +153,7 @@ describe("require host", function() {
     describe("with good host", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), requireHost("example.net", "example.com"), function() {
+          test.createStack(write(), rescue(), requireHost("example.net", "example.com"), function() {
             this.body = "ok"
             this.status = 201
           }), {
@@ -180,7 +180,7 @@ describe("require host", function() {
     describe("with bad host", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), requireHost("example.net", "example.com"), function() {
+          test.createStack(write(), rescue(), requireHost("example.net", "example.com"), function() {
             this.body = "ok"
             this.status = 201
           }), {

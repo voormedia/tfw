@@ -77,6 +77,7 @@ export class Application {
     this.stack = [
       middleware.log(logger),
       middleware.write(),
+      middleware.rescue(),
       middleware.shutdown(terminationGrace),
       middleware.route(router),
     ]

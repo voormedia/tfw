@@ -3,7 +3,7 @@ import timekeeper from "timekeeper"
 import {InternalServerError} from "src/errors"
 import Logger from "src/util/logger"
 import MemoryConsole from "src/util/memory-console"
-import {log, write} from "src/middleware"
+import {log, write, rescue} from "src/middleware"
 
 describe("log", function() {
   before(function() {
@@ -16,7 +16,7 @@ describe("log", function() {
       before(async function() {
         this.logger.console.clear()
         const {res, body} = await test.request(
-          test.createStack(log(this.logger), write(), function() {
+          test.createStack(log(this.logger), write(), rescue(), function() {
             this.body = "ok"
             this.status = 201
             this.data.log = {foo: {bar: "qux"}}
@@ -75,7 +75,7 @@ describe("log", function() {
       before(async function() {
         this.logger.console.clear()
         const {res, body} = await test.request(
-          test.createStack(log(this.logger), write(), function() {
+          test.createStack(log(this.logger), write(), rescue(), function() {
             this.body = "ok"
             this.status = 201
             this.data.log = {foo: {bar: "qux"}}
@@ -139,7 +139,7 @@ describe("log", function() {
       before(async function() {
         this.logger.console.clear()
         const {res, body} = await test.request(
-          test.createStack(log(this.logger), write(), function() {
+          test.createStack(log(this.logger), write(), rescue(), function() {
             this.status = 500
             this.data.error = this.body = new InternalServerError("Failure")
             this.data.log = {foo: {bar: "qux"}}
@@ -200,7 +200,7 @@ describe("log", function() {
       before(async function() {
         this.logger.console.clear()
         const {res, body} = await test.request(
-          test.createStack(log(this.logger), write(), function() {
+          test.createStack(log(this.logger), write(), rescue(), function() {
             this.status = 500
             this.data.error = this.body = new InternalServerError("")
             this.data.log = {foo: {bar: "qux"}}
@@ -261,7 +261,7 @@ describe("log", function() {
       before(async function() {
         this.logger.console.clear()
         const {res, body} = await test.request(
-          test.createStack(log(this.logger), write(), function() {
+          test.createStack(log(this.logger), write(), rescue(), function() {
             this.status = 500
             this.data.error = new Error
             this.body = new InternalServerError

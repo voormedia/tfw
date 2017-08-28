@@ -1,4 +1,4 @@
-import {write, parseBody, validateBody} from "src/middleware"
+import {write, rescue, parseBody, validateBody} from "src/middleware"
 
 describe("validate body", function() {
   describe("with schema", function() {
@@ -17,6 +17,7 @@ describe("validate body", function() {
 
       this.stack = test.createStack(
         write(),
+        rescue(),
         parseBody(),
         validateBody(options),
         function() {},
@@ -68,7 +69,7 @@ describe("validate body", function() {
       }
 
       const {res, body} = await test.request(
-        test.createStack(write(), parseBody(), validateBody(options), function() {}), {
+        test.createStack(write(), rescue(), parseBody(), validateBody(options), function() {}), {
           headers: {
             "Content-Type": "application/json; charset=utf-8"
           },
@@ -104,7 +105,7 @@ describe("validate body", function() {
       }
 
       const {res, body} = await test.request(
-        test.createStack(write(), parseBody(), validateBody(options), function() {}), {
+        test.createStack(write(), rescue(), parseBody(), validateBody(options), function() {}), {
           headers: {
             "Content-Type": "application/json; charset=utf-8"
           },

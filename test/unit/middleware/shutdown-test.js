@@ -1,6 +1,6 @@
 import fs from "fs"
 
-import {write, shutdown} from "src/middleware"
+import {write, rescue, shutdown} from "src/middleware"
 
 import {PaymentRequired} from "src/errors"
 
@@ -21,7 +21,7 @@ describe("shutdown", function() {
     describe("with slow request", function() {
       before(async function() {
        const {res, body} = await test.request(
-          test.createStack(write(), shutdown(0.02), async function() {
+          test.createStack(write(), rescue(), shutdown(0.02), async function() {
             await new Promise(resolve => setTimeout(resolve, 100))
             this.body = "ok"
           })
@@ -43,7 +43,7 @@ describe("shutdown", function() {
     describe("with fast request", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), shutdown(0.02), async function() {
+          test.createStack(write(), rescue(), shutdown(0.02), async function() {
             await new Promise(resolve => setTimeout(resolve, 1))
             this.body = "ok"
           })
@@ -67,7 +67,7 @@ describe("shutdown", function() {
     describe("with slow request", function() {
       before(async function() {
        const {res, body} = await test.request(
-          test.createStack(write(), shutdown(0.02), async function() {
+          test.createStack(write(), rescue(), shutdown(0.02), async function() {
             this.app.stop()
             await new Promise(resolve => setTimeout(resolve, 100))
             this.body = "ok"
@@ -90,7 +90,7 @@ describe("shutdown", function() {
     describe("with fast request", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), shutdown(0.02), async function() {
+          test.createStack(write(), rescue(), shutdown(0.02), async function() {
             this.app.stop()
             await new Promise(resolve => setTimeout(resolve, 1))
             this.body = "ok"

@@ -1,11 +1,11 @@
-import {write, parseAuthorization} from "src/middleware"
+import {write, rescue, parseAuthorization} from "src/middleware"
 
 describe("parse authorization", function() {
   describe("with username and password", function() {
     before(async function() {
       let ctx
       await test.request(
-        test.createStack(write(), parseAuthorization(), function() {
+        test.createStack(write(), rescue(), parseAuthorization(), function() {
           ctx = this
         }), {
           headers: {
@@ -30,7 +30,7 @@ describe("parse authorization", function() {
     before(async function() {
       let ctx
       await test.request(
-        test.createStack(write(), parseAuthorization(), function() {
+        test.createStack(write(), rescue(), parseAuthorization(), function() {
           ctx = this
         }), {
           headers: {
@@ -55,7 +55,7 @@ describe("parse authorization", function() {
     before(async function() {
       let ctx
       await test.request(
-        test.createStack(write(), parseAuthorization(), function() {
+        test.createStack(write(), rescue(), parseAuthorization(), function() {
           ctx = this
         }), {
           headers: {
@@ -80,7 +80,7 @@ describe("parse authorization", function() {
     before(async function() {
       let ctx
       await test.request(
-        test.createStack(write(), parseAuthorization(), function() {
+        test.createStack(write(), rescue(), parseAuthorization(), function() {
           ctx = this
         })
       )
@@ -101,7 +101,7 @@ describe("parse authorization", function() {
     before(async function() {
       let ctx
       await test.request(
-        test.createStack(write(), parseAuthorization(), function() {
+        test.createStack(write(), rescue(), parseAuthorization(), function() {
           ctx = this
         }), {
           headers: {
@@ -126,7 +126,7 @@ describe("parse authorization", function() {
     before(async function() {
       let ctx
       await test.request(
-        test.createStack(write(), parseAuthorization(), function() {
+        test.createStack(write(), rescue(), parseAuthorization(), function() {
           ctx = this
         }), {
           headers: {
@@ -150,7 +150,7 @@ describe("parse authorization", function() {
   describe("with null byte in credentials", function() {
     before(async function() {
       const {res, body} = await test.request(
-        test.createStack(write(), parseAuthorization()), {
+        test.createStack(write(), rescue(), parseAuthorization()), {
           headers: {
             "Authorization": "Basic AEE6AEE"
           }
@@ -173,7 +173,7 @@ describe("parse authorization", function() {
   describe("with control byte in credentials", function() {
     before(async function() {
       const {res, body} = await test.request(
-        test.createStack(write(), parseAuthorization()), {
+        test.createStack(write(), rescue(), parseAuthorization()), {
           headers: {
             "Authorization": "Basic B0E6ATVB"
           }
