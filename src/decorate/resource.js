@@ -9,6 +9,7 @@ export function resource({singular}: ResourceOptions = {singular: false}): Decor
   const single = [
     ["show", "GET", "/"],
     ["create", "POST", "/"],
+    ["create", "PUT", "/"],
     ["update", "PATCH", "/"],
     ["destroy", "DELETE", "/"],
 
@@ -20,6 +21,7 @@ export function resource({singular}: ResourceOptions = {singular: false}): Decor
     ["index", "GET", "/"],
     ["show", "GET", "/{id}"],
     ["create", "POST", "/"],
+    ["create", "PUT", "/"],
     ["update", "PATCH", "/{id}"],
     ["destroy", "DELETE", "/{id}"],
 
