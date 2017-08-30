@@ -18,7 +18,7 @@ for (const code in http.STATUS_CODES) {
 }
 
 export default function log(logger: Logger): Middleware {
-  return async function log(next: Next) {
+  return function log(next: Next) {
     (this: Context)
 
     const socket: StatsSocket = this.request.socket
@@ -32,10 +32,7 @@ export default function log(logger: Logger): Middleware {
 
     this.data.log = {}
 
-    try {
-      return await next()
-    } finally {
-
+    this.response.on("finish", () => {
       /* Store current read/written count for future reference. */
       socket.bytesReadPreviously = socket.bytesRead
       socket.bytesWrittenPreviously = socket.bytesWritten
@@ -88,6 +85,8 @@ export default function log(logger: Logger): Middleware {
         /* No error was thrown, or error was in 4xx range. */
         logger.info(statusCodes.get(status), logContext)
       }
-    }
+    })
+
+    return next()
   }
 }
