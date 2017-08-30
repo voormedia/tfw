@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 import BufferStream from "./buffer-stream"
 
-export default class MemoryConsole extends console.Console {
+export class MemoryConsole extends console.Console {
   stdout: BufferStream
   stderr: BufferStream
 
@@ -21,3 +21,5 @@ export default class MemoryConsole extends console.Console {
     this.stderr.clear()
   }
 }
+
+export default MemoryConsole

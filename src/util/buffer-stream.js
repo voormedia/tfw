@@ -1,7 +1,7 @@
 /* @flow */
 import {Writable} from "stream"
 
-export default class BufferStream extends Writable {
+export class BufferStream extends Writable {
   buffers: Array<Buffer> = []
 
   _write(chunk: Buffer | string, encoding: string, callback: Function) {
@@ -23,3 +23,5 @@ export default class BufferStream extends Writable {
     return Buffer.concat(this.buffers).toString()
   }
 }
+
+export default BufferStream

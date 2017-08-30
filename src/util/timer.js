@@ -1,5 +1,5 @@
 /* @flow */
-export default class Timer {
+export class Timer {
   time: number
   timer: number
 
@@ -17,3 +17,5 @@ export default class Timer {
     clearTimeout(this.timer)
   }
 }
+
+export default Timer

@@ -5,7 +5,7 @@ import type {IncomingMessage, ServerResponse} from "http"
 
 type Socket = net$Socket
 
-export default class ClosableServer extends Server {
+export class ClosableServer extends Server {
   closing: boolean = false
   sockets: Map<Socket, number> = new Map
 
@@ -53,3 +53,5 @@ export default class ClosableServer extends Server {
     return this
   }
 }
+
+export default ClosableServer

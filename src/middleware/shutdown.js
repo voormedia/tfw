@@ -5,6 +5,7 @@ import Timer from "../util/timer"
 import {ServiceUnavailable} from "../errors"
 
 import type {Context, Next, Middleware} from "../middleware"
+import type {ClosableServer} from "../util/closable-server"
 
 export default function shutdown(grace: number = 25): Middleware {
   return async function write(next: Next) {
@@ -16,7 +17,8 @@ export default function shutdown(grace: number = 25): Middleware {
     const stop = async () => {
       await timer.sleep()
 
-      if (this.request.socket.server.closing) {
+      const server: ClosableServer = this.request.socket.server
+      if (server.closing) {
         throw new ServiceUnavailable("Please retry the request")
       } else {
         return new Promise(() => {})
