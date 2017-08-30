@@ -5,11 +5,6 @@ import Timer from "../util/timer"
 import {ServiceUnavailable} from "../errors"
 
 import type {Context, Next, Middleware} from "../middleware"
-import type {Request} from "../context"
-
-type CancellingRequest = Request & {
-  cancelled?: boolean,
-}
 
 export default function shutdown(grace: number = 25): Middleware {
   return async function write(next: Next) {
@@ -21,8 +16,7 @@ export default function shutdown(grace: number = 25): Middleware {
     const stop = async () => {
       await timer.sleep()
 
-      const req: CancellingRequest = this.request
-      if (req.cancelled) {
+      if (this.request.socket.server.closing) {
         throw new ServiceUnavailable("Please retry the request")
       } else {
         return new Promise(() => {})

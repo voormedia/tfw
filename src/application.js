@@ -24,17 +24,11 @@ export type ApplicationOptions = {|
   terminationGrace?: number,
 |}
 
-type IdlingSocket = net$Socket & {
-  idle?: boolean,
-}
-
-type CancellingRequest = Request & {
-  cancelled?: boolean,
-}
-
 type ClosingServer = http.Server & {
   closing?: boolean,
 }
+
+type Socket = net$Socket
 
 const description = `${hostPkg.name} service ${process.env.HOSTNAME || ""}`.trim()
 
@@ -46,8 +40,7 @@ export class Application {
 
   description: string = description
   server: ClosingServer = http.createServer()
-  sockets: Set<IdlingSocket> = new Set
-  requests: Set<CancellingRequest> = new Set
+  sockets: Map<Socket, number> = new Map
 
   /* Start a new application with the given options in next tick. */
   static start(options: ApplicationOptions = Object.seal({})) {
@@ -86,6 +79,7 @@ export class Application {
   }
 
   start(): Promise<Application> {
+    this.server.closing = false
     this.server.timeout = 0
 
     process.on("SIGTERM", async () => {
@@ -115,29 +109,27 @@ export class Application {
       })
     }
 
-    this.server.on("connection", (socket: IdlingSocket) => {
-      socket.idle = true
+    this.server.on("connection", (socket: net$Socket) => {
+      this.sockets.set(socket, 0)
 
       socket.on("close", () => {
         this.sockets.delete(socket)
       })
-
-      this.sockets.add(socket)
     })
 
     this.server.on("request", (request: Request, response: Response) => {
-      const socket: IdlingSocket = request.socket
-      socket.idle = false
+      const socket = request.socket
+      this.sockets.set(socket, +this.sockets.get(socket) + 1)
 
       if (this.server.closing) {
-        response.removeHeader("Connection")
         response.setHeader("Connection", "close")
       }
 
       response.on("finish", () => {
-        socket.idle = true
+        const pending = +this.sockets.get(socket) - 1
+        this.sockets.set(socket, pending)
 
-        if (this.server.closing) {
+        if (this.server.closing && pending === 0) {
           this.logger.debug(`closing connection ${socket.remoteAddress || "unknown"}:${socket.remotePort}`)
           socket.end()
         }
@@ -161,13 +153,9 @@ export class Application {
   }
 
   stop(): Promise<Application> {
-    this.server.closing = true
-
     this.logger.notice(`stopping ${this.description}`)
 
-    for (const request of this.requests) {
-      request.cancelled = true
-    }
+    this.server.closing = true
 
     const stopped = new Promise(resolve => {
       this.server.close(err => {
@@ -180,8 +168,8 @@ export class Application {
       })
     })
 
-    for (const socket of this.sockets) {
-      if (socket.idle) {
+    for (const [socket, pending] of this.sockets) {
+      if (pending === 0) {
         this.logger.debug(`closing idle connection ${socket.remoteAddress || "unknown"}:${socket.remotePort}`)
         socket.end()
       }
@@ -194,11 +182,6 @@ export class Application {
     const stack = this.stack.slice(0)
     const context = new Context(stack, req, res)
     const handler = compose(stack, context)
-
-    this.requests.add(req)
-    res.on("finish", () => {
-      this.requests.delete(req)
-    })
 
     Promise.resolve(handler()).catch(err => {
       process.nextTick(() => {throw err})

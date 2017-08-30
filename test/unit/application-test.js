@@ -51,7 +51,6 @@ describe("application", function() {
       before(async function() {
         this.client = await test.createConnection(test.thisPort)
         await new Promise(resolve => setTimeout(resolve, 10))
-        this.socket = this.app.sockets.values().next().value
       })
 
       after(function() {
@@ -59,7 +58,7 @@ describe("application", function() {
       })
 
       it("should mark connection as idle", function() {
-        assert.equal(this.socket.idle, true)
+        assert.equal(this.app.sockets.values().next().value, 0)
       })
     })
 
@@ -71,8 +70,6 @@ describe("application", function() {
         await new Promise(resolve => {
           this.app.server.on("request", resolve)
         })
-
-        this.socket = this.app.sockets.values().next().value
       })
 
       after(function() {
@@ -80,7 +77,7 @@ describe("application", function() {
       })
 
       it("should mark connection as active", function() {
-        assert.equal(this.socket.idle, false)
+        assert.equal(this.app.sockets.values().next().value, 1)
       })
     })
 
@@ -94,8 +91,6 @@ describe("application", function() {
             response.on("finish", resolve)
           })
         })
-
-        this.socket = this.app.sockets.values().next().value
       })
 
       after(function() {
@@ -103,15 +98,17 @@ describe("application", function() {
       })
 
       it("should mark connection as idle", function() {
-        assert.equal(this.socket.idle, true)
+        assert.equal(this.app.sockets.values().next().value, 0)
       })
     })
 
     describe("on stop", function() {
       before(async function() {
-        this.app.server.closing = true
-
         this.client = await test.createConnection(test.thisPort)
+        this.client.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n")
+
+        await sleep(0)
+        this.app.stop()
         this.client.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n")
 
         const chunks = []
@@ -172,31 +169,6 @@ describe("application", function() {
   })
 
   describe("dispatch", function() {
-    describe("with request tracking", function() {
-      before(async function() {
-        const app = this.app = new Application({
-          port: test.nextPort,
-        })
-
-        let tracked
-        this.app.stack.push(function(next) {
-          tracked = new Set(app.requests)
-          return next()
-        })
-
-        await test.request(this.app)
-        this.tracked = tracked
-      })
-
-      it("should track request", function() {
-        assert.equal(this.tracked.size, 1)
-      })
-
-      it("should release request", function() {
-        assert.equal(this.app.requests.size, 0)
-      })
-    })
-
     describe("without handler", function() {
       before(async function() {
         const app = new Application({

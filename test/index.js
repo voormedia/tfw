@@ -37,7 +37,13 @@ const test = {
     options = Object.assign({port: app.port, method: "GET"}, options)
     if (options.method == "GET" && options.body) throw new Error("get required")
     return new Promise((resolve, reject) => {
-      const server = app.dispatch ? http.createServer(::app.dispatch).listen(app.port) : null
+      let server
+      if (app.dispatch) {
+        server = app.server ? app.server : http.createServer()
+        server.on("request", ::app.dispatch)
+        server.listen(app.port)
+      }
+
       if (server && options.fakeEncrypted) {
         server.on("connection", conn => conn.encrypted = true)
       }
