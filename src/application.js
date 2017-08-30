@@ -1,11 +1,10 @@
 /* @flow */
 import "./util/polyfill"
 
-import http from "http"
-
 import hostPkg from "./util/host-pkg"
 
 import Logger from "./util/logger"
+import ClosableServer from "./util/closable-server"
 import Router from "./router"
 import Context from "./context"
 
@@ -24,12 +23,6 @@ export type ApplicationOptions = {|
   terminationGrace?: number,
 |}
 
-type ClosingServer = http.Server & {
-  closing?: boolean,
-}
-
-type Socket = net$Socket
-
 const description = `${hostPkg.name} service ${process.env.HOSTNAME || ""}`.trim()
 
 export class Application {
@@ -39,8 +32,7 @@ export class Application {
   stack: Stack
 
   description: string = description
-  server: ClosingServer = http.createServer()
-  sockets: Map<Socket, number> = new Map
+  server: ClosableServer = new ClosableServer()
 
   /* Start a new application with the given options in next tick. */
   static start(options: ApplicationOptions = Object.seal({})) {
@@ -79,7 +71,6 @@ export class Application {
   }
 
   start(): Promise<Application> {
-    this.server.closing = false
     this.server.timeout = 0
 
     process.on("SIGTERM", async () => {
@@ -109,33 +100,6 @@ export class Application {
       })
     }
 
-    this.server.on("connection", (socket: net$Socket) => {
-      this.sockets.set(socket, 0)
-
-      socket.on("close", () => {
-        this.sockets.delete(socket)
-      })
-    })
-
-    this.server.on("request", (request: Request, response: Response) => {
-      const socket = request.socket
-      this.sockets.set(socket, +this.sockets.get(socket) + 1)
-
-      if (this.server.closing) {
-        response.setHeader("Connection", "close")
-      }
-
-      response.on("finish", () => {
-        const pending = +this.sockets.get(socket) - 1
-        this.sockets.set(socket, pending)
-
-        if (this.server.closing && pending === 0) {
-          this.logger.debug(`closing connection ${socket.remoteAddress || "unknown"}:${socket.remotePort}`)
-          socket.end()
-        }
-      })
-    })
-
     // ES7: this.server.on("request", ::this.dispatch)
     this.server.on("request", this.dispatch.bind(this))
 
@@ -153,27 +117,15 @@ export class Application {
   }
 
   stop(): Promise<Application> {
-    this.logger.notice(`stopping ${this.description}`)
-
-    this.server.closing = true
-
     const stopped = new Promise(resolve => {
-      this.server.close(err => {
-        if (err) {
-          this.logger.error(err)
-        }
-
-        this.logger.notice(`gracefully stopped ${this.description}`)
+      this.server.once("close", () => {
         resolve(this)
       })
     })
 
-    for (const [socket, pending] of this.sockets) {
-      if (pending === 0) {
-        this.logger.debug(`closing idle connection ${socket.remoteAddress || "unknown"}:${socket.remotePort}`)
-        socket.end()
-      }
-    }
+    this.logger.notice(`stopping ${this.description}`)
+
+    this.server.close()
 
     return stopped
   }

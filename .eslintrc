@@ -44,6 +44,7 @@
     "no-undef-init": 2,
     "no-underscore-dangle": 2,
     "no-unused-expressions": 2,
+    "no-unused-vars": [2, {args: "none"}],
     "no-with": 2,
     "camelcase": [2, {properties: "never"}],
     "comma-dangle": [1, "always-multiline"],

@@ -58,13 +58,15 @@ describe("application", function() {
       })
 
       it("should mark connection as idle", function() {
-        assert.equal(this.app.sockets.values().next().value, 0)
+        assert.deepEqual(Array.from(this.app.server.sockets.values()), [0])
       })
     })
 
     describe("on request", function() {
       before(async function() {
         this.client = await test.createConnection(test.thisPort)
+        this.client.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n")
+        this.client.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n")
         this.client.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n")
 
         await new Promise(resolve => {
@@ -77,13 +79,15 @@ describe("application", function() {
       })
 
       it("should mark connection as active", function() {
-        assert.equal(this.app.sockets.values().next().value, 1)
+        assert.deepEqual(Array.from(this.app.server.sockets.values()), [3])
       })
     })
 
     describe("on finish", function() {
       before(async function() {
         this.client = await test.createConnection(test.thisPort)
+        this.client.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n")
+        this.client.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n")
         this.client.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n")
 
         await new Promise(resolve => {
@@ -98,7 +102,7 @@ describe("application", function() {
       })
 
       it("should mark connection as idle", function() {
-        assert.equal(this.app.sockets.values().next().value, 0)
+        assert.deepEqual(Array.from(this.app.server.sockets.values()), [0])
       })
     })
 
@@ -118,7 +122,6 @@ describe("application", function() {
           this.client.on("end", resolve)
         })
 
-        this.socket = this.app.sockets.values().next().value
         this.body = Buffer.concat(chunks).toString()
       })
 
