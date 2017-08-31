@@ -14,8 +14,6 @@ import * as middleware from "./middleware"
 import type {Next, Stack} from "./middleware"
 import type {Request, Response} from "./context"
 
-import sleep from "./util/sleep"
-
 export type ApplicationOptions = {|
   port?: number,
   logger?: Logger,
@@ -73,61 +71,65 @@ export class Application {
   start(): Promise<Application> {
     this.server.timeout = 0
 
-    process.on("SIGTERM", async () => {
-      await this.stop()
-      process.exit(0)
-    })
-
     process.on("SIGINT", async () => {
       await this.stop()
-      process.exit(0)
+      process.exit(128 + 2)
+    })
+
+    process.on("SIGTERM", async () => {
+      await this.stop()
+      process.exit(128 + 15)
     })
 
     if (process.env.NODE_ENV !== "test") {
       process.on("uncaughtException", async (err: Error) => {
         this.logger.critical(`uncaught ${err.stack}`)
-
-        /* Don't wait for server to quite gracefully, but quit after short delay.
-           This avoids processes hanging for a long time because a
-           request failed to finish. We sacrifice all running requests for a
-           more speedy recovery because the server will restart. */
-        this.stop()
-
-        await sleep(500)
-        this.logger.warning(`forcefully stopped ${this.description}`)
-
+        await this.kill()
         process.exit(1)
+      })
+
+      process.on("unhandledRejection", async (err: Error, promise: Promise<any>) => {
+        this.logger.critical(`unhandled ${err.stack} from ${promise.toString()}`)
+        await this.kill()
+        process.exit(2)
       })
     }
 
     // ES7: this.server.on("request", ::this.dispatch)
     this.server.on("request", this.dispatch.bind(this))
 
-    const started = new Promise(resolve => {
-      this.server.once("listening", () => {
-        resolve(this)
-      })
-    })
-
     this.logger.notice(`starting ${this.description}`)
 
     this.server.listen(this.port)
 
-    return started
+    return new Promise(resolve => {
+      this.server.once("listening", () => resolve(this))
+    })
   }
 
   stop(): Promise<Application> {
-    const stopped = new Promise(resolve => {
-      this.server.once("close", () => {
-        resolve(this)
-      })
-    })
-
     this.logger.notice(`stopping ${this.description}`)
 
     this.server.close()
 
-    return stopped
+    return new Promise(resolve => {
+      this.server.once("close", () => resolve(this))
+    })
+  }
+
+  kill(): Promise<Application> {
+    this.logger.warning(`forcefully stopped ${this.description}`)
+
+    /* Don't wait for server to quite gracefully, but quit after short delay.
+       This avoids processes hanging for a long time because a
+       request failed to finish. We sacrifice all running requests for a
+       more speedy recovery because the server will restart. */
+    this.server.close()
+    this.server.unref()
+
+    return new Promise(resolve => {
+      setTimeout(() => resolve(this), 500)
+    })
   }
 
   dispatch(req: Request, res: Response): void {

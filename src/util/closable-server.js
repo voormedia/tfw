@@ -44,11 +44,13 @@ export class ClosableServer extends Server {
 
     this.closing = true
 
-    for (const [socket, pending] of this.sockets) {
-      if (pending === 0) {
-        socket.end()
+    process.nextTick(() => {
+      for (const [socket, pending] of this.sockets) {
+        if (pending === 0) {
+          socket.end()
+        }
       }
-    }
+    })
 
     return this
   }

@@ -12,15 +12,23 @@ const nullHandler = (code) => {exitCode = code}
 
 describe("application", function() {
   before(function() {
-    this.uncaughtExceptionListeners = process.listeners("uncaughtException")
     process.exit = nullHandler
+
+    this.uncaughtExceptionListeners = process.listeners("uncaughtException")
+    this.unhandledRejectionListeners = process.listeners("unhandledRejection")
   })
 
   after(function() {
     process.exit = exitHandler
+
     process.removeAllListeners("uncaughtException")
     for (const listener of this.uncaughtExceptionListeners) {
       process.on("uncaughtException", listener)
+    }
+
+    process.removeAllListeners("unhandledRejection")
+    for (const listener of this.unhandledRejectionListeners) {
+      process.on("unhandledRejection", listener)
     }
   })
 
@@ -137,7 +145,6 @@ describe("application", function() {
 
   describe("on uncaught error", function() {
     before(async function() {
-      /* Do not const mocha catch exceptions. */
       process.removeAllListeners("uncaughtException")
 
       this.app = new Application({
@@ -168,6 +175,41 @@ describe("application", function() {
 
     it("should set process exit code", function() {
       assert.equal(exitCode, 1)
+    })
+  })
+
+  describe("on unhandled rejection", function() {
+    before(async function() {
+      process.removeAllListeners("unhandledRejection")
+
+      this.app = new Application({
+        port: test.nextPort,
+      })
+
+      process.env.NODE_ENV = "production"
+      this.app.start()
+
+      this.app.logger.console.clear()
+      Promise.reject(new Error())
+      await sleep(550)
+      this.entry = JSON.parse(this.app.logger.console.stdout.toString().split("\n").shift())
+    })
+
+    after(function() {
+      process.env.NODE_ENV = "test"
+      this.app.stop()
+    })
+
+    it("should log error", function() {
+      assert.include(this.entry.message, "unhandled Error\n    at")
+    })
+
+    it("should log with critical severity", function() {
+      assert.equal(this.entry.severity, "CRITICAL")
+    })
+
+    it("should set process exit code", function() {
+      assert.equal(exitCode, 2)
     })
   })
 
