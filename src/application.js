@@ -4,15 +4,14 @@ import "./util/polyfill"
 import hostPkg from "./util/host-pkg"
 
 import Logger from "./util/logger"
-import ClosableServer from "./util/closable-server"
 import Router from "./router"
-import Context from "./context"
 
-import {NotFound, InternalServerError} from "./errors"
+import ClosableServer from "./app/closable-server"
+import dispatch from "./app/dispatch"
+
 import * as middleware from "./middleware"
 
-import type {Next, Stack} from "./middleware"
-import type {Request, Response} from "./context"
+import type {Stack} from "./middleware"
 
 export type ApplicationOptions = {|
   port?: number,
@@ -96,7 +95,7 @@ export class Application {
     }
 
     // ES7: this.server.on("request", ::this.dispatch)
-    this.server.on("request", this.dispatch.bind(this))
+    this.server.on("request", dispatch(this.stack))
 
     this.logger.notice(`starting ${this.description}`)
 
@@ -132,16 +131,6 @@ export class Application {
     })
   }
 
-  dispatch(req: Request, res: Response): void {
-    const stack = this.stack.slice(0)
-    const context = new Context(stack, req, res)
-    const handler = compose(stack, context)
-
-    Promise.resolve(handler()).catch(err => {
-      process.nextTick(() => {throw err})
-    })
-  }
-
   inspect() {
     return {
       router: this.router,
@@ -152,23 +141,3 @@ export class Application {
 }
 
 export default Application
-
-function compose(stack: Stack, context: Context): Next {
-  const iterator = stack.values()
-
-  return function next() {
-    const handler = iterator.next().value
-
-    /* Check if a handler is present and valid. */
-    if (!handler) {
-      throw new NotFound("Endpoint does not exist")
-    }
-
-    if (typeof handler !== "function") {
-      throw new InternalServerError("Bad handler")
-    }
-
-    // ES7: return context::handler(next)
-    return handler.call(context, next)
-  }
-}

@@ -31,7 +31,7 @@ export {
   validateContentType,
 }
 
-import type MiddlewareContext from "../context"
+import type MiddlewareContext from "../app/context"
 
 export type Next = () => Promise<void>
 export type Middleware = (next: Next) => Promise<void>

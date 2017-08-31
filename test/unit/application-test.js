@@ -12,6 +12,7 @@ const nullHandler = (code) => {exitCode = code}
 
 describe("application", function() {
   before(function() {
+    process.setMaxListeners(200)
     process.exit = nullHandler
 
     this.uncaughtExceptionListeners = process.listeners("uncaughtException")
@@ -224,7 +225,7 @@ describe("application", function() {
 
         this.res = res
         this.body = body
-        this.entry = JSON.parse(app.logger.console.stdout.toString())
+        this.entry = JSON.parse(app.logger.console.stdout.toString().split("\n")[1])
       })
 
       it("should render error", function() {
@@ -266,7 +267,7 @@ describe("application", function() {
         this.calls = calls
         this.res = res
         this.body = body
-        this.entry = JSON.parse(app.logger.console.stdout.toString())
+        this.entry = JSON.parse(app.logger.console.stdout.toString().split("\n")[1])
       })
 
       it("should call handlers with context", function() {
@@ -308,7 +309,7 @@ describe("application", function() {
 
         this.res = res
         this.body = body
-        this.entry = JSON.parse(app.logger.console.stdout.toString())
+        this.entry = JSON.parse(app.logger.console.stdout.toString().split("\n")[1])
       })
 
       it("should render body", function() {
@@ -362,7 +363,7 @@ describe("application", function() {
 
         this.res = res
         this.body = body
-        this.entry = JSON.parse(app.logger.console.stdout.toString())
+        this.entry = JSON.parse(app.logger.console.stdout.toString().split("\n")[1])
       })
 
       it("should render error", function() {
@@ -392,7 +393,7 @@ describe("application", function() {
 
         this.res = res
         this.body = body
-        this.entry = JSON.parse(app.logger.console.stdout.toString())
+        this.entry = JSON.parse(app.logger.console.stdout.toString().split("\n")[1])
       })
 
       it("should render error", function() {
@@ -423,7 +424,7 @@ describe("application", function() {
 
         this.res = res
         this.body = body
-        this.entry = JSON.parse(app.logger.console.stdout.toString())
+        this.entry = JSON.parse(app.logger.console.stdout.toString().split("\n")[1])
       })
 
       after(function() {

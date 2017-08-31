@@ -42,15 +42,14 @@ describe("require host", function() {
         })
 
         const body = await new Promise((resolve, reject) => {
-          const server = app.dispatch ? http.createServer(::app.dispatch).listen(app.port) : null
-
+          app.start()
           const options = {port: app.port}
           const body = []
           const socket = net.connect(options)
           socket.on("error", reject)
           socket.on("data", ::body.push)
           socket.on("end", () => {
-            if (server) server.close()
+            app.stop()
             resolve(Buffer.concat(body))
           })
           socket.end("POST /foo/bar HTTP/1.0\r\n\r\n")

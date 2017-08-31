@@ -5,7 +5,7 @@ import Timer from "../util/timer"
 import {ServiceUnavailable} from "../errors"
 
 import type {Context, Next, Middleware} from "../middleware"
-import type {ClosableServer} from "../util/closable-server"
+import type {ClosableServer} from "../app/closable-server"
 
 export default function shutdown(grace: number = 25): Middleware {
   return async function write(next: Next) {

@@ -1,9 +1,8 @@
 /* @flow */
-import type {Stack} from "./middleware"
-import type {IncomingMessage, ServerResponse} from "http"
+import type {Stack} from "../middleware"
+import type {IncomingMessage as Request, ServerResponse as Response} from "http"
 
-export type Request = IncomingMessage
-export type Response = ServerResponse
+export type {Request, Response}
 
 export class Context {
   stack: Stack
@@ -13,7 +12,7 @@ export class Context {
   body: Object | string = ""
   data: Object = {}
 
-  constructor(stack: Stack, request: IncomingMessage, response: ServerResponse) {
+  constructor(stack: Stack, request: Request, response: Response) {
     this.stack = stack
     this.request = request
     this.response = response

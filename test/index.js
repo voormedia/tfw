@@ -7,6 +7,8 @@ import stream from "stream"
 import timekeeper from "timekeeper"
 
 import Application from "../src/application"
+import Logger from "../src/util/logger"
+import MemoryConsole from "../src/util/memory-console"
 
 /* Force test env. */
 process.env.NODE_ENV = "test"
@@ -26,7 +28,8 @@ const test = {
   },
 
   createStack(...middlewares) {
-    const app = new Application({port: test.nextPort})
+    const logger = new Logger(new MemoryConsole)
+    const app = new Application({port: test.nextPort, logger})
     app.stack.splice(0, app.stack.length, ...middlewares)
     return app
   },
@@ -37,20 +40,14 @@ const test = {
     options = Object.assign({port: app.port, method: "GET"}, options)
     if (options.method == "GET" && options.body) throw new Error("get required")
     return new Promise((resolve, reject) => {
-      let server
-      if (app.dispatch) {
-        server = app.server ? app.server : http.createServer()
-        server.on("request", ::app.dispatch)
-        server.listen(app.port)
-      }
-
-      if (server && options.fakeEncrypted) {
-        server.on("connection", conn => conn.encrypted = true)
+      if (app.start) app.start()
+      if (app.server && options.fakeEncrypted) {
+        app.server.on("connection", conn => conn.encrypted = true)
       }
 
       const handle = res => {
         const body = []
-        if (server) server.close()
+        if (app.stop) app.stop()
         res.on("data", ::body.push)
         res.on("end", () => resolve({res, body: Buffer.concat(body)}))
       }
