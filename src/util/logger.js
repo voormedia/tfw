@@ -15,7 +15,16 @@ export type HttpRequest = {|
   cacheValidatedWithOriginServer?: boolean,
 |}
 
-export type LogSeverity = "DEBUG" | "INFO" | "NOTICE" | "WARNING" | "ERROR" | "CRITICAL" | "ALERT" | "EMERGENCY"
+export type LogSeverity = (
+  "DEBUG" |
+  "INFO" |
+  "NOTICE" |
+  "WARNING" |
+  "ERROR" |
+  "CRITICAL" |
+  "ALERT" |
+  "EMERGENCY"
+)
 
 /* https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry */
 /* https://github.com/GoogleCloudPlatform/fluent-plugin-google-cloud/blob/master/lib/fluent/plugin/out_google_cloud.rb */
@@ -80,11 +89,19 @@ export class Logger {
     return `${time} ${styles[entry.severity]}${http}${entry.message}${reset}`
   }
 
-  constructor(console: console.Console = defaultConsole(), formatter: LogEntry => string = defaultFormatter()) {
+  static get formatter() {
+    return process.env.NODE_ENV === "development" ? Logger.PRETTY : Logger.JSON
+  }
+
+  static get console() {
+    return process.env.NODE_ENV === "test" ? new MemoryConsole : console
+  }
+
+  constructor(console: console.Console = Logger.console, formatter: LogEntry => string = Logger.formatter) {
     this.console = console
     this.formatter = formatter
 
-    Object.seal(this)
+    Object.freeze(this)
   }
 
   write(severity: LogSeverity, message: mixed, context: LogContext) {
@@ -120,14 +137,6 @@ export class Logger {
   critical(message: mixed, context: LogContext = Object.seal({})) {
     this.write("CRITICAL", message, context)
   }
-}
-
-function defaultFormatter() {
-  return process.env.NODE_ENV === "development" ? Logger.PRETTY : Logger.JSON
-}
-
-function defaultConsole() {
-  return process.env.NODE_ENV === "test" ? new MemoryConsole : console
 }
 
 export default Logger
