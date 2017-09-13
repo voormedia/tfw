@@ -18,6 +18,8 @@ describe("start", function() {
       }
     }
 
+    this.app = app
+
     await new Promise(resolve => process.nextTick(resolve))
     const {res, body} = await test.request({port}, {path: "/"})
 
@@ -27,5 +29,9 @@ describe("start", function() {
 
   it("should run app", function() {
     assert.equal(this.body, "ok")
+  })
+
+  it("should assign app instance", function() {
+    assert.equal(this.app.instance.constructor, Application)
   })
 })
