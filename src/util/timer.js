@@ -7,7 +7,7 @@ export class Timer {
     this.time = time
   }
 
-  sleep() {
+  sleep(): Promise<void> {
     return new Promise(resolve => {
       this.timer = setTimeout(resolve, this.time)
     })
