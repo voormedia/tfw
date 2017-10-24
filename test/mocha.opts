@@ -1,6 +1,9 @@
 test/unit
---recursive
---compilers js:babel-register
+--harmony_async_iteration
+--use_strict
+--require babel-register
 --require test
+--recursive
 --timeout 4000
+--exit
 --reporter list
