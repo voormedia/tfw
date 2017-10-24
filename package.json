@@ -2,11 +2,11 @@
   "private": true,
   "author": "Rolf Timmermans",
   "name": "tfw",
-  "version": "4.2.2",
+  "version": "4.3.0",
   "main": "application.js",
   "license": "UNLICENSED",
   "engines": {
-    "node": ">=6"
+    "node": ">=8"
   },
   "files": [
     "application.js",
