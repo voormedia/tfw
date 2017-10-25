@@ -1,6 +1,5 @@
 /* @flow */
 /* eslint-disable no-unused-expressions */
-/* eslint-disable no-console */
 import type {Context, Next, Middleware} from "../middleware"
 import type {Request, Response} from "../app/context"
 
