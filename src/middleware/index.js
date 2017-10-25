@@ -13,6 +13,7 @@ export {
   write,
 }
 
+import connect from "./connect"
 import parseAuthorization from "./parse-authorization"
 import parseBody from "./parse-body"
 import parseSession from "./parse-session"
@@ -22,6 +23,7 @@ import validateBody from "./validate-body"
 import validateContentType from "./validate-content-type"
 
 export {
+  connect,
   parseAuthorization,
   parseBody,
   parseSession,
