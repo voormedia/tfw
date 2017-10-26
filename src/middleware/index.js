@@ -16,6 +16,7 @@ export {
 import connect from "./connect"
 import parseAuthorization from "./parse-authorization"
 import parseBody from "./parse-body"
+import parseQuery from "./parse-query"
 import parseSession from "./parse-session"
 import requireHost from "./require-host"
 import requireTLS from "./require-tls"
@@ -26,6 +27,7 @@ export {
   connect,
   parseAuthorization,
   parseBody,
+  parseQuery,
   parseSession,
   requireHost,
   requireTLS,

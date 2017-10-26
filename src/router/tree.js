@@ -10,6 +10,7 @@ export default class Tree {
   }
 
   match(parts: string[]): {node?: Node, params?: Object} {
+    /* Create object without prototype. */
     const params = Object.create(null)
 
     let node = this.root

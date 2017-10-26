@@ -47,7 +47,7 @@ export default function parseBody(): Middleware {
             this.data.body = querystring.parse(body.toString(), null, null, {maxKeys: 0})
           } catch (err) {
             /* TODO: Throw error to client? */
-            this.data.body = {}
+            this.data.body = Object.create(null)
           }
           break
 

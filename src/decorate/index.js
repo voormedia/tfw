@@ -10,6 +10,7 @@ import {use} from "./use"
 import connectMiddleware from "../middleware/connect"
 import parseAuthorizationMiddleware from "../middleware/parse-authorization"
 import parseBodyMiddleware from "../middleware/parse-body"
+import parseQueryMiddleware from "../middleware/parse-query"
 import parseSessionMiddleware from "../middleware/parse-session"
 import requireHostMiddleware from "../middleware/require-host"
 import requireTLSMiddleware from "../middleware/require-tls"
@@ -26,6 +27,10 @@ export function parseAuthorization(...args) {
 
 export function parseBody(...args) {
   return use(parseBodyMiddleware(...args))
+}
+
+export function parseQuery(...args) {
+  return use(parseQueryMiddleware(...args))
 }
 
 export function parseSession(...args) {

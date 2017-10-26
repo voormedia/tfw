@@ -10,7 +10,7 @@ export class Context {
   response: Response
 
   body: Object | string = ""
-  data: Object = {}
+  data: Object = Object.create(null)
 
   constructor(stack: Stack, request: Request, response: Response) {
     this.stack = stack

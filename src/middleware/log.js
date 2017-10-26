@@ -30,7 +30,7 @@ export default function log(logger: Logger): Middleware {
 
     const startTime = process.hrtime()
 
-    this.data.log = {}
+    this.data.log = Object.create(null)
 
     this.response.on("finish", () => {
       /* Store current read/written count for future reference. */
