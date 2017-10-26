@@ -8,7 +8,7 @@ import type {Context, Next, Middleware} from "../middleware"
 import type {ClosableServer} from "../app/closable-server"
 
 export default function shutdown(grace: number = 25): Middleware {
-  return async function write(next: Next) {
+  return async function shutdown(next: Next) {
     (this: Context)
 
     /* Cancel request if server is stopping, but only after a grace period.
