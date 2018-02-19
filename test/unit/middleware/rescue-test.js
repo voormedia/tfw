@@ -8,7 +8,7 @@ let exitCode = 0
 const exitHandler = process.exit
 const nullHandler = (code) => {exitCode = code}
 
-describe("write", function() {
+describe("rescue", function() {
   before(function() {
     process.exit = nullHandler
     process.env.NODE_ENV = "production"
@@ -48,7 +48,7 @@ describe("write", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body, '{"foo":"bar"}')
+      assert.equal(this.body.toString(), '{"foo":"bar"}')
     })
 
     it("should save error", function() {
@@ -81,7 +81,7 @@ describe("write", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body, '{"error":"Payment required","message":"Payment required"}')
+      assert.equal(this.body.toString(), '{"error":"Payment required","message":"Payment required"}')
     })
 
     it("should save error", function() {
@@ -114,7 +114,7 @@ describe("write", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body, '{"error":"Internal server error","message":"Internal server error"}')
+      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Internal server error"}')
     })
 
     it("should save error", function() {
@@ -148,7 +148,7 @@ describe("write", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body, '{"error":"Internal server error","message":"Internal server error"}')
+      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Internal server error"}')
     })
 
     it("should save error", function() {
@@ -182,7 +182,7 @@ describe("write", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body, '{"error":"Internal server error","message":"Internal server error"}')
+      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Internal server error"}')
     })
 
     it("should save error", function() {
@@ -216,7 +216,7 @@ describe("write", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body, '{"error":"Internal server error","message":"Internal server error"}')
+      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Internal server error"}')
     })
 
     it("should save error", function() {

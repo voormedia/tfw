@@ -139,7 +139,7 @@ describe("application", function() {
       })
 
       it("should mark connection as idle", function() {
-        assert.include(this.body, "Connection: close")
+        assert.include(this.body.toString(), "Connection: close")
       })
     })
   })
@@ -229,7 +229,7 @@ describe("application", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body, '{"error":"Not found","message":"Endpoint does not exist"}')
+        assert.equal(this.body.toString(), '{"error":"Not found","message":"Endpoint does not exist"}')
       })
 
       it("should return http not found", function() {
@@ -279,7 +279,7 @@ describe("application", function() {
       })
 
       it("should render body", function() {
-        assert.equal(this.body, "ok")
+        assert.equal(this.body.toString(), "ok")
       })
 
       it("should return status", function() {
@@ -313,7 +313,7 @@ describe("application", function() {
       })
 
       it("should render body", function() {
-        assert.equal(this.body, "ok")
+        assert.equal(this.body.toString(), "ok")
       })
 
       it("should return status", function() {
@@ -343,7 +343,7 @@ describe("application", function() {
       })
 
       it("should render body", function() {
-        assert.equal(this.body, "ok")
+        assert.equal(this.body.toString(), "ok")
       })
 
       it("should return status", function() {
@@ -367,7 +367,7 @@ describe("application", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body, '{"error":"Internal server error","message":"Bad handler"}')
+        assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Bad handler"}')
       })
 
       it("should return http internal error", function() {
@@ -397,7 +397,7 @@ describe("application", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body, '{"error":"Too many requests","message":"Too many requests"}')
+        assert.equal(this.body.toString(), '{"error":"Too many requests","message":"Too many requests"}')
       })
 
       it("should return error status", function() {
@@ -432,7 +432,7 @@ describe("application", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body, '{"error":"Internal server error","message":"Internal server error"}')
+        assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Internal server error"}')
       })
 
       it("should return http internal error", function() {

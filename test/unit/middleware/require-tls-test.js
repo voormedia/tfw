@@ -21,7 +21,7 @@ describe("require tls", function() {
       })
 
       it("should render body", function() {
-        assert.equal(this.body, "ok")
+        assert.equal(this.body.toString(), "ok")
       })
 
       it("should return status", function() {
@@ -50,7 +50,7 @@ describe("require tls", function() {
       })
 
       it("should render body", function() {
-        assert.equal(this.body, "ok")
+        assert.equal(this.body.toString(), "ok")
       })
 
       it("should return status", function() {
@@ -78,7 +78,7 @@ describe("require tls", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body, '{"error":"Forbidden","message":"TLS required"}')
+        assert.equal(this.body.toString(), '{"error":"Forbidden","message":"TLS required"}')
       })
 
       it("should return http forbidden", function() {
@@ -107,7 +107,7 @@ describe("require tls", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body, '{"error":"Forbidden","message":"TLS required"}')
+        assert.equal(this.body.toString(), '{"error":"Forbidden","message":"TLS required"}')
       })
 
       it("should return http forbidden", function() {

@@ -64,7 +64,7 @@ export default function parseBody(): Middleware {
       }
     }
 
-    return await next()
+    await next()
   }
 }
 

@@ -28,7 +28,7 @@ describe("start", function() {
   })
 
   it("should run app", function() {
-    assert.equal(this.body, "ok")
+    assert.equal(this.body.toString(), "ok")
   })
 
   it("should assign app instance", function() {

@@ -23,7 +23,7 @@ describe("connect", function() {
     })
 
     it("should render body", function() {
-      assert.equal(this.body, "")
+      assert.equal(this.body.toString(), "")
     })
 
     it("should continue through stack", function() {
@@ -66,7 +66,7 @@ describe("connect", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body, '{"foo":"bar"}')
+      assert.equal(this.body.toString(), '{"foo":"bar"}')
     })
 
     it("should save error", function() {
@@ -109,7 +109,7 @@ describe("connect", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body, '{"foo":"bar"}')
+      assert.equal(this.body.toString(), '{"foo":"bar"}')
     })
 
     it("should save error", function() {

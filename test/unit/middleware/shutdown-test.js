@@ -36,7 +36,7 @@ describe("shutdown", function() {
       })
 
       it("should not render error", function() {
-        assert.equal(this.body, "ok")
+        assert.equal(this.body.toString(), "ok")
       })
     })
 
@@ -58,7 +58,7 @@ describe("shutdown", function() {
       })
 
       it("should not render error", function() {
-        assert.equal(this.body, "ok")
+        assert.equal(this.body.toString(), "ok")
       })
     })
   })
@@ -83,7 +83,7 @@ describe("shutdown", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body, '{"error":"Service unavailable","message":"Please retry the request"}')
+        assert.equal(this.body.toString(), '{"error":"Service unavailable","message":"Please retry the request"}')
       })
     })
 
@@ -106,7 +106,7 @@ describe("shutdown", function() {
       })
 
       it("should not render error", function() {
-        assert.equal(this.body, "ok")
+        assert.equal(this.body.toString(), "ok")
       })
     })
   })

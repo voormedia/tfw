@@ -24,7 +24,7 @@ describe("require host", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body, '{"error":"Not found","message":"Endpoint does not exist"}')
+        assert.equal(this.body.toString(), '{"error":"Not found","message":"Endpoint does not exist"}')
       })
 
       it("should return http not found", function() {
@@ -86,7 +86,7 @@ describe("require host", function() {
       })
 
       it("should render body", function() {
-        assert.equal(this.body, "ok")
+        assert.equal(this.body.toString(), "ok")
       })
 
       it("should return http created", function() {
@@ -113,7 +113,7 @@ describe("require host", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body, '{"error":"Not found","message":"Endpoint does not exist"}')
+        assert.equal(this.body.toString(), '{"error":"Not found","message":"Endpoint does not exist"}')
       })
 
       it("should return http forbidden", function() {
@@ -141,7 +141,7 @@ describe("require host", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body, '{"error":"Not found","message":"Endpoint does not exist"}')
+        assert.equal(this.body.toString(), '{"error":"Not found","message":"Endpoint does not exist"}')
       })
 
       it("should return http not found", function() {
@@ -168,7 +168,7 @@ describe("require host", function() {
       })
 
       it("should render body", function() {
-        assert.equal(this.body, "ok")
+        assert.equal(this.body.toString(), "ok")
       })
 
       it("should return http created", function() {
@@ -195,7 +195,7 @@ describe("require host", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body, '{"error":"Not found","message":"Endpoint does not exist"}')
+        assert.equal(this.body.toString(), '{"error":"Not found","message":"Endpoint does not exist"}')
       })
 
       it("should return http forbidden", function() {

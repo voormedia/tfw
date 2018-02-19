@@ -14,6 +14,7 @@ export {
 }
 
 import connect from "./connect"
+import exposeAllErrors from "./expose-all-errors"
 import parseAuthorization from "./parse-authorization"
 import parseBody from "./parse-body"
 import parseQuery from "./parse-query"
@@ -25,6 +26,7 @@ import validateContentType from "./validate-content-type"
 
 export {
   connect,
+  exposeAllErrors,
   parseAuthorization,
   parseBody,
   parseQuery,

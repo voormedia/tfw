@@ -27,7 +27,7 @@ describe("write", function() {
       })
 
       it("should write body", function() {
-        assert.equal(this.body, "øk")
+        assert.equal(this.body.toString(), "øk")
       })
 
       it("should set content length", function() {
@@ -58,7 +58,7 @@ describe("write", function() {
       })
 
       it("should not write body", function() {
-        assert.equal(this.body, "")
+        assert.equal(this.body.toString(), "")
       })
 
       it.skip("should set content length", function() {
@@ -122,7 +122,7 @@ describe("write", function() {
       })
 
       it("should not write body", function() {
-        assert.equal(this.body, "")
+        assert.equal(this.body.toString(), "")
       })
 
       it.skip("should set content length", function() {
@@ -190,7 +190,7 @@ describe("write", function() {
       })
 
       it("should not write body", function() {
-        assert.equal(this.body, "")
+        assert.equal(this.body.toString(), "")
       })
 
       it("should not set content length", function() {
@@ -227,7 +227,7 @@ describe("write", function() {
       })
 
       it("should write body", function() {
-        assert.equal(this.body, '{"result":"ok"}')
+        assert.equal(this.body.toString(), '{"result":"ok"}')
       })
 
       it("should set content length", function() {
@@ -258,7 +258,7 @@ describe("write", function() {
       })
 
       it("should not write body", function() {
-        assert.equal(this.body, "")
+        assert.equal(this.body.toString(), "")
       })
 
       it.skip("should set content length", function() {

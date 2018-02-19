@@ -8,6 +8,7 @@ export * from "./when"
 import {use} from "./use"
 
 import connectMiddleware from "../middleware/connect"
+import exposeAllErrorsMiddleware from "../middleware/expose-all-errors"
 import parseAuthorizationMiddleware from "../middleware/parse-authorization"
 import parseBodyMiddleware from "../middleware/parse-body"
 import parseQueryMiddleware from "../middleware/parse-query"
@@ -19,6 +20,10 @@ import validateContentTypeMiddleware from "../middleware/validate-content-type"
 
 export function connect(...args) {
   return use(connectMiddleware(...args))
+}
+
+export function exposeAllErrors(...args) {
+  return use(exposeAllErrorsMiddleware(...args))
 }
 
 export function parseAuthorization(...args) {

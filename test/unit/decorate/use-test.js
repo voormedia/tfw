@@ -27,7 +27,7 @@ describe("use", function() {
     })
 
     it("should call middleware", function() {
-      assert.equal(this.body, "middleware ok")
+      assert.equal(this.body.toString(), "middleware ok")
     })
   })
 
@@ -64,7 +64,7 @@ describe("use", function() {
     })
 
     it("should call middleware", function() {
-      assert.equal(this.body, "middleware ok")
+      assert.equal(this.body.toString(), "middleware ok")
     })
   })
 

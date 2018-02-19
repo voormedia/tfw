@@ -15,7 +15,7 @@ describe("route", function() {
     })
 
     it("should call next handler", function() {
-      assert.equal(this.body, "next")
+      assert.equal(this.body.toString(), "next")
     })
   })
 
@@ -37,7 +37,7 @@ describe("route", function() {
       })
 
       it("should render body", function() {
-        assert.equal(this.body, "handler")
+        assert.equal(this.body.toString(), "handler")
       })
 
       it("should return status", function() {
@@ -62,7 +62,7 @@ describe("route", function() {
       })
 
       it("should not render body", function() {
-        assert.equal(this.body, "")
+        assert.equal(this.body.toString(), "")
       })
 
       it("should return status", function() {
@@ -102,7 +102,7 @@ describe("route", function() {
     })
 
     it("should render body", function() {
-      assert.equal(this.body, "wrap1 wrap2 handler")
+      assert.equal(this.body.toString(), "wrap1 wrap2 handler")
     })
 
     it("should return status", function() {
