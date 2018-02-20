@@ -11,12 +11,15 @@ export default function exposeAllErrors(): Middleware {
     try {
       await next()
     } catch (err) {
-      if (!err.toJSON) {
-        err.toJSON = toJSON
+      if (err instanceof Error) {
+        /* Add specific JSON serialization to the error and make it exposable. */
+        if (!err.toJSON) err.toJSON = toJSON
+        err.expose = true
+        throw err
+      } else {
+        /* Wrap anything that's not an Error but that pretends to be one. */
+        throw new InternalServerError(err.message || err.Message || err)
       }
-
-      err.expose = true
-      throw err
     }
   }
 }

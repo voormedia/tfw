@@ -2,13 +2,13 @@ import fs from "fs"
 
 import {write, rescue, exposeAllErrors} from "src/middleware"
 
-import {PaymentRequired} from "src/errors"
+import {PaymentRequired, InternalServerError} from "src/errors"
 
 let exitCode = 0
 const exitHandler = process.exit
 const nullHandler = (code) => {exitCode = code}
 
-describe("expose all errors", function() {
+describe.only("expose all errors", function() {
   before(function() {
     process.exit = nullHandler
     process.env.NODE_ENV = "production"
@@ -156,6 +156,72 @@ describe("expose all errors", function() {
 
     it("should save error", function() {
       assert.equal(this.ctx.data.error.constructor, Error)
+    })
+  })
+
+  describe("with unexpected string thrown", function() {
+    before(async function() {
+      let ctx
+      const {res, body} = await test.request(
+        test.createStack(write(), rescue(), exposeAllErrors(), function() {
+          ctx = this
+          ctx.set("Foo", "bar")
+          throw "Oh no!"
+        })
+      )
+
+      this.res = res
+      this.body = body
+      this.ctx = ctx
+    })
+
+    it("should write status", function() {
+      assert.equal(this.res.statusCode, 500)
+    })
+
+    it("should write headers", function() {
+      assert.equal(this.res.headers["foo"], "bar")
+    })
+
+    it("should render error", function() {
+      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Oh no!"}')
+    })
+
+    it("should save error", function() {
+      assert.equal(this.ctx.data.error.constructor, InternalServerError)
+    })
+  })
+
+  describe("with unexpected object thrown", function() {
+    before(async function() {
+      let ctx
+      const {res, body} = await test.request(
+        test.createStack(write(), rescue(), exposeAllErrors(), function() {
+          ctx = this
+          ctx.set("Foo", "bar")
+          throw {Message: "Oh no!", Code: 123}
+        })
+      )
+
+      this.res = res
+      this.body = body
+      this.ctx = ctx
+    })
+
+    it("should write status", function() {
+      assert.equal(this.res.statusCode, 500)
+    })
+
+    it("should write headers", function() {
+      assert.equal(this.res.headers["foo"], "bar")
+    })
+
+    it("should render error", function() {
+      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Oh no!"}')
+    })
+
+    it("should save error", function() {
+      assert.equal(this.ctx.data.error.constructor, InternalServerError)
     })
   })
 })
