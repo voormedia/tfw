@@ -8,7 +8,7 @@ let exitCode = 0
 const exitHandler = process.exit
 const nullHandler = (code) => {exitCode = code}
 
-describe.only("expose all errors", function() {
+describe("expose all errors", function() {
   before(function() {
     process.exit = nullHandler
     process.env.NODE_ENV = "production"

@@ -88,7 +88,7 @@ export class Application {
       })
 
       process.on("unhandledRejection", async (err: Error, promise: Promise<any>) => {
-        this.logger.critical(`unhandled ${err.stack} from ${promise.toString()}`)
+        this.logger.critical(`unhandled ${err.stack || err.toString()}`)
         await this.kill()
         process.exit(2)
       })
