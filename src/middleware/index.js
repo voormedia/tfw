@@ -19,6 +19,7 @@ import parseAuthorization from "./parse-authorization"
 import parseBody from "./parse-body"
 import parseQuery from "./parse-query"
 import parseSession from "./parse-session"
+import requireAuthorization from "./require-authorization"
 import requireHost from "./require-host"
 import requireTLS from "./require-tls"
 import validateBody from "./validate-body"
@@ -31,6 +32,7 @@ export {
   parseBody,
   parseQuery,
   parseSession,
+  requireAuthorization,
   requireHost,
   requireTLS,
   validateBody,
