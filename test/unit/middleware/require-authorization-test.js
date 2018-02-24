@@ -6,7 +6,7 @@ describe("require authorization", function() {
       let exec = false
       const {res, body} = await test.request(
         test.createStack(write(), rescue(), parseAuthorization(),
-          requireAuthorization({Aladdin: "OpenSesame"}), function() {exec = true}), {
+          requireAuthorization("test realm", {Aladdin: "OpenSesame"}), function() {exec = true}), {
           headers: {
             "Authorization": "Basic QWxhZGRpbjpPcGVuU2VzYW1l"
           }
@@ -31,7 +31,7 @@ describe("require authorization", function() {
       let exec = false
       const {res, body} = await test.request(
         test.createStack(write(), rescue(), parseAuthorization(),
-          requireAuthorization({Aladdin: "SesameOpen"}), function() {exec = true}), {
+          requireAuthorization("test realm", {Aladdin: "SesameOpen"}), function() {exec = true}), {
           headers: {
             "Authorization": "Basic QWxhZGRpbjpPcGVuU2VzYW1l"
           }
@@ -46,6 +46,10 @@ describe("require authorization", function() {
       assert.equal(this.res.statusCode, 401)
     })
 
+    it("should challenge with realm", function() {
+      assert.equal(this.res.headers["www-authenticate"], "Basic realm=\"test realm\"")
+    })
+
     it("should not execute handler", function() {
       assert.equal(this.exec, false)
     })
@@ -56,7 +60,7 @@ describe("require authorization", function() {
       let exec = false
       const {res, body} = await test.request(
         test.createStack(write(), rescue(), parseAuthorization(),
-          requireAuthorization({Aladdin: "OpenSesame"}), function() {exec = true}), {
+          requireAuthorization("test realm", {Aladdin: "OpenSesame"}), function() {exec = true}), {
           headers: {
             "Authorization": "Basic QWxhZGRpbg=="
           }
@@ -71,6 +75,10 @@ describe("require authorization", function() {
       assert.equal(this.res.statusCode, 401)
     })
 
+    it("should challenge with realm", function() {
+      assert.equal(this.res.headers["www-authenticate"], "Basic realm=\"test realm\"")
+    })
+
     it("should not execute handler", function() {
       assert.equal(this.exec, false)
     })
@@ -81,7 +89,7 @@ describe("require authorization", function() {
       let exec = false
       const {res, body} = await test.request(
         test.createStack(write(), rescue(), parseAuthorization(),
-        requireAuthorization({Aladdin: "OpenSesame"}), function() {exec = true}), {
+        requireAuthorization("test realm", {Aladdin: "OpenSesame"}), function() {exec = true}), {
           headers: {
             "Authorization": "Basic Ok9wZW5TZXNhbWU="
           }
@@ -96,6 +104,10 @@ describe("require authorization", function() {
       assert.equal(this.res.statusCode, 401)
     })
 
+    it("should challenge with realm", function() {
+      assert.equal(this.res.headers["www-authenticate"], "Basic realm=\"test realm\"")
+    })
+
     it("should not execute handler", function() {
       assert.equal(this.exec, false)
     })
@@ -106,7 +118,7 @@ describe("require authorization", function() {
       let exec = false
       const {res, body} = await test.request(
         test.createStack(write(), rescue(), parseAuthorization(),
-        requireAuthorization({Aladdin: "OpenSesame"}), function() {exec = true})
+        requireAuthorization("test realm", {Aladdin: "OpenSesame"}), function() {exec = true})
       )
 
       this.res = res
@@ -127,7 +139,7 @@ describe("require authorization", function() {
       let exec = false
       const {res, body} = await test.request(
         test.createStack(write(), rescue(), parseAuthorization(),
-        requireAuthorization({Aladdin: "OpenSesame"}), function() {exec = true}), {
+        requireAuthorization("test realm", {Aladdin: "OpenSesame"}), function() {exec = true}), {
           headers: {
             "Authorization": "Basic"
           }
@@ -142,6 +154,10 @@ describe("require authorization", function() {
       assert.equal(this.res.statusCode, 401)
     })
 
+    it("should challenge with realm", function() {
+      assert.equal(this.res.headers["www-authenticate"], "Basic realm=\"test realm\"")
+    })
+
     it("should not execute handler", function() {
       assert.equal(this.exec, false)
     })
@@ -152,7 +168,7 @@ describe("require authorization", function() {
       let exec = false
       const {res, body} = await test.request(
         test.createStack(write(), rescue(), parseAuthorization(),
-        requireAuthorization({Aladdin: "OpenSesame"}), function() {exec = true}), {
+        requireAuthorization("test realm", {Aladdin: "OpenSesame"}), function() {exec = true}), {
           headers: {
             "Authorization": "Bearer cn389ncoiwuencr"
           }
@@ -167,6 +183,10 @@ describe("require authorization", function() {
       assert.equal(this.res.statusCode, 401)
     })
 
+    it("should challenge with realm", function() {
+      assert.equal(this.res.headers["www-authenticate"], "Basic realm=\"test realm\"")
+    })
+
     it("should not execute handler", function() {
       assert.equal(this.exec, false)
     })
@@ -177,7 +197,7 @@ describe("require authorization", function() {
       let exec = false
       const {res, body} = await test.request(
         test.createStack(write(), rescue(), parseAuthorization(),
-        requireAuthorization({Aladdin: "OpenSesame"})), {
+        requireAuthorization("test realm", {Aladdin: "OpenSesame"})), {
           headers: {
             "Authorization": "Basic AEE6AEE"
           }
@@ -203,7 +223,7 @@ describe("require authorization", function() {
       let exec = false
       const {res, body} = await test.request(
         test.createStack(write(), rescue(), parseAuthorization(),
-        requireAuthorization({Aladdin: "OpenSesame"})), {
+        requireAuthorization("test realm", {Aladdin: "OpenSesame"})), {
           headers: {
             "Authorization": "Basic B0E6ATVB"
           }
