@@ -6,7 +6,7 @@ export type RouteOptions = {|
 |}
 
 export function route(pattern: string, {method}: RouteOptions): Decorator {
-  return (object: Object, key: ?string, descriptor: ?Descriptor) => {
+  return (object: Object, key: ?string, descriptor: ?PropertyDescriptor<string>) => {
     if (!descriptor) throw new TypeError("Property expected")
     descriptor.enumerable = true
     routerify(object).define(method, pattern, descriptor.value)

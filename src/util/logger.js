@@ -89,11 +89,11 @@ export class Logger {
     return `${time} ${styles[entry.severity]}${http}${entry.message}${reset}`
   }
 
-  static get formatter() {
+  static get formatter(): (entry: LogEntry) => string {
     return process.env.NODE_ENV === "development" ? Logger.PRETTY : Logger.JSON
   }
 
-  static get console() {
+  static get console(): console.Console {
     return process.env.NODE_ENV === "test" ? new MemoryConsole : console
   }
 
@@ -114,27 +114,27 @@ export class Logger {
     this.console.log(this.formatter(Object.assign(entry, context)))
   }
 
-  debug(message: mixed, context: LogContext = Object.seal({})) {
+  debug(message: mixed, context: LogContext = {}) {
     this.write("DEBUG", message, context)
   }
 
-  info(message: mixed, context: LogContext = Object.seal({})) {
+  info(message: mixed, context: LogContext = {}) {
     this.write("INFO", message, context)
   }
 
-  notice(message: mixed, context: LogContext = Object.seal({})) {
+  notice(message: mixed, context: LogContext = {}) {
     this.write("NOTICE", message, context)
   }
 
-  warning(message: mixed, context: LogContext = Object.seal({})) {
+  warning(message: mixed, context: LogContext = {}) {
     this.write("WARNING", message, context)
   }
 
-  error(message: mixed, context: LogContext = Object.seal({})) {
+  error(message: mixed, context: LogContext = {}) {
     this.write("ERROR", message, context)
   }
 
-  critical(message: mixed, context: LogContext = Object.seal({})) {
+  critical(message: mixed, context: LogContext = {}) {
     this.write("CRITICAL", message, context)
   }
 }

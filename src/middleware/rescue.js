@@ -31,7 +31,7 @@ function error(err: Error) {
 
   this.data.error = err
 
-  if (!err.expose) {
+  if (!(err: any).expose) {
     if (process.env.NODE_ENV === "test") throw err
     err = new InternalServerError
   }
@@ -43,6 +43,6 @@ function error(err: Error) {
 
   this.set("Content-Type", "application/json")
 
-  this.status = err.status || 500
+  this.status = (err: any).status || 500
   this.response.end(JSON.stringify(err), "utf8")
 }

@@ -1,7 +1,7 @@
 /* @flow */
 export class Timer {
   time: number
-  timer: number
+  timer: TimeoutID
 
   constructor(time: number) {
     this.time = time

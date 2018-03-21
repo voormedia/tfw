@@ -37,7 +37,9 @@ export function resource({singular}: ResourceOptions = {singular: false}): Decor
       if (descriptor) {
         const decorate = route(pattern, {method})
         descriptor = decorate(object.prototype, name, descriptor)
-        Object.defineProperty(object.prototype, name, descriptor)
+        if (descriptor) {
+          Object.defineProperty(object.prototype, name, descriptor)
+        }
       }
     }
   }

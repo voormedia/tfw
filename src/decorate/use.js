@@ -10,7 +10,7 @@ export function use(middleware: Middleware): Decorator {
     throw new TypeError("Middleware must take exactly 1 argument")
   }
 
-  const fn = (object: Object, key: ?string, descriptor: ?Descriptor) => {
+  const fn = (object: Object, key: ?string, descriptor: ?PropertyDescriptor<string>) => {
     if (descriptor) {
       attach(descriptor.value, middleware)
     } else {

@@ -13,12 +13,13 @@ import * as middleware from "./middleware"
 
 import type {Stack} from "./middleware"
 
-export type ApplicationOptions = {|
-  port?: number,
-  logger?: Logger,
-  router?: Router,
-  terminationGrace?: number,
-|}
+/* $Shape<T> makes every property optional. */
+export type ApplicationOptions = $Shape<{
+  port: number,
+  logger: Logger,
+  router: Router,
+  terminationGrace: number,
+}>
 
 const description = `${hostPkg.name} service ${process.env.HOSTNAME || ""}`.trim()
 
@@ -32,13 +33,13 @@ export class Application {
   server: ClosableServer = new ClosableServer()
 
   /* Start a new application with the given options in next tick. */
-  static start(options: ApplicationOptions = Object.seal({})) {
+  static start(options: ApplicationOptions = {}) {
     const app = new Application(options)
     process.nextTick(() => {app.start()})
     return app
   }
 
-  constructor(options: ApplicationOptions = Object.seal({})) {
+  constructor(options: ApplicationOptions = {}) {
     const {
       port = 3000,
       router = new Router,
