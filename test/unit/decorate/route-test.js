@@ -19,7 +19,6 @@ describe("route", function() {
         }
       }
 
-      this.res = {}
       this.body = {}
       for (const method of this.methods) {
         const {res, body} = await test.request(
@@ -27,7 +26,6 @@ describe("route", function() {
           {path: "/foo", method}
         )
 
-        this.res[method] = res
         this.body[method] = body
       }
     })
@@ -52,7 +50,6 @@ describe("route", function() {
         }
       }
 
-      this.res = {}
       this.body = {}
       for (const method of this.methods) {
         const {res, body} = await test.request(
@@ -60,7 +57,6 @@ describe("route", function() {
           {path: "/foobar", method}
         )
 
-        this.res[method] = res
         this.body[method] = body
       }
     })
@@ -101,7 +97,6 @@ describe("mount", function() {
       @mount("/bar", controller2)
       class app {}
 
-      this.res = {}
       this.body = {}
       for (const method of this.methods) {
         const {res, body} = await test.request(
@@ -109,7 +104,6 @@ describe("mount", function() {
           {path: "/bar/foo", method}
         )
 
-        this.res[method] = res
         this.body[method] = body
       }
     })

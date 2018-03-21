@@ -64,6 +64,15 @@ describe("router", function() {
         router.define("get", "foo/{id}/bar/{id}", {})
       }, "Pattern 'foo/{id}/bar/{id}' has duplicate param {id}")
     })
+
+    it("should complain about conflicting params", function() {
+      const router = new Router
+
+      router.define("get", "foo/{id}", {})
+      assert.throws(() => {
+        router.define("get", "foo/{name}/baz", {})
+      }, "Route 'GET /foo/{name}/baz' redefines existing parameter {id} as {name}")
+    })
   })
 
   describe("mount", function() {

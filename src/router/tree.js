@@ -1,6 +1,6 @@
 /* @flow */
 import Node from "./node"
-import Route from "./route"
+import Route, {RouteError} from "./route"
 
 export default class Tree {
   root: Node = new Node
@@ -28,6 +28,9 @@ export default class Tree {
     let node = this.root
     for (const part of route.parts) {
       node = node.insert(part.clone())
+      if (node.name !== part.name) {
+        throw new RouteError(route, `redefines existing parameter {${node.name}} as {${part.name}}`)
+      }
     }
 
     return node

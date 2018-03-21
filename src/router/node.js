@@ -30,7 +30,7 @@ export default class Node {
   }
 
   insert(node: Node): Node {
-    const key = node.toString()
+    const {key} = node
     const collection = node.pattern ? this.patterns : this.children
 
     const orig = collection.get(key)
@@ -40,11 +40,11 @@ export default class Node {
     return node
   }
 
+  get key(): string {
+    return this.pattern ? this.pattern.source : this.name
+  }
+
   toString(): string {
-    if (this.pattern) {
-      return `{${this.name}}`
-    } else {
-      return this.name
-    }
+    return this.pattern ? `{${this.name}}` : this.name
   }
 }
