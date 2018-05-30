@@ -29,7 +29,7 @@ export class Application extends AbstractTask {
 
   /* Start a new application with the given options in next tick. */
   static start(options: ApplicationOptions = {}) {
-    const app = new Application(options)
+    const app = new this(options)
     process.nextTick(() => {app.start()})
     return app
   }

@@ -12,7 +12,7 @@ export type TaskOptions = $Shape<{
 export class Task extends AbstractTask {
   /* Start a new task with the given options in next tick. */
   static start(options: TaskOptions = {}) {
-    const task = new Task(options)
+    const task = new this(options)
     process.nextTick(() => {task.start()})
     return task
   }
