@@ -1,8 +1,7 @@
 /* @flow */
 import "./util/polyfill"
 
-import hostPkg from "./util/host-pkg"
-
+import AbstractTask from "./util/abstract-task"
 import Logger from "./util/logger"
 import Router from "./router"
 
@@ -21,15 +20,11 @@ export type ApplicationOptions = $Shape<{
   terminationGrace: number,
 }>
 
-const description = `${hostPkg.name} service ${process.env.HOSTNAME || ""}`.trim()
-
-export class Application {
+export class Application extends AbstractTask {
   port: number
   router: Router
-  logger: Logger
   stack: Stack
 
-  description: string = description
   server: ClosableServer = new ClosableServer()
 
   /* Start a new application with the given options in next tick. */
@@ -47,10 +42,7 @@ export class Application {
       terminationGrace = 25,
     } = options
 
-    /* Assign default env. */
-    if (!process.env.NODE_ENV) {
-      process.env.NODE_ENV = "development"
-    }
+    super()
 
     this.port = port
     this.router = router
@@ -68,57 +60,33 @@ export class Application {
     Object.freeze(this)
   }
 
-  start(): Promise<Application> {
+  async start(): Promise<void> {
+    await super.start()
+
     this.server.timeout = 0
-
-    process.on("SIGINT", async () => {
-      await this.stop()
-      process.exit(128 + 2)
-    })
-
-    process.on("SIGTERM", async () => {
-      await this.stop()
-      process.exit(128 + 15)
-    })
-
-    if (process.env.NODE_ENV !== "test") {
-      process.on("uncaughtException", async (err: Error) => {
-        this.logger.critical(`uncaught ${err.stack}`)
-        await this.kill()
-        process.exit(1)
-      })
-
-      process.on("unhandledRejection", async (err: Error, promise: Promise<any>) => {
-        this.logger.critical(`unhandled ${err.stack || err.toString()}`)
-        await this.kill()
-        process.exit(2)
-      })
-    }
 
     // ES7: this.server.on("request", ::this.dispatch)
     this.server.on("request", dispatch(this.stack))
 
-    this.logger.notice(`starting ${this.description}`)
-
     this.server.listen(this.port)
 
     return new Promise(resolve => {
-      this.server.once("listening", () => resolve(this))
+      this.server.once("listening", () => resolve())
     })
   }
 
-  stop(): Promise<Application> {
-    this.logger.notice(`stopping ${this.description}`)
+  async stop(): Promise<void> {
+    await super.stop()
 
     this.server.close()
 
     return new Promise(resolve => {
-      this.server.once("close", () => resolve(this))
+      this.server.once("close", () => resolve())
     })
   }
 
-  kill(): Promise<Application> {
-    this.logger.warning(`forcefully stopped ${this.description}`)
+  async kill(): Promise<void> {
+    await super.kill()
 
     /* Don't wait for server to quite gracefully, but quit after short delay.
        This avoids processes hanging for a long time because a
@@ -128,7 +96,7 @@ export class Application {
     this.server.unref()
 
     return new Promise(resolve => {
-      setTimeout(() => resolve(this), 500)
+      setTimeout(() => resolve(), 500)
     })
   }
 
