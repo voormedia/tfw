@@ -95,6 +95,13 @@ export default function log(logger: Logger): Middleware {
   }
 }
 
+const healthCheckTokens = new Set([
+  "GoogleHC",
+  "ELB-HealthChecker",
+  "kube-probe",
+])
+
 function isHealthCheck({userAgent}: HttpRequest) {
-  return userAgent === "GoogleHC/1.0"
+  if (!userAgent) return false
+  return healthCheckTokens.has(userAgent.split("/")[0])
 }
