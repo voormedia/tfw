@@ -83,10 +83,18 @@ export default function log(logger: Logger): Middleware {
         }
       } else {
         /* No error was thrown, or error was in 4xx range. */
-        logger.info(statusCodes.get(status), logContext)
+        if (isHealthCheck(httpRequest)) {
+          logger.debug(statusCodes.get(status), logContext)
+        } else {
+          logger.info(statusCodes.get(status), logContext)
+        }
       }
     })
 
     return next()
   }
+}
+
+function isHealthCheck({userAgent}: HttpRequest) {
+  return userAgent === "GoogleHC/1.0"
 }

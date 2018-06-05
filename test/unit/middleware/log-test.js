@@ -132,6 +132,66 @@ describe("log", function() {
         assert.equal(this.entry.foo.bar, "qux")
       })
     })
+
+    describe("as health check", function() {
+      before(async function() {
+        this.logger.console.clear()
+        const {res, body} = await test.request(
+          test.createStack(log(this.logger), write(), rescue(), function() {
+            this.body = "ok"
+            this.status = 201
+            this.data.log = {foo: {bar: "qux"}}
+          }), {
+            method: "POST",
+            path: "/foo",
+            body: "foobar",
+            headers: {"user-agent": "GoogleHC/1.0"}
+          }
+        )
+
+        this.entry = JSON.parse(this.logger.console.stdout.toString())
+      })
+
+      it("should log severity", function() {
+        assert.equal(this.entry.severity, "DEBUG")
+      })
+
+      it("should log message", function() {
+        assert.equal(this.entry.message, "created")
+      })
+
+      it("should log request method", function() {
+        assert.equal(this.entry.httpRequest.requestMethod, "POST")
+      })
+
+      it("should log request url", function() {
+        assert.equal(this.entry.httpRequest.requestUrl, "/foo")
+      })
+
+      it("should log request size", function() {
+        assert.equal(this.entry.httpRequest.requestSize, 115)
+      })
+
+      it("should log response status", function() {
+        assert.equal(this.entry.httpRequest.status, 201)
+      })
+
+      it("should log response size", function() {
+        assert.equal(this.entry.httpRequest.responseSize, 101)
+      })
+
+      it("should log remote ip", function() {
+        assert.equal(this.entry.httpRequest.remoteIp, "::ffff:127.0.0.1")
+      })
+
+      it("should log latency", function() {
+        assert.match(this.entry.httpRequest.latency, /\d+\.\d{3}s/)
+      })
+
+      it("should log additional data", function() {
+        assert.equal(this.entry.foo.bar, "qux")
+      })
+    })
   })
 
   describe("on exposable error", function() {
