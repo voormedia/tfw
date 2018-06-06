@@ -22,7 +22,8 @@
     "ajv": "^5.2.2",
     "ajv-keywords": "^2.1.0",
     "content-type": "^1.0.2",
-    "cookies": "^0.7.0"
+    "cookies": "^0.7.0",
+    "stack-trace": "0.0.10"
   },
   "devDependencies": {
     "app-module-path": "^2.2.0",
