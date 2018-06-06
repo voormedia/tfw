@@ -18,11 +18,11 @@ export class Task extends AbstractTask {
   }
 
   constructor(options: TaskOptions = {}) {
-    const {
-      logger = new Logger,
-    } = options
-
     super()
+
+    const {
+      logger = new Logger(this.description),
+    } = options
 
     this.logger = logger
 

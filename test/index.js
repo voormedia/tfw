@@ -28,7 +28,7 @@ const test = {
   },
 
   createStack(...middlewares) {
-    const logger = new Logger(new MemoryConsole)
+    const logger = new Logger("test logger", new MemoryConsole)
     const app = new Application({port: test.nextPort, logger})
     app.stack.splice(0, app.stack.length, ...middlewares)
     return app

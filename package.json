@@ -37,6 +37,7 @@
     "babel-plugin-transform-export-extensions": "^6.9.0",
     "babel-plugin-transform-flow-strip-types": "^6.9.0",
     "babel-plugin-transform-function-bind": "^6.9.0",
+    "babel-plugin-transform-object-rest-spread": "^6.9.0",
     "babel-plugin-transform-strict-mode": "^6.9.0",
     "benchmark": "^2.1.0",
     "chai": "^4.1.0",
