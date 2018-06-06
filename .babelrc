@@ -7,7 +7,6 @@
     "transform-export-extensions",
     "transform-flow-strip-types",
     "transform-function-bind",
-    "transform-object-rest-spread",
     "transform-strict-mode"
   ]
 }

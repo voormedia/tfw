@@ -35,14 +35,14 @@ export class Application extends AbstractTask {
   }
 
   constructor(options: ApplicationOptions = {}) {
-    super()
-
     const {
       port = 3000,
       router = new Router,
-      logger = new Logger(this.description),
+      logger = new Logger,
       terminationGrace = 25,
     } = options
+
+    super()
 
     this.port = port
     this.router = router

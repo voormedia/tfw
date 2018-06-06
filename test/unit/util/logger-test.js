@@ -11,7 +11,7 @@ describe("log", function() {
 
   describe("with json format", function() {
     before(function() {
-      this.logger = new Logger("test logger", new MemoryConsole, Logger.JSON)
+      this.logger = new Logger(new MemoryConsole, Logger.JSON)
     })
 
     describe("with string message", function() {
@@ -31,10 +31,6 @@ describe("log", function() {
 
       it("should log severity", function() {
         assert.equal(this.entry.severity, "DEBUG")
-      })
-
-      it("should log producer", function() {
-        assert.equal(this.entry["logging.googleapis.com/operation"].producer, "test logger")
       })
     })
 
@@ -81,22 +77,6 @@ describe("log", function() {
         this.entry = JSON.parse(this.logger.console.stdout.toString())
       })
 
-      it("should log string", function() {
-        assert.equal(this.entry.message, "oops!")
-      })
-
-      it("should log time", function() {
-        assert.equal(this.entry.time, "2012-03-02T11:38:49.321Z")
-      })
-
-      it("should log severity", function() {
-        assert.equal(this.entry.severity, "ERROR")
-      })
-
-      it("should log producer", function() {
-        assert.equal(this.entry["logging.googleapis.com/operation"].producer, "test logger")
-      })
-
       it("should log source location", function() {
         assert.equal(this.entry["logging.googleapis.com/sourceLocation"].file,
           "test/unit/util/logger-test.js")
@@ -109,7 +89,7 @@ describe("log", function() {
 
   describe("with pretty format", function() {
     before(function() {
-      this.logger = new Logger("test logger", new MemoryConsole, Logger.PRETTY)
+      this.logger = new Logger(new MemoryConsole, Logger.PRETTY)
     })
 
     describe("with string message", function() {

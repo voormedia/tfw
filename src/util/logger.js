@@ -25,13 +25,6 @@ export type SourceLocation = {|
   line?: number,
 |}
 
-export type Operation = {|
-  id?: string,
-  producer?: string,
-  first?: boolean,
-  last?: boolean,
-|}
-
 export type LogSeverity = (
   "DEBUG" |
   "INFO" |
@@ -53,16 +46,14 @@ export type LogEntry = {
   severity: LogSeverity,
   httpRequest?: HttpRequest,
   "logging.googleapis.com/sourceLocation"?: SourceLocation,
-  "logging.googleapis.com/operation"?: Operation,
 }
 
 export type LogContext = {
   httpRequest?: HttpRequest,
-  sourceLocation?: SourceLocation,
+  "logging.googleapis.com/sourceLocation"?: SourceLocation,
 }
 
 export class Logger {
-  producer: string
   console: console.Console
   formatter: LogEntry => string
 
@@ -118,29 +109,21 @@ export class Logger {
     return process.env.NODE_ENV === "test" ? new MemoryConsole : console
   }
 
-  constructor(producer: string, console: console.Console = Logger.console,
-    formatter: LogEntry => string = Logger.formatter) {
-    this.producer = producer
+  constructor(console: console.Console = Logger.console, formatter: LogEntry => string = Logger.formatter) {
     this.console = console
     this.formatter = formatter
 
     Object.freeze(this)
   }
 
-  write(severity: LogSeverity, message: mixed, {sourceLocation, ...context}: LogContext) {
+  write(severity: LogSeverity, message: mixed, context: LogContext) {
     const entry: LogEntry = {
-      "time": new Date,
-      "message": typeof message === "object" ? JSON.stringify(message) : String(message),
+      time: new Date,
+      message: typeof message === "object" ? JSON.stringify(message) : String(message),
       severity,
-      ...context,
-      "logging.googleapis.com/operation": {producer: this.producer},
     }
 
-    if (sourceLocation) {
-      entry["logging.googleapis.com/sourceLocation"] = sourceLocation
-    }
-
-    this.console.log(this.formatter(entry))
+    this.console.log(this.formatter(Object.assign(entry, context)))
   }
 
   debug(message: mixed, context: LogContext = {}) {
@@ -160,12 +143,12 @@ export class Logger {
   }
 
   error(message: mixed, context: LogContext = {}) {
-    context.sourceLocation = sourceLocation()
+    context["logging.googleapis.com/sourceLocation"] = sourceLocation()
     this.write("ERROR", message, context)
   }
 
   critical(message: mixed, context: LogContext = {}) {
-    context.sourceLocation = sourceLocation()
+    context["logging.googleapis.com/sourceLocation"] = sourceLocation()
     this.write("CRITICAL", message, context)
   }
 }

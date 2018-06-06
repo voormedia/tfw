@@ -8,7 +8,7 @@ import {log, write, rescue} from "src/middleware"
 describe("log", function() {
   before(function() {
     timekeeper.freeze(new Date(1330688329321))
-    this.logger = new Logger("test logger", new MemoryConsole, Logger.JSON)
+    this.logger = new Logger(new MemoryConsole, Logger.JSON)
   })
 
   describe("on success", function() {
