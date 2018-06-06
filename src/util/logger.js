@@ -1,8 +1,4 @@
 /* @flow */
-/* eslint-disable no-console */
-import path from "path"
-import stackTrace from "stack-trace"
-
 import MemoryConsole from "./memory-console"
 
 export type HttpRequest = {|
@@ -17,12 +13,6 @@ export type HttpRequest = {|
   latency?: string,
   cacheHit?: boolean,
   cacheValidatedWithOriginServer?: boolean,
-|}
-
-export type SourceLocation = {|
-  file?: string,
-  function?: string,
-  line?: number,
 |}
 
 export type LogSeverity = (
@@ -45,12 +35,10 @@ export type LogEntry = {
   message: string,
   severity: LogSeverity,
   httpRequest?: HttpRequest,
-  "logging.googleapis.com/sourceLocation"?: SourceLocation,
 }
 
 export type LogContext = {
   httpRequest?: HttpRequest,
-  "logging.googleapis.com/sourceLocation"?: SourceLocation,
 }
 
 export class Logger {
@@ -143,23 +131,11 @@ export class Logger {
   }
 
   error(message: mixed, context: LogContext = {}) {
-    context["logging.googleapis.com/sourceLocation"] = sourceLocation()
     this.write("ERROR", message, context)
   }
 
   critical(message: mixed, context: LogContext = {}) {
-    context["logging.googleapis.com/sourceLocation"] = sourceLocation()
     this.write("CRITICAL", message, context)
-  }
-}
-
-function sourceLocation(depth: number = 1): SourceLocation {
-  const caller = stackTrace.get()[depth + 1]
-
-  return {
-    file: path.relative(process.cwd(), caller.getFileName()),
-    function: caller.getFunctionName() || "(anonymous)",
-    line: caller.getLineNumber(),
   }
 }
 
