@@ -77,6 +77,22 @@ describe("log", function() {
         assert.equal(this.entry.message, '{"foo":"bar"}')
       })
     })
+
+    describe("with error level", function() {
+      before(function errorTest() {
+        this.logger.console.clear()
+        this.logger.error("oops!")
+        this.entry = JSON.parse(this.logger.console.stdout.toString())
+      })
+
+      it("should log source location", function() {
+        assert.equal(this.entry.context.reportLocation.filePath,
+          "test/unit/util/logger-test.js")
+
+        assert.equal(this.entry.context.reportLocation.functionName,
+          "errorTest")
+      })
+    })
   })
 
   describe("with pretty format", function() {
