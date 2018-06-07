@@ -1,4 +1,6 @@
 /* @flow */
+import hostPkg from "./host-pkg"
+
 import MemoryConsole from "./memory-console"
 
 export type HttpRequest = {|
@@ -13,6 +15,11 @@ export type HttpRequest = {|
   latency?: string,
   cacheHit?: boolean,
   cacheValidatedWithOriginServer?: boolean,
+|}
+
+export type ServiceContext = {|
+  service: string,
+  version?: string,
 |}
 
 export type LogSeverity = (
@@ -35,6 +42,7 @@ export type LogEntry = {
   message: string,
   severity: LogSeverity,
   httpRequest?: HttpRequest,
+  serviceContext?: ServiceContext,
 }
 
 export type LogContext = {
@@ -42,6 +50,7 @@ export type LogContext = {
 }
 
 export class Logger {
+  serviceContext: ServiceContext
   console: console.Console
   formatter: LogEntry => string
 
@@ -98,6 +107,11 @@ export class Logger {
   }
 
   constructor(console: console.Console = Logger.console, formatter: LogEntry => string = Logger.formatter) {
+    this.serviceContext = {
+      service: hostPkg.name,
+      version: hostPkg.version,
+    }
+
     this.console = console
     this.formatter = formatter
 
@@ -108,6 +122,7 @@ export class Logger {
     const entry: LogEntry = {
       time: new Date,
       message: typeof message === "object" ? JSON.stringify(message) : String(message),
+      serviceContext: this.serviceContext,
       severity,
     }
 

@@ -32,6 +32,14 @@ describe("log", function() {
       it("should log severity", function() {
         assert.equal(this.entry.severity, "DEBUG")
       })
+
+      it("should log service name", function() {
+        assert.equal(this.entry.serviceContext.service, "mocha")
+      })
+
+      it("should log service version", function() {
+        assert.match(this.entry.serviceContext.version, /\d+\.\d+\.\d+/)
+      })
     })
 
     describe("with multiline string message", function() {
