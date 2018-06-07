@@ -35,7 +35,8 @@ export type LogSeverity = (
 
 /* https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry */
 /* https://github.com/GoogleCloudPlatform/fluent-plugin-google-cloud/blob/master/lib/fluent/plugin/out_google_cloud.rb */
-/* Note, this is actually the contents of jsonPayload, so it can contain
+/* https://github.com/GoogleCloudPlatform/fluent-plugin-google-cloud/issues/99 */
+/* Note, this also has the contents of jsonPayload, so it can contain
    arbitrary fields! */
 export type LogEntry = {
   time: Date,

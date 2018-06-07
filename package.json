@@ -2,7 +2,7 @@
   "private": true,
   "author": "Rolf Timmermans",
   "name": "tfw",
-  "version": "4.5.0",
+  "version": "4.6.0",
   "main": "application.js",
   "license": "UNLICENSED",
   "engines": {
