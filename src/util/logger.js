@@ -50,9 +50,9 @@ export type LogContext = {
 }
 
 export class Logger {
-  serviceContext: ServiceContext
   console: console.Console
   formatter: LogEntry => string
+  service: ServiceContext
 
   static JSON = JSON.stringify
 
@@ -106,14 +106,19 @@ export class Logger {
     return process.env.NODE_ENV === "test" ? new MemoryConsole : console
   }
 
-  constructor(console: console.Console = Logger.console, formatter: LogEntry => string = Logger.formatter) {
-    this.serviceContext = {
+  static get service(): ServiceContext {
+    return {
       service: hostPkg.name,
       version: hostPkg.version,
     }
+  }
 
+  constructor(console: console.Console = Logger.console,
+              formatter: LogEntry => string = Logger.formatter,
+              service: ServiceContext = Logger.service) {
     this.console = console
     this.formatter = formatter
+    this.service = service
 
     Object.freeze(this)
   }
@@ -122,7 +127,7 @@ export class Logger {
     const entry: LogEntry = {
       time: new Date,
       message: typeof message === "object" ? JSON.stringify(message) : String(message),
-      serviceContext: this.serviceContext,
+      serviceContext: this.service,
       severity,
     }
 
