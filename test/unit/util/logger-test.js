@@ -86,10 +86,10 @@ describe("log", function() {
       })
 
       it("should log source location", function() {
-        assert.equal(this.entry.context.reportLocation.filePath,
+        assert.equal(this.entry.reportLocation.filePath,
           "test/unit/util/logger-test.js")
 
-        assert.equal(this.entry.context.reportLocation.functionName,
+        assert.equal(this.entry.reportLocation.functionName,
           "errorTest")
       })
     })

@@ -41,10 +41,6 @@ export type ReportLocation = {|
   functionName?: string,
 |}
 
-export type Context = {|
-  reportLocation: ReportLocation,
-|}
-
 /* https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry */
 /* https://github.com/GoogleCloudPlatform/fluent-plugin-google-cloud/blob/master/lib/fluent/plugin/out_google_cloud.rb */
 /* https://github.com/GoogleCloudPlatform/fluent-plugin-google-cloud/issues/99 */
@@ -56,7 +52,7 @@ export type LogEntry = {
   severity: LogSeverity,
   httpRequest?: HttpRequest,
   serviceContext?: ServiceContext,
-  context?: Context,
+  reportLocation?: ReportLocation,
 }
 
 export type LogContext = {
@@ -153,7 +149,7 @@ export class Logger {
     }
 
     if (errorSeverity.has(severity)) {
-      entry.context = {reportLocation: reportLocation()}
+      entry.reportLocation = reportLocation()
     }
 
     this.console.log(this.formatter(Object.assign(entry, context)))
