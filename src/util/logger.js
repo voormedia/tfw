@@ -1,20 +1,7 @@
 /* @flow */
-import path from "path"
-import stackTrace from "stack-trace"
-
 import hostPkg from "./host-pkg"
-import MemoryConsole from "./memory-console"
 
-export type LogSeverity = (
-  "DEBUG" |
-  "INFO" |
-  "NOTICE" |
-  "WARNING" |
-  "ERROR" |
-  "CRITICAL" |
-  "ALERT" |
-  "EMERGENCY"
-)
+import MemoryConsole from "./memory-console"
 
 export type HttpRequest = {|
   requestMethod: string,
@@ -35,15 +22,16 @@ export type ServiceContext = {|
   version?: string,
 |}
 
-export type ReportLocation = {|
-  filePath: string,
-  lineNumber?: number,
-  functionName?: string,
-|}
-
-export type Context = {|
-  reportLocation: ReportLocation,
-|}
+export type LogSeverity = (
+  "DEBUG" |
+  "INFO" |
+  "NOTICE" |
+  "WARNING" |
+  "ERROR" |
+  "CRITICAL" |
+  "ALERT" |
+  "EMERGENCY"
+)
 
 /* https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry */
 /* https://github.com/GoogleCloudPlatform/fluent-plugin-google-cloud/blob/master/lib/fluent/plugin/out_google_cloud.rb */
@@ -56,19 +44,11 @@ export type LogEntry = {
   severity: LogSeverity,
   httpRequest?: HttpRequest,
   serviceContext?: ServiceContext,
-  context?: Context,
 }
 
 export type LogContext = {
   httpRequest?: HttpRequest,
 }
-
-const errorSeverity: Set<LogSeverity> = new Set([
-  "ERROR",
-  "CRITICAL",
-  "ALERT",
-  "EMERGENCY",
-])
 
 export class Logger {
   console: console.Console
@@ -152,10 +132,6 @@ export class Logger {
       severity,
     }
 
-    if (errorSeverity.has(severity)) {
-      entry.context = {reportLocation: reportLocation()}
-    }
-
     this.console.log(this.formatter(Object.assign(entry, context)))
   }
 
@@ -181,17 +157,6 @@ export class Logger {
 
   critical(message: mixed, context: LogContext = {}) {
     this.write("CRITICAL", message, context)
-  }
-}
-
-
-function reportLocation(depth: number = 2): ReportLocation {
-  const caller = stackTrace.get()[depth + 1]
-
-  return {
-    filePath: path.relative(process.cwd(), caller.getFileName()),
-    lineNumber: caller.getLineNumber(),
-    functionName: caller.getFunctionName() || "<anonymous>",
   }
 }
 
