@@ -125,4 +125,40 @@ describe("validate body", function() {
       }))
     })
   })
+
+  describe("with optional schema and null body", function() {
+    before(async function() {
+      const options = {
+        optional: true,
+        schema: {
+          type: "object",
+          properties: {
+            foo: { type: "string" },
+            bar: { type: "integer", minimum: 1 },
+          },
+          required: ["foo", "bar"],
+        },
+      }
+
+      const {res, body} = await test.request(
+        test.createStack(write(), rescue(), parseBody(), validateBody(options), function() {}), {
+          headers: {
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          method: "POST",
+          body: 'null'
+        }
+      )
+
+      this.res = res
+      this.body = body
+    })
+
+    it("should return error on validation failure", function() {
+      assert.deepEqual(this.body.toString(), JSON.stringify({
+        error: "Bad request",
+        message: "Request is invalid: request body should be object"
+      }))
+    })
+  })
 })

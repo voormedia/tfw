@@ -82,7 +82,7 @@ function guessType(req, body) {
   if (body instanceof Buffer) {
     /* Check for magic headers of various binary files. */
     for (const type in magic) {
-      let header = magic[type]
+      const header = magic[type]
       if (body.slice(0, header.length).equals(header)) return type
     }
   }

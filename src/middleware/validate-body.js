@@ -24,7 +24,7 @@ export default function validateBody(options: ValidationOptions): Middleware {
 
 function validate(body, {schema, message = "Request is invalid", details = true, optional = false}) {
   /* Don't validate non-JSON bodies if the request schema is optional. */
-  if (!body || Buffer.isBuffer(body)) {
+  if (body === undefined || Buffer.isBuffer(body)) {
     if (optional) return
 
     /* Validate empty body. */
