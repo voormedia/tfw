@@ -35,6 +35,11 @@ export class Task extends AbstractTask {
     await this.stop()
   }
 
+  async stop(): Promise<void> {
+    await super.stop()
+    process.exit()
+  }
+
   async run(): Promise<void> {}
 }
 
