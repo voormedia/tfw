@@ -55,7 +55,7 @@
     "dot-notation": [2, {allowKeywords: true}],
     "eol-last": 2,
     "no-extra-parens": [2, "functions"],
-    "eqeqeq": 1,
+    "eqeqeq": [2, "always", {null: "ignore"}],
     "key-spacing": [2, {mode: "minimum", beforeColon: false, afterColon: true}],
     "keyword-spacing": 2,
     "max-len": [2, 120, 4, {ignoreUrls: true}],

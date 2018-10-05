@@ -5,11 +5,15 @@ class HttpError extends Error {
   message: string
   expose: boolean = true
 
-  constructor(message: string) {
+  constructor(message?: string) {
     super()
 
     /* Error message without trailing period. */
-    this.message = message.replace(/\.?$/, "")
+    if (message == null) {
+      this.message = "Unknown reason"
+    } else {
+      this.message = message.replace(/\.?$/, "")
+    }
 
     Error.captureStackTrace(this, this.constructor)
     Object.freeze(this.stack)
