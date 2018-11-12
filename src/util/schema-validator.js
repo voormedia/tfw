@@ -11,15 +11,14 @@ const instance = ajv({
   $data: true,
 })
 
-/* Currently ajv-keywords still uses draft-06. */
-const jsonSchemaId = "draft-06"
-instance.addMetaSchema(require(`ajv/lib/refs/json-schema-${jsonSchemaId}.json`))
+/* Force default metadata schema to be computed to avoid warnings when
+   adding the select and switch keywords. */
+instance.validateSchema({})
 
 keywordSwitch(instance)
 keywordSelect(instance)
 
 export function createValidator(schema: Object): Validator {
-  schema.$schema = `http://json-schema.org/${jsonSchemaId}/schema`
   const validate = instance.compile(schema)
 
   return (body: mixed) => {

@@ -152,7 +152,7 @@ describe("rescue", function() {
     })
 
     it("should save error", function() {
-      assert.equal(this.ctx.data.error.constructor, TypeError)
+      assert.include(["TypeError", "NodeError"], this.ctx.data.error.constructor.name)
     })
   })
 
