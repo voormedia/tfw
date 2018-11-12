@@ -222,32 +222,4 @@ describe("schema validator", function() {
       })
     })
   })
-
-  describe("select", function() {
-    before(function() {
-      this.schema = {
-        properties: {
-          foo: {enum: ["bar", "baz"]},
-        },
-        select: {$data: "/foo"},
-        selectCases: {
-          bar: {
-            properties: {bar: {}},
-            required: ["bar"],
-          },
-          baz: {
-            properties: {baz: {}},
-            required: ["baz"],
-          }
-        },
-      }
-    })
-
-    describe("failing", function() {
-      it("should report error", function() {
-        const errors = createValidator(this.schema)({foo: "bar"})
-        assert.deepEqual(errors, ["request body requires key 'bar'"])
-      })
-    })
-  })
 })

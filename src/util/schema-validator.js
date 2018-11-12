@@ -2,7 +2,6 @@
 import ajv from "ajv"
 
 import keywordSwitch from "ajv-keywords/keywords/switch"
-import keywordSelect from "ajv-keywords/keywords/select"
 
 export type Validator = (body: mixed) => string[]
 
@@ -16,7 +15,6 @@ const instance = ajv({
 instance.validateSchema({})
 
 keywordSwitch(instance)
-keywordSelect(instance)
 
 export function createValidator(schema: Object): Validator {
   const validate = instance.compile(schema)
