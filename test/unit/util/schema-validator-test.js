@@ -1,4 +1,4 @@
-import * as validator from "src/util/schema-validator"
+import {createValidator} from "src/util/schema-validator"
 
 describe("schema validator", function() {
   describe("type", function() {
@@ -12,7 +12,7 @@ describe("schema validator", function() {
 
     describe("failing", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: 1})
+        const errors = createValidator(this.schema)({foo: 1})
         assert.deepEqual(errors, ["'foo' should be object"])
       })
     })
@@ -35,14 +35,14 @@ describe("schema validator", function() {
 
     describe("failing single", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: {"baz": 1}})
+        const errors = createValidator(this.schema)({foo: {"baz": 1}})
         assert.deepEqual(errors, ["'foo' requires key 'bar'"])
       })
     })
 
     describe("failing multiple", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: {}})
+        const errors = createValidator(this.schema)({foo: {}})
         assert.deepEqual(errors, ["'foo' requires keys 'bar', 'baz'"])
       })
     })
@@ -61,14 +61,14 @@ describe("schema validator", function() {
 
     describe("failing single", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: {"bar": 1}})
+        const errors = createValidator(this.schema)({foo: {"bar": 1}})
         assert.deepEqual(errors, ["'foo' has unknown key 'bar'"])
       })
     })
 
     describe("failing multiple", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: {"bar": 1, "baz": 2}})
+        const errors = createValidator(this.schema)({foo: {"bar": 1, "baz": 2}})
         assert.deepEqual(errors, ["'foo' has unknown keys 'bar', 'baz'"])
       })
     })
@@ -86,14 +86,14 @@ describe("schema validator", function() {
 
     describe("failing single", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: "x", "bar": "baz"})
+        const errors = createValidator(this.schema)({foo: "x", "bar": "baz"})
         assert.deepEqual(errors, ["'foo' should be one of 'bar', 'baz', 'qux'"])
       })
     })
 
     describe("failing multiple", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: "baz", "bar": "x"})
+        const errors = createValidator(this.schema)({foo: "baz", "bar": "x"})
         assert.deepEqual(errors, ["'bar' should be 'baz'"])
       })
     })
@@ -111,14 +111,14 @@ describe("schema validator", function() {
 
     describe("failing", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: "//example.com/foo/bar", bar: "y"})
+        const errors = createValidator(this.schema)({foo: "//example.com/foo/bar", bar: "y"})
         assert.deepEqual(errors, ["'foo' should be formatted as url", "'bar' should be formatted as email address"])
       })
     })
 
     describe("succeeding", function() {
       it("should not report error", function() {
-        const errors = validator.validate(this.schema, {foo: "https://example.com/foo/bar", bar: "john+doe@foo.example.com"})
+        const errors = createValidator(this.schema)({foo: "https://example.com/foo/bar", bar: "john+doe@foo.example.com"})
         assert.deepEqual(errors, [])
       })
     })
@@ -136,7 +136,7 @@ describe("schema validator", function() {
 
     describe("failing", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: 0, bar: 0})
+        const errors = createValidator(this.schema)({foo: 0, bar: 0})
         assert.deepEqual(errors, ["'foo' should be more than 1", "'bar' should be at least 1"])
       })
     })
@@ -154,7 +154,7 @@ describe("schema validator", function() {
 
     describe("failing", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: 10, bar: 10})
+        const errors = createValidator(this.schema)({foo: 10, bar: 10})
         assert.deepEqual(errors, ["'foo' should be less than 1", "'bar' should be at most 1"])
       })
     })
@@ -171,7 +171,7 @@ describe("schema validator", function() {
 
     describe("failing", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: "ab"})
+        const errors = createValidator(this.schema)({foo: "ab"})
         assert.deepEqual(errors, ["'foo' should be at least 3 characters"])
       })
     })
@@ -188,7 +188,7 @@ describe("schema validator", function() {
 
     describe("failing", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: "abcd"})
+        const errors = createValidator(this.schema)({foo: "abcd"})
         assert.deepEqual(errors, ["'foo' should be at most 3 characters"])
       })
     })
@@ -217,7 +217,35 @@ describe("schema validator", function() {
 
     describe("failing", function() {
       it("should report error", function() {
-        const errors = validator.validate(this.schema, {foo: "bar"})
+        const errors = createValidator(this.schema)({foo: "bar"})
+        assert.deepEqual(errors, ["request body requires key 'bar'"])
+      })
+    })
+  })
+
+  describe("select", function() {
+    before(function() {
+      this.schema = {
+        properties: {
+          foo: {enum: ["bar", "baz"]},
+        },
+        select: {$data: "/foo"},
+        selectCases: {
+          bar: {
+            properties: {bar: {}},
+            required: ["bar"],
+          },
+          baz: {
+            properties: {baz: {}},
+            required: ["baz"],
+          }
+        },
+      }
+    })
+
+    describe("failing", function() {
+      it("should report error", function() {
+        const errors = createValidator(this.schema)({foo: "bar"})
         assert.deepEqual(errors, ["request body requires key 'bar'"])
       })
     })

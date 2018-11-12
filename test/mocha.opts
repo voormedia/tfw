@@ -1,5 +1,4 @@
 test/unit
---harmony_async_iteration
 --use_strict
 --require babel-register
 --require test

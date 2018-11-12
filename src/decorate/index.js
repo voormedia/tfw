@@ -19,46 +19,46 @@ import requireTLSMiddleware from "../middleware/require-tls"
 import validateBodyMiddleware from "../middleware/validate-body"
 import validateContentTypeMiddleware from "../middleware/validate-content-type"
 
-export function connect(...args) {
+export function connect(...args: any[]) {
   return use(connectMiddleware(...args))
 }
 
-export function exposeAllErrors(...args) {
+export function exposeAllErrors(...args: any[]) {
   return use(exposeAllErrorsMiddleware(...args))
 }
 
-export function parseAuthorization(...args) {
+export function parseAuthorization(...args: any[]) {
   return use(parseAuthorizationMiddleware(...args))
 }
 
-export function parseBody(...args) {
+export function parseBody(...args: any[]) {
   return use(parseBodyMiddleware(...args))
 }
 
-export function parseQuery(...args) {
+export function parseQuery(...args: any[]) {
   return use(parseQueryMiddleware(...args))
 }
 
-export function parseSession(...args) {
+export function parseSession(...args: any[]) {
   return use(parseSessionMiddleware(...args))
 }
 
-export function requireAuthorization(...args) {
+export function requireAuthorization(...args: any[]) {
   return use(requireAuthorizationMiddleware(...args))
 }
 
-export function requireHost(...args) {
+export function requireHost(...args: any[]) {
   return use(requireHostMiddleware(...args))
 }
 
-export function requireTLS(...args) {
+export function requireTLS(...args: any[]) {
   return use(requireTLSMiddleware(...args))
 }
 
-export function validateBody(...args) {
+export function validateBody(...args: any[]) {
   return use(validateBodyMiddleware(...args))
 }
 
-export function validateContentType(...args) {
+export function validateContentType(...args: any[]) {
   return use(validateContentTypeMiddleware(...args))
 }

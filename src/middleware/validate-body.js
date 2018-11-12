@@ -1,12 +1,12 @@
 /* @flow */
 /* eslint-disable no-unused-expressions */
-import * as validator from "../util/schema-validator"
+import {createValidator} from "../util/schema-validator"
 
 import {BadRequest} from "../errors"
 
 import type {Context, Next, Middleware} from "../middleware"
 
-type ValidationOptions = {
+export type ValidationOptions = {
   schema: Object,
   message: string,
   details: boolean,
@@ -14,15 +14,16 @@ type ValidationOptions = {
 }
 
 export default function validateBody(options: ValidationOptions): Middleware {
+  const validator = createValidator(options.schema)
   return function validateBody(next: Next) {
     (this: Context)
 
-    validate(this.data.body, options)
+    validate(validator, this.data.body, options)
     return next()
   }
 }
 
-function validate(body, {schema, message = "Request is invalid", details = true, optional = false}) {
+function validate(validator, body, {message = "Request is invalid", details = true, optional = false}) {
   /* Don't validate non-JSON bodies if the request schema is optional. */
   if (body === undefined || Buffer.isBuffer(body)) {
     if (optional) return
@@ -31,7 +32,7 @@ function validate(body, {schema, message = "Request is invalid", details = true,
     body = {}
   }
 
-  const errors = validator.validate(schema, body)
+  const errors = validator(body)
   if (errors.length) {
     if (details) {
       throw new BadRequest(`${message}: ${errors.join("; ")}`)

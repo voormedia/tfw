@@ -19,8 +19,8 @@
     "build": "rm -rf lib && node_modules/.bin/babel src --out-dir lib --source-maps inline --ignore node_modules"
   },
   "dependencies": {
-    "ajv": "^5.2.2",
-    "ajv-keywords": "^2.1.0",
+    "ajv": "^6.5",
+    "ajv-keywords": "^3.2",
     "content-type": "^1.0.2",
     "cookies": "^0.7.0"
   },
