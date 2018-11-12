@@ -1,5 +1,4 @@
 /* @flow */
-/* eslint-disable no-console */
 import ajv from "ajv"
 
 import keywordSwitch from "ajv-keywords/keywords/switch"
