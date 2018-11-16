@@ -11,13 +11,13 @@ type SessionOptions = {
 }
 
 function decode(string) {
-  const body = new Buffer(string, "base64").toString("utf8")
+  const body = Buffer.from(string, "base64").toString("utf8")
   return JSON.parse(body)
 }
 
 function encode(body) {
   const string = JSON.stringify(body)
-  return new Buffer(string).toString("base64")
+  return Buffer.from(string).toString("base64")
 }
 
 const day = 24 * 60 * 60 * 1000

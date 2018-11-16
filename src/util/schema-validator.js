@@ -1,20 +1,15 @@
 /* @flow */
 import ajv from "ajv"
 
-import keywordSwitch from "ajv-keywords/keywords/switch"
-
 export type Validator = (body: mixed) => string[]
 
 const instance = ajv({
   allErrors: true,
-  $data: true,
 })
 
 /* Force default metadata schema to be computed to avoid warnings when
    adding the select and switch keywords. */
 instance.validateSchema({})
-
-keywordSwitch(instance)
 
 export function createValidator(schema: Object): Validator {
   const validate = instance.compile(schema)
@@ -106,6 +101,9 @@ export function createValidator(schema: Object): Validator {
           messages.add(`${path} should be at most ${limit} ${fmtPlural("character", limit)}`)
           break
         }
+
+        /* Ignore spurious errors regarding failing if/then/else. */
+        case "if": break
 
         default:
           messages.add(`${path} failed constraint`)

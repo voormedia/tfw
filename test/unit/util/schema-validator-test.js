@@ -194,7 +194,7 @@ describe("schema validator", function() {
     })
   })
 
-  describe("switch", function() {
+  describe("if then else", function() {
     before(function() {
       this.schema = {
         properties: {
@@ -202,16 +202,16 @@ describe("schema validator", function() {
           bar: {},
           baz: {},
         },
-        switch: [
-          {
-            "if": {properties: {foo: {const: "bar"}}},
-            "then": {required: ["bar"]},
+        if: {properties: {foo: {const: "bar"}}},
+        then: {
+          required: ["bar"],
+        },
+        else: {
+          if: {properties: {foo: {const: "baz"}}},
+          then: {
+            required: ["baz"],
           },
-          {
-            "if": {properties: {foo: {const: "baz"}}},
-            "then": {required: ["baz"]},
-          },
-        ],
+        },
       }
     })
 
