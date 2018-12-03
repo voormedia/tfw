@@ -7,6 +7,11 @@ const instance = ajv({
   allErrors: true,
 })
 
+instance.addFormat("rfc2822-datetime",
+  /* Based on http://regexlib.com/REDetails.aspx?regexp_id=969 */
+  /^((Sun|Mon|Tue|Wed|Thu|Fri|Sat),?\s+)?(0?[1-9]|[1-2][0-9]|3[01])\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(19[0-9]{2}|[2-9][0-9]{3}|[0-9]{2})\s+(2[0-3]|[0-1][0-9]):([0-5][0-9])(:(60|[0-5][0-9]))?\s+([-+][0-9]{2}[0-5][0-9]|(UT|GMT|(E|C|M|P)(ST|DT)|[A-IK-Z]))$/
+)
+
 /* Force default metadata schema to be computed to avoid warnings when
    adding the select and switch keywords. */
 instance.validateSchema({})
@@ -85,7 +90,12 @@ export function createValidator(schema: Object): Validator {
 
         case "format": {
           let format = errors[0].params.format
-          if (format === "email") format = "email address"
+
+          switch (format) {
+          case "email": format = "email address"; break
+          case "rfc2822-datetime": format = "rfc 2822 date-time"; break
+          }
+
           messages.add(`${path} should be formatted as ${format}`)
           break
         }

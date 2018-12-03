@@ -124,6 +124,41 @@ describe("schema validator", function() {
     })
   })
 
+  describe("format for rfc 2822 date", function() {
+    before(function() {
+      this.schema = {
+        properties: {
+          date: {format: "rfc2822-datetime"},
+        },
+      }
+    })
+
+    it("should report error for invalid dates", function() {
+      const validate = createValidator(this.schema)
+
+      assert.deepEqual(
+        validate({date: "foo bar"}),
+        ["'date' should be formatted as rfc 2822 date-time"],
+      )
+
+      assert.deepEqual(
+        validate({date: "Tue. 01 Nov 2016 01:23:45 GMT"}),
+        ["'date' should be formatted as rfc 2822 date-time"],
+      )
+    })
+
+    it("should not report error for valid dates", function() {
+      const validate = createValidator(this.schema)
+
+      assert.deepEqual(validate({date: "Tue, 01 Nov 2016 01:23:45 UT"}), [])
+      assert.deepEqual(validate({date: "Tue 01 Nov 2016 02:23:45 GMT"}), [])
+      assert.deepEqual(validate({date: "Tue, 01 Nov 2016 03:23 +0000"}), [])
+      assert.deepEqual(validate({date: "Tue, 01 Nov 16 04:23:45 Z"}), [])
+      assert.deepEqual(validate({date: "01 Nov 2016 05:23:45 Z"}), [])
+      assert.deepEqual(validate({date: "Tue, 1 Nov 2016 06:23:45 GMT"}), [])
+    })
+  })
+
   describe("minimum", function() {
     before(function() {
       this.schema = {
