@@ -14,6 +14,7 @@ export {
 }
 
 import connect from "./connect"
+import cors from "./cors"
 import exposeAllErrors from "./expose-all-errors"
 import parseAuthorization from "./parse-authorization"
 import parseBody from "./parse-body"
@@ -27,6 +28,7 @@ import validateContentType from "./validate-content-type"
 
 export {
   connect,
+  cors,
   exposeAllErrors,
   parseAuthorization,
   parseBody,
