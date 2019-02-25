@@ -13,8 +13,8 @@ export {
   write,
 }
 
+import allowCors from "./allow-cors"
 import connect from "./connect"
-import cors from "./cors"
 import exposeAllErrors from "./expose-all-errors"
 import parseAuthorization from "./parse-authorization"
 import parseBody from "./parse-body"
@@ -27,8 +27,8 @@ import validateBody from "./validate-body"
 import validateContentType from "./validate-content-type"
 
 export {
+  allowCors,
   connect,
-  cors,
   exposeAllErrors,
   parseAuthorization,
   parseBody,

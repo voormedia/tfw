@@ -7,6 +7,7 @@ export * from "./when"
 
 import {use} from "./use"
 
+import allowCorsMiddleware from "../middleware/allow-cors"
 import connectMiddleware from "../middleware/connect"
 import exposeAllErrorsMiddleware from "../middleware/expose-all-errors"
 import parseAuthorizationMiddleware from "../middleware/parse-authorization"
@@ -18,6 +19,10 @@ import requireHostMiddleware from "../middleware/require-host"
 import requireTLSMiddleware from "../middleware/require-tls"
 import validateBodyMiddleware from "../middleware/validate-body"
 import validateContentTypeMiddleware from "../middleware/validate-content-type"
+
+export function allowCors(...args: any[]) {
+  return use(allowCorsMiddleware(...args))
+}
 
 export function connect(...args: any[]) {
   return use(connectMiddleware(...args))
