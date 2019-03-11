@@ -8,6 +8,7 @@ type AllowCorsOptions = {
   methods?: Array<string>,
   requestHeaders?: Array<string>,
   responseHeaders?: Array<string>,
+  allowCredentials?: boolean,
   maxAge?: number,
 }
 
@@ -18,6 +19,7 @@ export default function allowCors(options: AllowCorsOptions = {}): Middleware {
   const allowedMethodList = (options.methods || ["GET", "POST", "PUT", "PATCH", "DELETE"]).join(", ")
   const requestHeaderList = (options.requestHeaders || []).join(", ")
   const responseHeaderList = (options.responseHeaders || []).join(", ")
+  const allowCredentials = options.allowCredentials
   const maxAge = options.maxAge
 
   return function cors(next: Next) {
@@ -46,6 +48,7 @@ export default function allowCors(options: AllowCorsOptions = {}): Middleware {
       this.set("Access-Control-Allow-Methods", allowedMethodList)
       if (requestHeaderList) this.set("Access-Control-Allow-Headers", requestHeaderList)
       if (responseHeaderList) this.set("Access-Control-Expose-Headers", responseHeaderList)
+      if (allowCredentials) this.set("Access-Control-Allow-Credentials", "true")
       if (maxAge) this.set("Access-Control-Max-Age", maxAge)
 
       if (this.method === "OPTIONS" && this.get("access-control-request-method")) {
