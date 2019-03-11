@@ -47,6 +47,10 @@ describe("allow cors", function() {
         assert.equal(this.res.headers["access-control-expose-headers"], undefined)
       })
 
+      it("should return no access control allow credentials header", function() {
+        assert.equal(this.res.headers["access-control-allow-credentials"], undefined)
+      })
+
       it("should return no access control max age", function() {
         assert.equal(this.res.headers["access-control-max-age"], undefined)
       })
@@ -93,6 +97,10 @@ describe("allow cors", function() {
         assert.equal(this.res.headers["access-control-expose-headers"], undefined)
       })
 
+      it("should return no access control allow credentials header", function() {
+        assert.equal(this.res.headers["access-control-allow-credentials"], undefined)
+      })
+
       it("should return no access control max age", function() {
         assert.equal(this.res.headers["access-control-max-age"], undefined)
       })
@@ -136,6 +144,10 @@ describe("allow cors", function() {
         assert.equal(this.res.headers["access-control-expose-headers"], undefined)
       })
 
+      it("should return no access control allow credentials header", function() {
+        assert.equal(this.res.headers["access-control-allow-credentials"], undefined)
+      })
+
       it("should return no access control max age", function() {
         assert.equal(this.res.headers["access-control-max-age"], undefined)
       })
@@ -148,6 +160,7 @@ describe("allow cors", function() {
       methods: ["GET", "POST", "DELETE"],
       requestHeaders: ["Content-Length"],
       responseHeaders: ["Content-Length", "Range"],
+      allowCredentials: true,
       maxAge: 150,
     }
 
@@ -185,6 +198,10 @@ describe("allow cors", function() {
 
       it("should return no access control exposed headers", function() {
         assert.equal(this.res.headers["access-control-expose-headers"], undefined)
+      })
+
+      it("should return no access control allow credentials header", function() {
+        assert.equal(this.res.headers["access-control-allow-credentials"], undefined)
       })
 
       it("should return no access control max age", function() {
@@ -236,6 +253,10 @@ describe("allow cors", function() {
           "Content-Length, Range")
       })
 
+      it("should return access control allow credentials header", function() {
+        assert.equal(this.res.headers["access-control-allow-credentials"], "true")
+      })
+
       it("should return access control max age", function() {
         assert.equal(this.res.headers["access-control-max-age"], "150")
       })
@@ -282,6 +303,10 @@ describe("allow cors", function() {
           "Content-Length, Range")
       })
 
+      it("should return access control allow credentials header", function() {
+        assert.equal(this.res.headers["access-control-allow-credentials"], "true")
+      })
+
       it("should return access control max age", function() {
         assert.equal(this.res.headers["access-control-max-age"], "150")
       })
@@ -325,6 +350,10 @@ describe("allow cors", function() {
 
       it("should return no access control exposed headers", function() {
         assert.equal(this.res.headers["access-control-expose-headers"], undefined)
+      })
+
+      it("should return no access control allow credentials header", function() {
+        assert.equal(this.res.headers["access-control-allow-credentials"], undefined)
       })
 
       it("should return access control max age", function() {
