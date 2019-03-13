@@ -8,7 +8,7 @@ describe("context", function() {
   describe("inspect", function() {
     it("should include relevant details", function() {
       assert.equal(JSON.stringify(this.context.inspect()),
-        '{"stack":[],"data":{},"req":"<node req>","res":"<node res>"}')
+        '{"data":{},"req":"<node req>","res":"<node res>","stack":[]}')
     })
   })
 })

@@ -262,7 +262,9 @@ describe("log", function() {
         const {res, body} = await test.request(
           test.createStack(log(this.logger), write(), rescue(), function() {
             this.status = 500
-            this.data.error = this.body = new InternalServerError("")
+            const err = new Error
+            err.expose = true
+            this.data.error = this.body = err
             this.data.log = {foo: {bar: "qux"}}
           }), {
             method: "POST",
@@ -299,7 +301,7 @@ describe("log", function() {
       })
 
       it("should log response size", function() {
-        assert.equal(this.entry.httpRequest.responseSize, 192)
+        assert.equal(this.entry.httpRequest.responseSize, 161)
       })
 
       it("should log remote ip", function() {

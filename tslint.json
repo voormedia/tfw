@@ -1,0 +1,21 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:latest"
+  ],
+  "jsRules": {},
+  "rules": {
+    "curly": [2, "multi-line"],
+    "interface-name": [0],
+    "max-classes-per-file": [2, 3],
+    "max-line-length": [2, {"code": 120, "comments": 160, "ignoreUrls": true, "ignoreRegExpLiterals": true}],
+    "new-cap": [0],
+    "new-parens": [0],
+    "no-console": [1],
+    "no-empty": [2, "allow-empty-functions"],
+    "no-shadowed-variable": [0],
+    "object-literal-sort-keys": [1],
+    "semicolon": [2, "never"]
+  },
+  "rulesDirectory": []
+}

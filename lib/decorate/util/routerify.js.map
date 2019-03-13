@@ -1,0 +1,1 @@
+{"version":3,"file":"routerify.js","sourceRoot":"","sources":["../../../src/decorate/util/routerify.ts"],"names":[],"mappings":";;AAAA,yCAAiC;AAEjC,SAAwB,SAAS,CAAC,MAAc;IAC9C,IAAI,CAAE,MAAc,CAAC,MAAM,EAAE;QAC3B,MAAM,CAAC,cAAc,CAAC,MAAM,EAAE,QAAQ,EAAE;YACtC,KAAK,EAAE,IAAI,gBAAM;SAClB,CAAC,CAAA;KACH;IAED,OAAQ,MAAc,CAAC,MAAM,CAAA;AAC/B,CAAC;AARD,4BAQC"}

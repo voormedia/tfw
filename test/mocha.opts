@@ -1,5 +1,6 @@
 test/unit
 --use_strict
+--require ts-node/register
 --require babel-register
 --require test
 --recursive
