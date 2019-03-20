@@ -3,6 +3,7 @@ import { IncomingMessage as Request, ServerResponse as Response } from "http";
 import { Stack } from "../middleware";
 export { Request, Response };
 export declare type Body = Buffer | object | string;
+declare type AsyncBody = Promise<Body>;
 export interface Data {
     [key: string]: any;
 }
@@ -10,7 +11,7 @@ export declare class Context {
     stack: Stack;
     request: Request;
     response: Response;
-    body: Body;
+    body: Body | AsyncBody;
     data: Data;
     constructor(stack: Stack, request: Request, response: Response);
     get(header: string): string | undefined;

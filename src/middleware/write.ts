@@ -1,8 +1,8 @@
-/* @flow */
 /* eslint-disable no-unused-expressions */
+import {ServerResponse} from "http"
 import {Readable} from "stream"
 
-import {Context, Middleware, Next} from "../middleware"
+import {Body, Context, Middleware, Next} from "../middleware"
 
 export default function write(): Middleware {
   return async function write(this: Context, next: Next) {
@@ -12,19 +12,35 @@ export default function write(): Middleware {
 
     if (this.sent) return
 
-    /* tslint:disable-next-line: strict-type-predicates */
-    if (this.body === null) {
-      this.response.end()
-    } else if (this.body instanceof Buffer) {
-      this.response.end(this.body)
-    } else if (this.body instanceof Readable) {
-      this.body.pipe(this.response)
-    } else if (typeof this.body === "string") {
-      this.response.end(this.body, "utf8")
+    if (this.body instanceof Promise) {
+      await sendAsync(this.response, this.body)
     } else {
-      /* Treat as JSON. */
-      this.set("Content-Type", "application/json")
-      this.response.end(JSON.stringify(this.body), "utf8")
+      send(this.response, this.body)
     }
+  }
+}
+
+async function sendAsync(response: ServerResponse, body: Promise<Body>) {
+  response.writeHead(response.statusCode)
+  send(response, await body)
+}
+
+function send(response: ServerResponse, body: Body) {
+  /* tslint:disable-next-line: strict-type-predicates */
+  if (body === null) {
+    response.end()
+  } else if (body instanceof Buffer) {
+    response.end(body)
+  } else if (body instanceof Readable) {
+    body.pipe(response)
+  } else if (typeof body === "string") {
+    response.end(body, "utf8")
+  } else {
+    /* Treat as JSON. */
+    if (!response.headersSent) {
+      response.setHeader("Content-Type", "application/json")
+    }
+
+    response.end(JSON.stringify(body), "utf8")
   }
 }

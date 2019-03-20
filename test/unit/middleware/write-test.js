@@ -266,4 +266,68 @@ describe("write", function() {
       })
     })
   })
+
+  describe("buffer promise", function() {
+    describe("with get request", function() {
+      before(async function() {
+        const {res, body} = await test.request(
+          test.createStack(write(), function() {
+            this.body = Promise.resolve(Buffer.from([0x00, 0x01, 0xfe, 0xff]))
+            this.status = 429
+            this.set("Foo", "bar")
+          })
+        )
+
+        this.res = res
+        this.body = body
+      })
+
+      it("should write status", function() {
+        assert.equal(this.res.statusCode, 429)
+      })
+
+      it("should write headers", function() {
+        assert.equal(this.res.headers["foo"], "bar")
+      })
+
+      it("should write body", function() {
+        assert.deepEqual(this.body, Buffer.from([0x00, 0x01, 0xfe, 0xff]))
+      })
+
+      it("should set transfer encoding", function() {
+        assert.equal(this.res.headers["transfer-encoding"], "chunked")
+      })
+    })
+
+    describe("with head request", function() {
+      before(async function() {
+        const {res, body} = await test.request(
+          test.createStack(write(), function() {
+            this.body = Promise.resolve(Buffer.from([0x00, 0x01, 0xfe, 0xff]))
+            this.set("Foo", "bar")
+          }),
+          {method: "head"}
+        )
+
+        this.res = res
+        this.body = body
+      })
+
+      it("should write status", function() {
+        assert.equal(this.res.statusCode, 200)
+      })
+
+      it("should write headers", function() {
+        assert.equal(this.res.headers["foo"], "bar")
+      })
+
+      it("should not write body", function() {
+        assert.equal(this.body.toString(), "")
+      })
+
+      it.skip("should set transfer encoding", function() {
+        assert.equal(this.res.headers["transfer-encoding"], "chunked")
+      })
+    })
+  })
 })

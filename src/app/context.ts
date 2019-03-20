@@ -4,6 +4,7 @@ import {Stack} from "../middleware"
 export {Request, Response}
 
 export type Body = Buffer | object | string
+type AsyncBody = Promise<Body>
 
 export interface Data {
   [key: string]: any,
@@ -14,7 +15,7 @@ export class Context {
   request: Request
   response: Response
 
-  body: Body = ""
+  body: Body | AsyncBody = ""
   data: Data = Object.create(null) as Data
 
   constructor(stack: Stack, request: Request, response: Response) {
