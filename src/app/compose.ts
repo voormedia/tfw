@@ -6,7 +6,7 @@ import {Context} from "./context"
 export default function compose(stack: Stack, context: Context): Next {
   const iterator = stack.values()
 
-  return function next(): Promise<void> {
+  return async function next(): Promise<void> {
     const handler = iterator.next().value
 
     /* Check if a handler is present and valid. */
@@ -14,6 +14,7 @@ export default function compose(stack: Stack, context: Context): Next {
       throw new NotFound("Endpoint does not exist")
     }
 
+    /* tslint:disable-next-line: strict-type-predicates */
     if (typeof handler !== "function") {
       throw new InternalServerError("Bad handler")
     }

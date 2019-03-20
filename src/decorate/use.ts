@@ -7,6 +7,7 @@ type Decorator = (
 ) => PropertyDescriptor | void
 
 export function use(middleware: Middleware): Decorator {
+  /* tslint:disable-next-line: strict-type-predicates */
   if (typeof middleware !== "function") {
     throw new TypeError("Middleware must be function")
   }

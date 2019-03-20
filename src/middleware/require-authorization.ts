@@ -6,7 +6,7 @@ import {Unauthorized} from "../errors"
 export interface Credentials {[username: string]: string}
 
 export default function requireAuthorization(realm: string, credentials: Credentials): Middleware {
-  return function requireAuthorization(this: Context, next: Next) {
+  return async function requireAuthorization(this: Context, next: Next) {
     const {username, password} = this.data
     if (username) {
       const expected = credentials[username]

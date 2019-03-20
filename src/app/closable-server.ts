@@ -2,8 +2,8 @@ import {IncomingMessage, Server, ServerResponse} from "http"
 import {Socket} from "net"
 
 export class ClosableServer extends Server {
-  public closing: boolean = false
-  private sockets: Map<Socket, number> = new Map
+  closing = false
+  private readonly sockets = new Map<Socket, number>()
 
   constructor() {
     super()
@@ -35,7 +35,7 @@ export class ClosableServer extends Server {
     })
   }
 
-  public close(callback?: (err?: Error) => void): this {
+  close(callback?: (err?: Error) => void): this {
     super.close(callback)
 
     this.closing = true

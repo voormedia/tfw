@@ -6,7 +6,7 @@ import {Context, Middleware, Next} from "../middleware"
 import {Forbidden} from "../errors"
 
 export default function requireTLS(): Middleware {
-  return function requireTLS(this: Context, next: Next) {
+  return async function requireTLS(this: Context, next: Next) {
     const socket: TLSSocket | Socket = this.request.socket
 
     if ((socket as TLSSocket).encrypted) return next()

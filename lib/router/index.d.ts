@@ -1,6 +1,6 @@
 import Route from "./route";
 export default class Router {
-    private tree;
+    private readonly tree;
     constructor();
     define(method: string, pattern: string, handler?: object): void;
     mount(pattern: string, router: Router): void;

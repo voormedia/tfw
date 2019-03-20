@@ -1,8 +1,8 @@
 class HttpError extends Error {
-  public status!: number
-  public error!: string
-  public message: string
-  public expose: boolean = true
+  status!: number
+  error!: string
+  message: string
+  expose = true
 
   constructor(message?: string) {
     super()
@@ -14,19 +14,19 @@ class HttpError extends Error {
     Object.freeze(this.stack)
   }
 
-  public toJSON() {
+  toJSON() {
     return {error: this.error, message: this.message}
   }
 
-  public toString() {
+  toString() {
     return `${this.status} ${this.message}`
   }
 }
 
 function defineError(status: number, error: string) {
   return class extends HttpError {
-    public status: number = status
-    public error: string = error
+    status: number = status
+    error: string = error
 
     constructor(message: string = error) {
       super(message)
@@ -35,6 +35,7 @@ function defineError(status: number, error: string) {
 }
 
 /* https://github.com/nodejs/node/blob/master/lib/_http_server.js */
+/* tslint:disable:variable-name */
 export const BadRequest = defineError(400, "Bad request")
 export const Unauthorized = defineError(401, "Unauthorized")
 export const PaymentRequired = defineError(402, "Payment required")

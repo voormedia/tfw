@@ -1,4 +1,4 @@
-import Timer from "../util/timer"
+import {Timer} from "../util/timer"
 
 import {ServiceUnavailable} from "../errors"
 
@@ -22,7 +22,7 @@ export default function shutdown(grace: number = 25): Middleware {
     }
 
     try {
-      return await Promise.race([stop(), next()])
+      await Promise.race([stop(), next()])
     } finally {
       /* Clear timer. It frees setTimeout reference to this context, potentially
          conserving a lot of memory if most requests are short. */

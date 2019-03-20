@@ -19,7 +19,7 @@ export default function allowCors(options: AllowCorsOptions = {}): Middleware {
   const allowCredentials = options.allowCredentials
   const maxAge = options.maxAge
 
-  return function cors(this: Context, next: Next) {
+  return async function cors(this: Context, next: Next) {
     const origin = this.get("origin")
 
     /* Avoid cache conflicts if the response headers can be different

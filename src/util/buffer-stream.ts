@@ -1,24 +1,24 @@
 import {Writable} from "stream"
 
 export class BufferStream extends Writable {
-  private buffers: Buffer[] = []
+  private readonly buffers: Buffer[] = []
 
-  public _write(chunk: Buffer | string, encoding: string, callback: (err?: Error) => void) {
+  _write(chunk: Buffer | string, encoding: string, callback: (err?: Error) => void) {
     if (typeof chunk === "string") chunk = Buffer.from(chunk)
     this.buffers.push(chunk)
     callback()
     return true
   }
 
-  public clear() {
+  clear() {
     this.buffers.length = 0
   }
 
-  public inspect() {
+  inspect() {
     return Buffer.concat(this.buffers).toString()
   }
 
-  public toString() {
+  toString() {
     return Buffer.concat(this.buffers).toString()
   }
 }

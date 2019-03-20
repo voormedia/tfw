@@ -19,18 +19,18 @@ export class ParseError extends Error {
 }
 
 export default class Route {
-  public static parse(method: string, route: string): Route {
+  static parse(method: string, route: string): Route {
     method = method.toUpperCase()
     const parts = [new Node(method)].concat(parse(route))
     return new Route(parts)
   }
 
-  public static create(path: Node[]): Route {
-    const parts = path.map((node) => node.clone())
+  static create(path: Node[]): Route {
+    const parts = path.map(node => node.clone())
     return new Route(parts)
   }
 
-  public parts: Node[]
+  parts: Node[]
 
   constructor(parts: Node[]) {
     this.parts = parts
@@ -39,7 +39,7 @@ export default class Route {
     Object.freeze(this)
   }
 
-  public prefix(prefix: string): Route {
+  prefix(prefix: string): Route {
     const path = this.parts.slice(1)
     const parts = [this.parts[0]].concat(parse(prefix)).concat(path)
     return new Route(parts)
@@ -50,14 +50,14 @@ export default class Route {
   }
 
   get path(): string {
-    return "/" + this.parts.slice(1).map((part) => part.toString()).join("/")
+    return "/" + this.parts.slice(1).map(part => part.toString()).join("/")
   }
 
-  public inspect(): string {
+  inspect(): string {
     return this.toString()
   }
 
-  public toString(): string {
+  toString(): string {
     return `${this.method} ${this.path}`
   }
 }

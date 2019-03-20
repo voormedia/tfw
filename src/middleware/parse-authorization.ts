@@ -3,7 +3,7 @@ import {BadRequest} from "../errors"
 import {Context, Middleware, Next} from "../middleware"
 
 export default function parseAuthorization(): Middleware {
-  return function parseAuthorization(this: Context, next: Next) {
+  return async function parseAuthorization(this: Context, next: Next) {
     const auth = this.get("authorization")
 
     if (auth) {

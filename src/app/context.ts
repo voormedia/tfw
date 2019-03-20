@@ -10,12 +10,12 @@ export interface Data {
 }
 
 export class Context {
-  public stack: Stack
-  public request: Request
-  public response: Response
+  stack: Stack
+  request: Request
+  response: Response
 
-  public body: Body = ""
-  public data: Data = Object.create(null)
+  body: Body = ""
+  data: Data = Object.create(null) as Data
 
   constructor(stack: Stack, request: Request, response: Response) {
     this.stack = stack
@@ -25,7 +25,7 @@ export class Context {
     Object.seal(this)
   }
 
-  public get(header: string): string | undefined {
+  get(header: string): string | undefined {
     return this.request.headers[header.toLowerCase()] as string
   }
 
@@ -37,7 +37,7 @@ export class Context {
     return this.request.url!
   }
 
-  public set(header: string, value: string | number) {
+  set(header: string, value: string | number) {
     this.response.setHeader(header, value)
   }
 
@@ -53,7 +53,7 @@ export class Context {
     return this.response.headersSent
   }
 
-  public inspect() {
+  inspect() {
     return {
       data: this.data,
       req: "<node req>",

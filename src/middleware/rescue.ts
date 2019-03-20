@@ -4,11 +4,9 @@ import {Context, Middleware, Next} from "../middleware"
 
 export default function rescue(): Middleware {
   return async function rescue(this: Context, next: Next) {
-    this.response.on("pipe", (stream) => {
-      stream.on("error", (err) => {
+    this.response.on("pipe", stream => {
+      stream.on("error", err => {
         stream.unpipe()
-
-        // ES7 this::error(err)
         error.call(this, err)
       })
     })
@@ -16,8 +14,8 @@ export default function rescue(): Middleware {
     try {
       await next()
     } catch (err) {
-      // ES7 this::error(err)
-      return error.call(this, err)
+      error.call(this, err)
+      return
     }
   }
 }

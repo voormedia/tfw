@@ -36,9 +36,9 @@ export declare class Logger {
         (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string;
     };
     static PRETTY: (entry: LogEntry) => string;
-    private console;
-    private formatter;
-    private service;
+    private readonly console;
+    private readonly formatter;
+    private readonly service;
     constructor(console?: Console, formatter?: (entry: LogEntry) => string, service?: ServiceContext);
     write(severity: LogSeverity, message: Message, context: LogContext): void;
     debug(message: Message, context?: LogContext): void;

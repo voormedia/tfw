@@ -6,7 +6,8 @@ const instance = ajv({
   allErrors: true,
 })
 
-instance.addFormat("rfc2822-datetime",
+instance.addFormat(
+  "rfc2822-datetime",
   /* Based on http://regexlib.com/REDetails.aspx?regexp_id=969 */
   /^((Sun|Mon|Tue|Wed|Thu|Fri|Sat),?\s+)?(0?[1-9]|[1-2][0-9]|3[01])\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(19[0-9]{2}|[2-9][0-9]{3}|[0-9]{2})\s+(2[0-3]|[0-1][0-9]):([0-5][0-9])(:(60|[0-5][0-9]))?\s+([-+][0-9]{2}[0-5][0-9]|(UT|GMT|(E|C|M|P)(ST|DT)|[A-IK-Z]))$/,
 )
@@ -21,33 +22,22 @@ export function createValidator(schema: object): Validator {
   return (body: any) => {
     if (validate(body)) return []
 
-    const grouped = new Map
-    for (const error of validate.errors || []) {
-      const key = error.schemaPath + ":" + error.dataPath
-      let set = grouped.get(key)
-      if (!set) {
-        set = []
-        grouped.set(key, set)
-      }
-
-      set.push(error)
-    }
-
+    const grouped = groupErrors(validate)
     const messages = new Set
     for (const [ , errors] of grouped) {
-      const {keyword, dataPath} = errors[0]
-
-      const path = fmtPath(dataPath)
-      switch (keyword) {
+      const [error] = errors
+      const path = fmtPath(error.dataPath)
+      switch (error.keyword) {
         case "type": {
-          const type = errors[0].params.type
+          const type = (error.params as ajv.TypeParams).type
           messages.add(`${path} should be ${type}`)
           break
         }
 
         case "enum": {
-          const values = errors[0].params.allowedValues.map(fmtProp).join(", ")
-          messages.add(`${path} should be ${errors[0].params.allowedValues.length > 1 ? "one of " : ""}${values}`)
+          const allowedValues = (error.params as ajv.EnumParams).allowedValues
+          const values = allowedValues.map(fmtProp).join(", ")
+          messages.add(`${path} should be ${allowedValues.length > 1 ? "one of " : ""}${values}`)
           break
         }
 
@@ -64,35 +54,36 @@ export function createValidator(schema: object): Validator {
         }
 
         case "minimum": {
-          const limit = errors[0].params.limit
+          const limit = (error.params as ajv.LimitParams).limit
           messages.add(`${path} should be at least ${limit}`)
           break
         }
 
         case "exclusiveMinimum": {
-          const limit = errors[0].params.limit
+          const limit = (error.params as ajv.LimitParams).limit
           messages.add(`${path} should be more than ${limit}`)
           break
         }
 
         case "maximum": {
-          const limit = errors[0].params.limit
+          const limit = (error.params as ajv.LimitParams).limit
           messages.add(`${path} should be at most ${limit}`)
           break
         }
 
         case "exclusiveMaximum": {
-          const limit = errors[0].params.limit
+          const limit = (error.params as ajv.LimitParams).limit
           messages.add(`${path} should be less than ${limit}`)
           break
         }
 
         case "format": {
-          let format = errors[0].params.format
+          let format = (error.params as ajv.FormatParams).format
 
           switch (format) {
           case "email": format = "email address"; break
           case "rfc2822-datetime": format = "rfc 2822 date-time"; break
+          default:
           }
 
           messages.add(`${path} should be formatted as ${format}`)
@@ -100,13 +91,13 @@ export function createValidator(schema: object): Validator {
         }
 
         case "minLength": {
-          const limit = errors[0].params.limit
+          const limit = (error.params as ajv.LimitParams).limit
           messages.add(`${path} should be at least ${limit} ${fmtPlural("character", limit)}`)
           break
         }
 
         case "maxLength": {
-          const limit = errors[0].params.limit
+          const limit = (error.params as ajv.LimitParams).limit
           messages.add(`${path} should be at most ${limit} ${fmtPlural("character", limit)}`)
           break
         }
@@ -121,6 +112,21 @@ export function createValidator(schema: object): Validator {
 
     return [...messages]
   }
+}
+
+function groupErrors(validate: ajv.ValidateFunction): Map<string, ajv.ErrorObject[]> {
+  const grouped = new Map<string, ajv.ErrorObject[]>()
+  for (const error of validate.errors || []) {
+    const key = `${error.schemaPath}:${error.dataPath}`
+    let set = grouped.get(key)
+    if (!set) {
+      set = []
+      grouped.set(key, set)
+    }
+
+    set.push(error)
+  }
+  return grouped
 }
 
 const fmtProp = (prop: string) => `'${prop}'`

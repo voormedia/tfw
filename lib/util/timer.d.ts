@@ -2,7 +2,6 @@ export declare class Timer {
     time: number;
     timer?: number;
     constructor(time: number);
-    sleep(): Promise<void>;
     clear(): void;
+    sleep(): Promise<void>;
 }
-export default Timer;

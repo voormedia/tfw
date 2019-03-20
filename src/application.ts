@@ -17,18 +17,20 @@ export interface ApplicationOptions {
 }
 
 export class Application extends AbstractTask {
-
   /* Start a new application with the given options in next tick. */
-  public static start(options: ApplicationOptions = {}) {
+  static start(options: ApplicationOptions = {}) {
     const app = new this(options)
-    process.nextTick(() => {app.start()})
+    process.nextTick(() => {
+      app.start().catch(err => {throw err})
+    })
     return app
   }
-  public port: number
-  public router: Router
-  public stack: Stack
 
-  public server: ClosableServer = new ClosableServer()
+  port: number
+  router: Router
+  stack: Stack
+
+  server: ClosableServer = new ClosableServer()
 
   constructor(options: ApplicationOptions = {}) {
     super()
@@ -56,7 +58,7 @@ export class Application extends AbstractTask {
     Object.freeze(this)
   }
 
-  public async start(): Promise<void> {
+  async start(): Promise<void> {
     await super.start()
 
     this.server.timeout = 0
@@ -66,22 +68,22 @@ export class Application extends AbstractTask {
 
     this.server.listen(this.port)
 
-    return new Promise((resolve) => {
-      this.server.once("listening", () => resolve())
+    return new Promise(resolve => {
+      this.server.once("listening", resolve)
     })
   }
 
-  public async stop(): Promise<void> {
+  async stop(): Promise<void> {
     await super.stop()
 
     this.server.close()
 
-    return new Promise((resolve) => {
-      this.server.once("close", () => resolve())
+    return new Promise(resolve => {
+      this.server.once("close", resolve)
     })
   }
 
-  public async kill(): Promise<void> {
+  async kill(): Promise<void> {
     await super.kill()
 
     /* Don't wait for server to quite gracefully, but quit after short delay.
@@ -91,12 +93,12 @@ export class Application extends AbstractTask {
     this.server.close()
     this.server.unref()
 
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(), 500)
+    return new Promise(resolve => {
+      setTimeout(resolve, 500)
     })
   }
 
-  public inspect() {
+  inspect() {
     return {
       router: this.router,
       server: "<node server>",

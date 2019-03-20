@@ -1,12 +1,12 @@
 export default class Node {
-  public name: string
-  public pattern: RegExp | undefined = undefined
+  name: string
+  pattern: RegExp | undefined = undefined
 
-  public children: Map<string, Node> = new Map
-  public patterns: Map<string, Node> = new Map
+  children: Map<string, Node> = new Map
+  patterns: Map<string, Node> = new Map
 
-  public handler: object | undefined = undefined
-  public leaf: boolean = false
+  handler: object | undefined = undefined
+  leaf = false
 
   constructor(name: string = "", pattern?: RegExp) {
     this.name = name
@@ -15,11 +15,11 @@ export default class Node {
     Object.seal(this)
   }
 
-  public clone(): Node {
+  clone(): Node {
     return new Node(this.name, this.pattern)
   }
 
-  public find(part: string): Node | undefined {
+  find(part: string): Node | undefined {
     const node = this.children.get(part)
     if (node) return node
 
@@ -28,7 +28,7 @@ export default class Node {
     }
   }
 
-  public insert(node: Node): Node {
+  insert(node: Node): Node {
     const {key} = node
     const collection = node.pattern ? this.patterns : this.children
 
@@ -43,7 +43,7 @@ export default class Node {
     return this.pattern ? this.pattern.source : this.name
   }
 
-  public toString(): string {
+  toString(): string {
     return this.pattern ? `{${this.name}}` : this.name
   }
 }

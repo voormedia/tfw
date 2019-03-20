@@ -2,8 +2,8 @@ import {Console} from "console"
 import BufferStream from "./buffer-stream"
 
 export class MemoryConsole extends Console {
-  public stdout: BufferStream
-  public stderr: BufferStream
+  stdout: BufferStream
+  stderr: BufferStream
 
   constructor() {
     const stdout = new BufferStream
@@ -15,7 +15,7 @@ export class MemoryConsole extends Console {
     Object.freeze(this)
   }
 
-  public clear() {
+  clear() {
     this.stdout.clear()
     this.stderr.clear()
   }

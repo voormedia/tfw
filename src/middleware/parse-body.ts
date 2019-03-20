@@ -10,11 +10,11 @@ export default function parseBody(): Middleware {
   return async function parseBody(this: Context, next: Next) {
     const buffers: Buffer[] = []
 
-    this.request.on("data", (chunk) => {
+    this.request.on("data", (chunk: Buffer) => {
       buffers.push(chunk)
     })
 
-    await new Promise((resolve) => {
+    await new Promise<void>(resolve => {
       this.request.on("end", resolve)
     })
 
@@ -70,8 +70,8 @@ function guessType(req: Request, body: Buffer) {
   const magic: {[key: string]: Buffer} = {
     "application/pdf":  Buffer.from([0x25, 0x50, 0x44, 0x46]),
     "image/gif":        Buffer.from([0x47, 0x49, 0x46]),
-    "image/jpeg":       Buffer.from([0xff, 0xd8, 0xff]),
-    "image/png":        Buffer.from([0x89, 0x50, 0x4e, 0x47]),
+    "image/jpeg":       Buffer.from([0xFF, 0xD8, 0xFF]),
+    "image/png":        Buffer.from([0x89, 0x50, 0x4E, 0x47]),
     /* TODO: Assume '{"' means we have JSON? */
     // "application/json": Buffer.from([0x7b, 0x22]),
   }

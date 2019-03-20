@@ -12,6 +12,7 @@ export default function write(): Middleware {
 
     if (this.sent) return
 
+    /* tslint:disable-next-line: strict-type-predicates */
     if (this.body === null) {
       this.response.end()
     } else if (this.body instanceof Buffer) {

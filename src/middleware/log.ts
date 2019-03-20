@@ -5,8 +5,8 @@ import {Context, Middleware, Next} from "../middleware"
 import {HttpRequest, LogContext, Logger} from "../util/logger"
 
 type StatsSocket = Socket & {
-  bytesReadPreviously?: number,
-  bytesWrittenPreviously?: number,
+  bytesReadPreviously?: number;
+  bytesWrittenPreviously?: number;
 }
 
 const statusCodes: Map<number, string> = new Map
@@ -15,7 +15,7 @@ for (const [code, description] of Object.entries(STATUS_CODES)) {
 }
 
 export default function log(logger: Logger): Middleware {
-  return function log(this: Context, next: Next) {
+  return async function log(this: Context, next: Next) {
     const socket: StatsSocket = this.request.socket
 
     /* Check what has been previously recorded as read/written on this socket.
@@ -43,7 +43,7 @@ export default function log(logger: Logger): Middleware {
       const referer = this.get("referer")
 
       const [sec, nano] = process.hrtime(startTime)
-      const latency = `${(sec + 1e-9 * nano).toFixed(3)}s`
+      const latency = `${(sec + nano * 1e-9).toFixed(3)}s`
 
       let remoteIp = socket.remoteAddress
       const forwarded = this.get("x-forwarded-for")
@@ -61,7 +61,7 @@ export default function log(logger: Logger): Middleware {
         responseSize,
         status,
         userAgent,
-        // protocol, TODO
+        // TODO add protocol
       }
 
       const logContext: LogContext = {...this.data.log, httpRequest}

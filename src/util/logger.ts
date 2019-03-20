@@ -1,4 +1,3 @@
-import {Console} from "console"
 import hostPkg from "./host-pkg"
 
 import MemoryConsole from "./memory-console"
@@ -70,9 +69,9 @@ export class Logger {
     }
   }
 
-  public static JSON = JSON.stringify
+  static JSON = JSON.stringify.bind(JSON)
 
-  public static PRETTY = (entry: LogEntry) => {
+  static PRETTY = (entry: LogEntry) => {
     const reset = "\x1b[0m"
     const bold = "\x1b[1m"
 
@@ -80,7 +79,7 @@ export class Logger {
     const red = "\x1b[31m"
     const green = "\x1b[32m"
     const yellow = "\x1b[33m"
-    // const blue = "\x1b[34m"
+    // TODO add const blue = "\x1b[34m"
 
     const dateOptions = {
       year: "numeric",
@@ -114,9 +113,9 @@ export class Logger {
     return `${time} ${styles[entry.severity]}${http}${entry.message}${reset}`
   }
 
-  private console: Console
-  private formatter: (entry: LogEntry) => string
-  private service: ServiceContext
+  private readonly console: Console
+  private readonly formatter: (entry: LogEntry) => string
+  private readonly service: ServiceContext
 
   constructor(console: Console = Logger.console,
               formatter: (entry: LogEntry) => string = Logger.formatter,
@@ -128,7 +127,7 @@ export class Logger {
     Object.freeze(this)
   }
 
-  public write(severity: LogSeverity, message: Message, context: LogContext) {
+  write(severity: LogSeverity, message: Message, context: LogContext) {
     const entry: LogEntry = {
       time: new Date,
       message: typeof message === "object" ? JSON.stringify(message) : String(message),
@@ -139,27 +138,27 @@ export class Logger {
     this.console.log(this.formatter({...entry, ...context}))
   }
 
-  public debug(message: Message, context: LogContext = {}) {
+  debug(message: Message, context: LogContext = {}) {
     this.write("DEBUG", message, context)
   }
 
-  public info(message: Message, context: LogContext = {}) {
+  info(message: Message, context: LogContext = {}) {
     this.write("INFO", message, context)
   }
 
-  public notice(message: Message, context: LogContext = {}) {
+  notice(message: Message, context: LogContext = {}) {
     this.write("NOTICE", message, context)
   }
 
-  public warning(message: Message, context: LogContext = {}) {
+  warning(message: Message, context: LogContext = {}) {
     this.write("WARNING", message, context)
   }
 
-  public error(message: Message, context: LogContext = {}) {
+  error(message: Message, context: LogContext = {}) {
     this.write("ERROR", message, context)
   }
 
-  public critical(message: Message, context: LogContext = {}) {
+  critical(message: Message, context: LogContext = {}) {
     this.write("CRITICAL", message, context)
   }
 }

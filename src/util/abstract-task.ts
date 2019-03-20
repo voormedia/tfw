@@ -1,12 +1,11 @@
 import hostPkg from "./host-pkg"
-
 import Logger from "./logger"
 
 const description = `${hostPkg.name} service ${process.env.HOSTNAME || ""}`.trim()
 
-export class AbstractTask {
-  public description: string = description
-  public logger!: Logger
+export abstract class AbstractTask {
+  description: string = description
+  logger!: Logger
 
   constructor() {
     /* Assign default env. */
@@ -15,7 +14,7 @@ export class AbstractTask {
     }
   }
 
-  public async start(): Promise<void> {
+  async start(): Promise<void> {
     process.on("SIGINT", async () => {
       await this.stop()
       process.exit(128 + 2)
@@ -45,19 +44,17 @@ export class AbstractTask {
     this.logger.notice(`starting ${this.description}`)
   }
 
-  public async stop(): Promise<void> {
+  async stop(): Promise<void> {
     this.logger.notice(`stopping ${this.description}`)
     /* Left up to implementation how to further deal with this scenario. */
   }
 
-  public async kill(): Promise<void> {
+  async kill(): Promise<void> {
     this.logger.warning(`forcefully stopped ${this.description}`)
     /* Left up to implementation how to further deal with this scenario. */
   }
 
-  public inspect() {
-    return {}
-  }
+  abstract inspect(): any
 }
 
 export default AbstractTask

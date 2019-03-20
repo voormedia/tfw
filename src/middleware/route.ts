@@ -3,7 +3,7 @@ import Router from "../router"
 import {Context, Middleware, Next} from "../middleware"
 
 export default function route(router: Router): Middleware {
-  return function route(this: Context, next: Next) {
+  return async function route(this: Context, next: Next) {
     const url = this.url
     let method = this.method
     if (method === "HEAD") {

@@ -2,7 +2,7 @@
 import { Server } from "http";
 export declare class ClosableServer extends Server {
     closing: boolean;
-    private sockets;
+    private readonly sockets;
     constructor();
     close(callback?: (err?: Error) => void): this;
 }

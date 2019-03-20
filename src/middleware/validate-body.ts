@@ -13,8 +13,8 @@ export interface ValidationOptions {
 
 export default function validateBody(options: ValidationOptions): Middleware {
   const validator = createValidator(options.schema)
-  return function validateBody(this: Context, next: Next) {
-    validate(validator, this.data.body, options)
+  return async function validateBody(this: Context, next: Next) {
+    validate(validator, this.data.body as Body, options)
     return next()
   }
 }
@@ -23,8 +23,9 @@ function validate(validator: Validator, body: Body, {
   message = "Request is invalid",
   details = true,
   optional = false,
-}) {
+}: ValidationOptions) {
   /* Don't validate non-JSON bodies if the request schema is optional. */
+  /* tslint:disable-next-line: strict-type-predicates */
   if (body === undefined || Buffer.isBuffer(body)) {
     if (optional) return
 

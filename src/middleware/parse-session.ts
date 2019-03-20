@@ -1,14 +1,13 @@
+import * as Cookies from "cookies"
 import {Socket} from "net"
 import {TLSSocket} from "tls"
 
 import {Context, Middleware, Next} from "../middleware"
 
-import * as Cookies from "cookies"
-
 export interface SessionOptions {
-  name?: string,
   keys?: string[],
   maxAge?: number,
+  name?: string,
 }
 
 function decode(input: string): object {
@@ -23,7 +22,7 @@ function encode(input: object): string {
 
 const day = 24 * 60 * 60 * 1000
 
-export default function parseSession({name = "sess", keys, maxAge = 90 * day}: SessionOptions = {}): Middleware {
+export default function parseSession({name = "sess", keys, maxAge = day * 90}: SessionOptions = {}): Middleware {
   return async function parseSession(this: Context, next: Next) {
     let session: object | undefined
     let cookie: string | undefined
@@ -49,7 +48,7 @@ export default function parseSession({name = "sess", keys, maxAge = 90 * day}: S
         return session
       },
 
-      set: (value) => {
+      set: value => {
         if (typeof value !== "object") {
           throw new TypeError("Session must be an object")
         }

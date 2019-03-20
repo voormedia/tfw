@@ -10,5 +10,6 @@ export declare class Task extends AbstractTask {
     start(): Promise<void>;
     stop(): Promise<void>;
     run(): Promise<void>;
+    inspect(): any;
 }
 export default Task;

@@ -3,25 +3,25 @@ import Route, {RouteError} from "./route"
 import Tree from "./tree"
 
 export default class Router {
-  private tree: Tree = new Tree
+  private readonly tree: Tree = new Tree
 
   constructor() {
     Object.freeze(this)
   }
 
-  public define(method: string, pattern: string, handler?: object) {
+  define(method: string, pattern: string, handler?: object) {
     const route = Route.parse(method, pattern)
     define(this.tree.insert(route), route, handler)
   }
 
-  public mount(pattern: string, router: Router) {
+  mount(pattern: string, router: Router) {
     for (const [{handler}, path] of router.tree.traverse()) {
       const route = Route.create(path).prefix(pattern)
       define(this.tree.insert(route), route, handler)
     }
   }
 
-  public match(method: string, url: string): {handler?: object, params?: object} {
+  match(method: string, url: string): {handler?: object; params?: object} {
     const {node, params} = this.tree.match(parse(method, url))
     if (!node) return {}
     return {handler: node.handler || undefined, params}
@@ -43,9 +43,9 @@ export default class Router {
     return Array.from(handlers)
   }
 
-  public inspect(): string {
-    const routes = this.routes.map((route) => route.inspect())
-    return "[ " + routes.join(",\n  ") + " ]"
+  inspect(): string {
+    const routes = this.routes.map(route => route.inspect())
+    return `[ ${routes.join(",\n  ")} ]`
   }
 }
 
@@ -63,6 +63,6 @@ function parse(method: string, url: string) {
   url = url.split("?").shift()!
 
   /* Split url into path segments. */
-  const parts = url.split("/").filter((part) => part !== "")
+  const parts = url.split("/").filter(part => part !== "")
   return [method.toUpperCase()].concat(parts)
 }

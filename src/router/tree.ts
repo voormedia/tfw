@@ -2,13 +2,13 @@ import Node from "./node"
 import Route, {RouteError} from "./route"
 
 export default class Tree {
-  private root: Node = new Node
+  private readonly root: Node = new Node
 
   constructor() {
     Object.freeze(this)
   }
 
-  public match(parts: string[]): {node?: Node, params?: object} {
+  match(parts: string[]): {node?: Node; params?: object} {
     /* Create object without prototype. */
     const params = Object.create(null)
 
@@ -23,7 +23,7 @@ export default class Tree {
     return {node, params}
   }
 
-  public insert(route: Route): Node {
+  insert(route: Route): Node {
     let node = this.root
     for (const part of route.parts) {
       node = node.insert(part.clone())
@@ -35,7 +35,7 @@ export default class Tree {
     return node
   }
 
-  public *traverse(): Iterable<[Node, Node[]]> {
+  *traverse(): Iterable<[Node, Node[]]> {
     const stack = [[this.root]]
 
     while (stack.length) {

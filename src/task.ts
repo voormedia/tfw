@@ -9,9 +9,9 @@ export interface TaskOptions {
 
 export class Task extends AbstractTask {
   /* Start a new task with the given options in next tick. */
-  public static start(options: TaskOptions = {}) {
+  static start(options: TaskOptions = {}) {
     const task = new this(options)
-    process.nextTick(() => {task.start()})
+    process.nextTick(() => {task.start().catch(err => {throw err})})
     return task
   }
 
@@ -27,18 +27,24 @@ export class Task extends AbstractTask {
     Object.freeze(this)
   }
 
-  public async start(): Promise<void> {
+  async start(): Promise<void> {
     await super.start()
     await this.run()
     await this.stop()
   }
 
-  public async stop(): Promise<void> {
+  async stop(): Promise<void> {
     await super.stop()
     process.exit()
   }
 
-  public async run(): Promise<void> {
+  /* tslint:disable-next-line: prefer-function-over-method */
+  async run(): Promise<void> {
+  }
+
+  /* tslint:disable-next-line: prefer-function-over-method */
+  inspect(): any {
+    return {}
   }
 }
 
