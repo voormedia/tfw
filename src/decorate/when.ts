@@ -2,7 +2,7 @@ type Decorator = (
   object: any,
   key?: string,
   descriptor?: PropertyDescriptor,
-) => PropertyDescriptor | void
+) => void
 
 export function when(condition: boolean, decorator: Decorator): Decorator {
   if (condition) return decorator

@@ -4,7 +4,7 @@ type Decorator = (
   object: any,
   key?: string,
   descriptor?: PropertyDescriptor,
-) => PropertyDescriptor | void
+) => void
 
 export function use(middleware: Middleware): Decorator {
   /* tslint:disable-next-line: strict-type-predicates */
