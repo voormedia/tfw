@@ -1,8 +1,8 @@
 import fs from "fs"
 import timekeeper from "timekeeper"
 
-import Logger from "lib/util/logger"
-import MemoryConsole from "lib/util/memory-console"
+import Logger from "src/util/logger"
+import MemoryConsole from "src/util/memory-console"
 
 describe("log", function() {
   before(function() {

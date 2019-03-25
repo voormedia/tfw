@@ -1,4 +1,4 @@
-import {createValidator} from "lib/util/schema-validator"
+import {createValidator} from "src/util/schema-validator"
 
 describe("schema validator", function() {
   describe("type", function() {

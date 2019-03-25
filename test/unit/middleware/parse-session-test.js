@@ -1,6 +1,6 @@
 import timekeeper from "timekeeper"
 
-import {write, rescue, parseSession} from "lib/middleware"
+import {write, rescue, parseSession} from "src/middleware"
 
 describe("parse session", function() {
   before(function() {

@@ -1,6 +1,6 @@
 import fs from "fs"
 
-import {write} from "lib/middleware"
+import {write} from "src/middleware"
 
 describe("write", function() {
   describe("string", function() {

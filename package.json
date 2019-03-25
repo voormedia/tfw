@@ -8,6 +8,12 @@
   "engines": {
     "node": ">=8"
   },
+  "files": [
+    "application.js",
+    "decorate.js",
+    "errors.js",
+    "lib"
+  ],
   "scripts": {
     "test": "tslint --project . --format verbose && nyc mocha && tsc",
     "fix": "tslint --project . --fix",

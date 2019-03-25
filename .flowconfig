@@ -1,0 +1,13 @@
+[ignore]
+
+[include]
+
+[libs]
+decl
+
+[options]
+esproposal.class_instance_fields=enable
+esproposal.decorators=ignore
+module.name_mapper='lib' -> '<PROJECT_ROOT>/lib'
+module.ignore_non_literal_requires=true
+module.use_strict=true

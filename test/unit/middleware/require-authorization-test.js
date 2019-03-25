@@ -1,4 +1,4 @@
-import {write, rescue, parseAuthorization, requireAuthorization} from "lib/middleware"
+import {write, rescue, parseAuthorization, requireAuthorization} from "src/middleware"
 
 describe("require authorization", function() {
   describe("with correct username and password", function() {

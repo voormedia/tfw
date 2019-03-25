@@ -1,4 +1,4 @@
-import {write, rescue, connect} from "lib/middleware"
+import {write, rescue, connect} from "src/middleware"
 
 describe("connect", function() {
   describe("with connect middleware", function() {

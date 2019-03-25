@@ -1,4 +1,4 @@
-import {write, rescue, validateContentType} from "lib/middleware"
+import {write, rescue, validateContentType} from "src/middleware"
 
 describe("validate content type", function() {
   describe("without body", function() {

@@ -1,5 +1,5 @@
-import {route, write} from "lib/middleware"
-import {resource} from "lib/decorate"
+import {route, write} from "src/middleware"
+import {resource} from "src/decorate"
 
 describe("resource", function() {
   describe("with plural", function() {

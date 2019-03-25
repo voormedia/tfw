@@ -1,7 +1,7 @@
-import Application from "lib/application"
-import Logger from "lib/util/logger"
-import {route, write} from "lib/middleware"
-import {start, GET} from "lib/decorate"
+import Application from "src/application"
+import Logger from "src/util/logger"
+import {route, write} from "src/middleware"
+import {start, GET} from "src/decorate"
 
 import http from "http"
 

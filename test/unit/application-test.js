@@ -1,10 +1,10 @@
 import mocha from "mocha"
 
-import Application from "lib/application"
-import Logger from "lib/util/logger"
-import {TooManyRequests} from "lib/errors"
+import Application from "src/application"
+import Logger from "src/util/logger"
+import {TooManyRequests} from "src/errors"
 
-import sleep from "lib/util/sleep"
+import sleep from "src/util/sleep"
 
 let exitCode = 0
 const exitHandler = process.exit

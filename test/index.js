@@ -6,9 +6,9 @@ import net from "net"
 import stream from "stream"
 import timekeeper from "timekeeper"
 
-import Application from "../lib/application"
-import Logger from "../lib/util/logger"
-import MemoryConsole from "../lib/util/memory-console"
+import Application from "../src/application"
+import Logger from "../src/util/logger"
+import MemoryConsole from "../src/util/memory-console"
 
 /* Force test env. */
 process.env.NODE_ENV = "test"

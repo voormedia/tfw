@@ -1,9 +1,9 @@
 import timekeeper from "timekeeper"
 
-import {InternalServerError} from "lib/errors"
-import Logger from "lib/util/logger"
-import MemoryConsole from "lib/util/memory-console"
-import {log, write, rescue} from "lib/middleware"
+import {InternalServerError} from "src/errors"
+import Logger from "src/util/logger"
+import MemoryConsole from "src/util/memory-console"
+import {log, write, rescue} from "src/middleware"
 
 describe("log", function() {
   before(function() {

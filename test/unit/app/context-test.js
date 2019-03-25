@@ -1,4 +1,4 @@
-import Context from "lib/app/context"
+import Context from "src/app/context"
 
 describe("context", function() {
   before(function() {
