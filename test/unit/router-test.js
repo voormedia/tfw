@@ -1,4 +1,4 @@
-import Router from "src/router"
+import Router from "lib/router"
 
 describe("router", function() {
   describe("define", function() {

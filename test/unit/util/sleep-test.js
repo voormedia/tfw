@@ -1,5 +1,5 @@
 import timekeeper from "timekeeper"
-import sleep from "src/util/sleep"
+import sleep from "lib/util/sleep"
 
 describe("sleep", function() {
   it("should sleep", async function() {

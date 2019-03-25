@@ -1,4 +1,4 @@
-import {write, rescue, parseBody, validateBody} from "src/middleware"
+import {write, rescue, parseBody, validateBody} from "lib/middleware"
 
 describe("validate body", function() {
   describe("with schema", function() {

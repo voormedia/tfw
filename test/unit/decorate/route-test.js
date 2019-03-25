@@ -1,5 +1,5 @@
-import {route, write} from "src/middleware"
-import {mount, GET, DELETE, PATCH, POST, PUT} from "src/decorate"
+import {route, write} from "lib/middleware"
+import {mount, GET, DELETE, PATCH, POST, PUT} from "lib/decorate"
 
 describe("route", function() {
   before(function() {

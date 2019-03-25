@@ -1,7 +1,7 @@
 import net from "net"
 import http from "http"
 
-import {write, rescue, requireHost} from "src/middleware"
+import {write, rescue, requireHost} from "lib/middleware"
 
 describe("require host", function() {
   describe("without allowed hosts", function() {

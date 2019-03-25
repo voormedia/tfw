@@ -1,4 +1,4 @@
-import {write, rescue, allowCors} from "src/middleware"
+import {write, rescue, allowCors} from "lib/middleware"
 
 const methods = [
   "OPTIONS",

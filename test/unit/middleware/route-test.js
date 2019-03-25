@@ -1,5 +1,5 @@
-import Router from "src/router"
-import {route, write} from "src/middleware"
+import Router from "lib/router"
+import {route, write} from "lib/middleware"
 
 describe("route", function() {
   describe("without handler", function() {

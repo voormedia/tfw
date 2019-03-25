@@ -1,8 +1,8 @@
 import fs from "fs"
 
-import {write, rescue} from "src/middleware"
+import {write, rescue} from "lib/middleware"
 
-import {PaymentRequired} from "src/errors"
+import {PaymentRequired} from "lib/errors"
 
 let exitCode = 0
 const exitHandler = process.exit

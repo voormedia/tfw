@@ -1,4 +1,4 @@
-import {write, rescue, parseBody} from "src/middleware"
+import {write, rescue, parseBody} from "lib/middleware"
 
 describe("parse body", function() {
   describe("with json content type", function() {

@@ -1,5 +1,5 @@
-import {route, write} from "src/middleware"
-import {use, mount, GET} from "src/decorate"
+import {route, write} from "lib/middleware"
+import {use, mount, GET} from "lib/decorate"
 
 describe("use", function() {
   describe("with handler", function() {

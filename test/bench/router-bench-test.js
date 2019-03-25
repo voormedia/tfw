@@ -1,5 +1,5 @@
 import Benchmark from "benchmark"
-import Router from "../../src/router"
+import Router from "../../lib/router"
 
 import routington from "routington"
 

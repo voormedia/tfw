@@ -1,4 +1,4 @@
-import {write, rescue, requireTLS} from "src/middleware"
+import {write, rescue, requireTLS} from "lib/middleware"
 
 describe("require tls", function() {
   describe("over https", function() {

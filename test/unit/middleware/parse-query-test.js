@@ -1,5 +1,5 @@
-import Router from "src/router"
-import {write, rescue, route, parseQuery} from "src/middleware"
+import Router from "lib/router"
+import {write, rescue, route, parseQuery} from "lib/middleware"
 
 describe("parse query", function() {
   describe("with router", function() {
