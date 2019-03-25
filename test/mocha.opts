@@ -1,4 +1,4 @@
-test/unit
+test/unit/**/*-test.js
 --use_strict
 --require ts-node/register
 --require babel-register
