@@ -12,39 +12,53 @@ interface Error {
     message?: string;
 }
 export interface UnknownField extends Error {
-    error: "unknown";
+    error: "unknown_field";
 }
 export interface RequiredField extends Error {
-    error: "required";
+    error: "required_field";
 }
 export interface InvalidType extends Error {
     error: "invalid_type";
     expected: string;
+    suggestion?: string;
+}
+export interface InvalidFormat extends Error {
+    error: "invalid_format";
+    expected: string;
+    suggestion?: string;
+}
+export interface InvalidRange extends Error {
+    error: "invalid_range";
+    expected: RangeExpecation<string | number>;
+    suggestion?: string;
+}
+export interface InvalidLength extends Error {
+    error: "invalid_length";
+    expected: RangeExpecation<number>;
+    suggestion?: string;
+}
+export interface InvalidChoice extends Error {
+    error: "invalid_choice";
+    expected?: string[];
+    suggestion?: string;
 }
 export interface InvalidValue extends Error {
     error: "invalid_value";
     expected?: string[];
     suggestion?: string;
 }
-export interface InvalidFormat extends Error {
-    error: "invalid_format";
-    expected: string;
-}
-export interface InvalidRange extends Error {
-    error: "invalid_range";
-    limit: string | number;
-    operator: string;
-}
-export interface InvalidLength extends Error {
-    error: "invalid_length";
-    limit: number;
-    operator: string;
-}
 export interface BlockedValue extends Error {
     error: "blocked_value";
+    suggestion?: string;
 }
 export interface OtherFailure extends Error {
-    error: "other";
+    error: "other_failure";
+    suggestion?: string;
+}
+declare type Operator = "==" | "<=" | ">=" | "<" | ">";
+interface RangeExpecation<T> {
+    operator: Operator;
+    limit: T;
 }
 export declare type ValidationResult = (Success | UnknownField | RequiredField | InvalidType | InvalidValue | InvalidFormat | InvalidRange | InvalidLength | BlockedValue | OtherFailure);
 export {};

@@ -47,13 +47,13 @@ export function createValidator(schema: object): Validator {
 
         case "additionalProperties": {
           const unknown = (error.params as ajv.AdditionalPropertiesParams).additionalProperty
-          results.push({path: path ? `${path}.${unknown}` : unknown, error: "unknown"})
+          results.push({path: path ? `${path}.${unknown}` : unknown, error: "unknown_field"})
           break
         }
 
         case "required": {
           const required = (error.params as ajv.RequiredParams).missingProperty
-          results.push({path: path ? `${path}.${required}` : required, error: "required"})
+          results.push({path: path ? `${path}.${required}` : required, error: "required_field"})
           break
         }
 
@@ -61,20 +61,21 @@ export function createValidator(schema: object): Validator {
         case "exclusiveMinimum":
         case "maximum":
         case "exclusiveMaximum": {
-          const {limit, comparison: operator} = (error.params as ajv.ComparisonParams)
-          results.push({path, error: "invalid_range", limit, operator})
+          const {limit, comparison} = (error.params as ajv.ComparisonParams)
+          const expected: RangeExpecation<string | number> = {operator: comparison as Operator, limit}
+          results.push({path, error: "invalid_range", expected})
           break
         }
 
         case "minLength": {
           const limit = (error.params as ajv.LimitParams).limit
-          results.push({path, error: "invalid_length", limit, operator: ">="})
+          results.push({path, error: "invalid_length", expected: {operator: ">=", limit}})
           break
         }
 
         case "maxLength": {
           const limit = (error.params as ajv.LimitParams).limit
-          results.push({path, error: "invalid_length", limit, operator: "<="})
+          results.push({path, error: "invalid_length", expected: {operator: "<=", limit}})
           break
         }
 
@@ -82,7 +83,7 @@ export function createValidator(schema: object): Validator {
         case "if": break
 
         default: {
-          results.push({path, error: "other"})
+          results.push({path, error: "other_failure"})
         }
       }
     }
@@ -124,11 +125,11 @@ export function simplifyResults(results: ValidationResult[]): string[] {
       case undefined:
         break
 
-      case "unknown":
-      case "required": {
+      case "unknown_field":
+      case "required_field": {
         const [key, ...parts] = (result.path || "").split(".").reverse()
         const parent = parts.length ? `'${parts.reverse().join(".")}'` : "request body"
-        const map = result.error === "unknown" ? unknowns : requireds
+        const map = result.error === "unknown_field" ? unknowns : requireds
         if (map.has(parent)) {
           map.get(parent)!.push(`'${key}'`)
         } else {
@@ -156,23 +157,18 @@ export function simplifyResults(results: ValidationResult[]): string[] {
 
 function messageForError(result: ValidationResult, length: number = 1): string {
   switch (result.error) {
-    case "unknown":
+    case "unknown_field":
       return `requires ${fmtPlural("key", length)}`
 
-    case "required":
+    case "required_field":
       return `has unknown ${fmtPlural("key", length)}`
 
-    case "invalid_type":
-      return `should be ${result.expected}`
+    case "invalid_type": {
+      const a = ["a", "e", "i", "o", "u"].includes(result.expected[0]) ? "an" : "a"
+      return `should be ${a} ${result.expected}`
+    }
 
-    case "invalid_value":
-      if (result.expected) {
-        return `should be ${result.expected.length > 1 ? "one of " : ""}${result.expected.map(fmtProp).join(", ")}`
-      } else {
-        return "is not valid"
-      }
-
-    case "invalid_format":
+    case "invalid_format": {
       let format = result.expected
       switch (format) {
         case "email": format = "email address"; break
@@ -181,18 +177,30 @@ function messageForError(result: ValidationResult, length: number = 1): string {
       }
 
       return `should be formatted as ${format}`
+    }
 
-    case "invalid_range":
-      return `should be ${fmtOperator(result.operator)} ${result.limit}`
+    case "invalid_range": {
+      const {operator, limit} = result.expected
+      return `should be ${fmtOperator(operator)} ${limit}`
+    }
 
-    case "invalid_length":
-      return `should be ${fmtOperator(result.operator)} ${result.limit} ${fmtPlural("character", result.limit)}`
+    case "invalid_length": {
+      const {operator, limit} = result.expected
+      return `should be ${fmtOperator(operator)} ${limit} ${fmtPlural("character", limit)}`
+    }
 
     case "blocked_value":
       return "has a value that is not allowed"
 
+    case "invalid_value": {
+      if (result.expected) {
+        return `should be ${result.expected.length > 1 ? "one of " : ""}${result.expected.map(fmtProp).join(", ")}`
+      }
+    }
+
     default:
-      return "failed constraint"
+    case "other_failure":
+      return "is invalid"
   }
 }
 
@@ -207,16 +215,41 @@ interface Error {
 }
 
 export interface UnknownField extends Error {
-  error: "unknown"
+  error: "unknown_field"
 }
 
 export interface RequiredField extends Error {
-  error: "required"
+  error: "required_field"
 }
 
 export interface InvalidType extends Error {
   error: "invalid_type"
   expected: string
+  suggestion?: string
+}
+
+export interface InvalidFormat extends Error {
+  error: "invalid_format"
+  expected: string
+  suggestion?: string
+}
+
+export interface InvalidRange extends Error {
+  error: "invalid_range"
+  expected: RangeExpecation<string | number>
+  suggestion?: string
+}
+
+export interface InvalidLength extends Error {
+  error: "invalid_length"
+  expected: RangeExpecation<number>
+  suggestion?: string
+}
+
+export interface InvalidChoice extends Error {
+  error: "invalid_choice"
+  expected?: string[]
+  suggestion?: string
 }
 
 export interface InvalidValue extends Error {
@@ -225,29 +258,21 @@ export interface InvalidValue extends Error {
   suggestion?: string
 }
 
-export interface InvalidFormat extends Error {
-  error: "invalid_format"
-  expected: string
-}
-
-export interface InvalidRange extends Error {
-  error: "invalid_range"
-  limit: string | number
-  operator: string
-}
-
-export interface InvalidLength extends Error {
-  error: "invalid_length"
-  limit: number
-  operator: string
-}
-
 export interface BlockedValue extends Error {
   error: "blocked_value"
+  suggestion?: string
 }
 
 export interface OtherFailure extends Error {
-  error: "other"
+  error: "other_failure"
+  suggestion?: string
+}
+
+type Operator = "==" | "<=" | ">=" | "<" | ">"
+
+interface RangeExpecation<T> {
+  operator: Operator
+  limit: T
 }
 
 export type ValidationResult = (

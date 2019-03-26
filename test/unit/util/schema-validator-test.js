@@ -13,7 +13,7 @@ describe("schema validator", function() {
     describe("failing", function() {
       it("should report error", function() {
         const errors = createSimpleValidator(this.schema)({foo: 1})
-        assert.deepEqual(errors, ["'foo' should be object"])
+        assert.deepEqual(errors, ["'foo' should be an object"])
       })
     })
   })
