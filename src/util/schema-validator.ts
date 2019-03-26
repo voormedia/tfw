@@ -204,10 +204,6 @@ function messageForError(result: ValidationResult, length: number = 1): string {
   }
 }
 
-export interface Success {
-  error: undefined
-}
-
 interface Error {
   path?: string
   error: string
@@ -276,7 +272,6 @@ interface RangeExpecation<T> {
 }
 
 export type ValidationResult = (
-  Success |
   UnknownField |
   RequiredField |
   InvalidType |

@@ -3,9 +3,6 @@ export declare type Validator = (body: object) => ValidationResult[];
 export declare function createValidator(schema: object): Validator;
 export declare function createSimpleValidator(schema: object): SimpleValidator;
 export declare function simplifyResults(results: ValidationResult[]): string[];
-export interface Success {
-    error: undefined;
-}
 interface Error {
     path?: string;
     error: string;
@@ -60,5 +57,5 @@ interface RangeExpecation<T> {
     operator: Operator;
     limit: T;
 }
-export declare type ValidationResult = (Success | UnknownField | RequiredField | InvalidType | InvalidValue | InvalidFormat | InvalidRange | InvalidLength | BlockedValue | OtherFailure);
+export declare type ValidationResult = (UnknownField | RequiredField | InvalidType | InvalidValue | InvalidFormat | InvalidRange | InvalidLength | BlockedValue | OtherFailure);
 export {};
