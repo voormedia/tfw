@@ -36,7 +36,7 @@ function validate(validator: Validator, body: Body, {
   const errors = validator(body as object)
   if (errors.length) {
     if (details) {
-      throw new ValidationError(simplifyResults(errors).join("; "), errors)
+      throw new ValidationError(errors)
     } else {
       throw new BadRequest(message)
     }
@@ -46,8 +46,8 @@ function validate(validator: Validator, body: Body, {
 export class ValidationError extends BadRequest {
   details: ValidationResult[]
 
-  constructor(message: string, details: ValidationResult[]) {
-    super(`${BadRequest.defaultMessage.replace(/\.$/, ":")} ${message}`)
+  constructor(details: ValidationResult[]) {
+    super(`${BadRequest.defaultMessage.replace(/\.$/, ":")} ${simplifyResults(details).join("; ")}`)
     this.details = details
   }
 
