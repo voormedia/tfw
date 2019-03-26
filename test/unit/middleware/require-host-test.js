@@ -24,7 +24,7 @@ describe("require host", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString(), '{"error":"Not found","message":"Endpoint does not exist"}')
+        assert.equal(this.body.toString(), '{"error":"not_found","message":"This endpoint does not exist."}')
       })
 
       it("should return http not found", function() {
@@ -59,7 +59,7 @@ describe("require host", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString().split("\r\n\r\n")[1], '{"error":"Not found","message":"Endpoint does not exist"}')
+        assert.equal(this.body.toString().split("\r\n\r\n")[1], '{"error":"not_found","message":"This endpoint does not exist."}')
       })
 
       it("should return http not found", function() {
@@ -113,7 +113,7 @@ describe("require host", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString(), '{"error":"Not found","message":"Endpoint does not exist"}')
+        assert.equal(this.body.toString(), '{"error":"not_found","message":"This endpoint does not exist."}')
       })
 
       it("should return http forbidden", function() {
@@ -141,7 +141,7 @@ describe("require host", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString(), '{"error":"Not found","message":"Endpoint does not exist"}')
+        assert.equal(this.body.toString(), '{"error":"not_found","message":"This endpoint does not exist."}')
       })
 
       it("should return http not found", function() {
@@ -195,7 +195,7 @@ describe("require host", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString(), '{"error":"Not found","message":"Endpoint does not exist"}')
+        assert.equal(this.body.toString(), '{"error":"not_found","message":"This endpoint does not exist."}')
       })
 
       it("should return http forbidden", function() {

@@ -11,12 +11,12 @@ export default function compose(stack: Stack, context: Context): Next {
 
     /* Check if a handler is present and valid. */
     if (!handler) {
-      throw new NotFound("Endpoint does not exist")
+      throw new NotFound("This endpoint does not exist.")
     }
 
     /* tslint:disable-next-line: strict-type-predicates */
     if (typeof handler !== "function") {
-      throw new InternalServerError("Bad handler")
+      throw new InternalServerError("Invalid endpoint handler")
     }
 
     // ES7: return context::handler(next)

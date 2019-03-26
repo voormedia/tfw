@@ -3,7 +3,7 @@ import {TLSSocket} from "tls"
 
 import {Context, Middleware, Next} from "../middleware"
 
-import {Forbidden} from "../errors"
+import {Forbidden, ServiceError} from "../errors"
 
 export default function requireTLS(): Middleware {
   return async function requireTLS(this: Context, next: Next) {
@@ -13,6 +13,13 @@ export default function requireTLS(): Middleware {
     if (this.get("x-forwarded-proto") === "https") return next()
     if (process.env.NODE_ENV === "development") return next()
 
-    throw new Forbidden("TLS required")
+    throw new TlsRequired()
   }
 }
+
+/* tslint:disable-next-line: variable-name */
+const TlsRequired = ServiceError.define({
+  status: 403,
+  error: "tls_required",
+  message: "TLS is required to connect",
+})

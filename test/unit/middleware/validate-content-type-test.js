@@ -104,8 +104,8 @@ describe("validate content type", function() {
 
       it("should render error", function() {
         assert.deepEqual(this.body.toString(), JSON.stringify({
-          error: "Unsupported media type",
-          message: "Please use foo/bar content type"
+          error: "unsupported_media_type",
+          message: "Request requires 'foo/bar' content type."
         }))
       })
 
@@ -133,8 +133,8 @@ describe("validate content type", function() {
 
       it("should render error", function() {
         assert.deepEqual(this.body.toString(), JSON.stringify({
-          error: "Unsupported media type",
-          message: "Please use foo/bar content type"
+          error: "unsupported_media_type",
+          message: "Request requires 'foo/bar' content type."
         }))
       })
 

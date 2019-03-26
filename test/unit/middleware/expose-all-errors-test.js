@@ -1,10 +1,7 @@
-import fs from "fs"
-
 import {write, rescue, exposeAllErrors} from "src/middleware"
 
 import {PaymentRequired, InternalServerError} from "src/errors"
 
-let exitCode = 0
 const exitHandler = process.exit
 const nullHandler = (code) => {exitCode = code}
 
@@ -81,7 +78,7 @@ describe("expose all errors", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"Payment required","message":"Payment required"}')
+      assert.equal(this.body.toString(), '{"error":"payment_required","message":"Payment required."}')
     })
 
     it("should save error", function() {
@@ -114,7 +111,7 @@ describe("expose all errors", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Oh no!"}')
+      assert.equal(this.body.toString(), '{"error":"internal_error","message":"Oh no!"}')
     })
 
     it("should save error", function() {
@@ -184,7 +181,7 @@ describe("expose all errors", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Oh no!"}')
+      assert.equal(this.body.toString(), '{"error":"internal_error","message":"Oh no!"}')
     })
 
     it("should save error", function() {
@@ -217,7 +214,7 @@ describe("expose all errors", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Oh no!"}')
+      assert.equal(this.body.toString(), '{"error":"internal_error","message":"Oh no!"}')
     })
 
     it("should save error", function() {

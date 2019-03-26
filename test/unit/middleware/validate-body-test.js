@@ -34,8 +34,12 @@ describe("validate body", function() {
       })
 
       assert.deepEqual(body.toString(), JSON.stringify({
-        error: "Bad request",
-        message: "Request is invalid: 'foo' should be string; request body requires key 'bar'"
+        error: "invalid_request",
+        message: "Request is invalid: 'foo' should be string; request body requires key 'bar'.",
+        details: [
+          {error: "invalid_type", path: "foo", expected: "string"},
+          {error: "required", path: "bar"},
+        ],
       }))
     })
 
@@ -48,8 +52,12 @@ describe("validate body", function() {
       })
 
       assert.deepEqual(body.toString(), JSON.stringify({
-        error: "Bad request",
-        message: "Request is invalid: request body requires keys 'foo', 'bar'"
+        error: "invalid_request",
+        message: "Request is invalid: request body requires keys 'foo', 'bar'.",
+        details: [
+          {error: "required", path: "foo"},
+          {error: "required", path: "bar"},
+        ],
       }))
     })
   })
@@ -84,8 +92,8 @@ describe("validate body", function() {
 
     it("should return error on validation failure", function() {
       assert.deepEqual(this.body.toString(), JSON.stringify({
-        error: "Bad request",
-        message: "Request is invalid"
+        error: "invalid_request",
+        message: "Request is invalid."
       }))
     })
   })
@@ -120,8 +128,12 @@ describe("validate body", function() {
 
     it("should return error on validation failure", function() {
       assert.deepEqual(this.body.toString(), JSON.stringify({
-        error: "Bad request",
-        message: "Request is invalid: 'foo' should be string; 'bar' should be at least 1"
+        error: "invalid_request",
+        message: "Request is invalid: 'foo' should be string; 'bar' should be at least 1.",
+        details: [
+          {error: "invalid_type", path: "foo", expected: "string"},
+          {error: "invalid_range", path: "bar", limit: 1, operator: ">="},
+        ],
       }))
     })
   })
@@ -156,8 +168,11 @@ describe("validate body", function() {
 
     it("should return error on validation failure", function() {
       assert.deepEqual(this.body.toString(), JSON.stringify({
-        error: "Bad request",
-        message: "Request is invalid: request body should be object"
+        error: "invalid_request",
+        message: "Request is invalid: request body should be object.",
+        details: [
+          {error: "invalid_type", expected: "object"},
+        ],
       }))
     })
   })

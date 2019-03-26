@@ -1,4 +1,4 @@
-import {createValidator, Validator} from "../util/schema-validator"
+import {createValidator, simplifyResults, ValidationResult, Validator} from "../util/schema-validator"
 
 import {BadRequest} from "../errors"
 
@@ -6,9 +6,9 @@ import {Body, Context, Middleware, Next} from "../middleware"
 
 export interface ValidationOptions {
   schema: object,
-  message: string,
-  details: boolean,
-  optional: boolean,
+  details?: boolean,
+  optional?: boolean,
+  message?: string,
 }
 
 export default function validateBody(options: ValidationOptions): Middleware {
@@ -20,7 +20,7 @@ export default function validateBody(options: ValidationOptions): Middleware {
 }
 
 function validate(validator: Validator, body: Body, {
-  message = "Request is invalid",
+  message = BadRequest.defaultMessage,
   details = true,
   optional = false,
 }: ValidationOptions) {
@@ -33,12 +33,25 @@ function validate(validator: Validator, body: Body, {
     body = {}
   }
 
-  const errors = validator(body)
+  const errors = validator(body as object)
   if (errors.length) {
     if (details) {
-      throw new BadRequest(`${message}: ${errors.join("; ")}`)
+      throw new ValidationError(simplifyResults(errors).join("; "), errors)
     } else {
       throw new BadRequest(message)
     }
+  }
+}
+
+export class ValidationError extends BadRequest {
+  details: ValidationResult[]
+
+  constructor(message: string, details: ValidationResult[]) {
+    super(`${BadRequest.defaultMessage.replace(/\.$/, ":")} ${message}`)
+    this.details = details
+  }
+
+  toJSON() {
+    return {...super.toJSON(), details: this.details}
   }
 }

@@ -28,13 +28,13 @@ export default function parseBody(): Middleware {
            Content-Type header when uploading images. */
         parsed = contentType.parse(guessType(this.request, body))
       } catch (err) {
-        throw new BadRequest("Bad Content-Type header")
+        throw new BadRequest("Invalid Content-Type header")
       }
 
       const {type, parameters: {charset = "utf-8"}} = parsed
 
       if (charset.toLowerCase() !== "utf-8") {
-        throw new UnsupportedMediaType(`Charset ${charset.toLowerCase()} is not supported`)
+        throw new UnsupportedMediaType(`Character set '${charset.toLowerCase()}' is not supported`)
       }
 
       switch (type) {

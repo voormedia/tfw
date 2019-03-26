@@ -78,7 +78,7 @@ describe("require tls", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString(), '{"error":"Forbidden","message":"TLS required"}')
+        assert.equal(this.body.toString(), '{"error":"tls_required","message":"TLS is required to connect."}')
       })
 
       it("should return http forbidden", function() {
@@ -86,7 +86,7 @@ describe("require tls", function() {
       })
     })
 
-    describe("without proxy", function() {
+    describe("with proxy", function() {
       before(async function() {
         const {res, body} = await test.request(
           test.createStack(write(), rescue(), requireTLS(), function() {
@@ -107,7 +107,7 @@ describe("require tls", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString(), '{"error":"Forbidden","message":"TLS required"}')
+        assert.equal(this.body.toString(), '{"error":"tls_required","message":"TLS is required to connect."}')
       })
 
       it("should return http forbidden", function() {

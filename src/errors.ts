@@ -1,72 +1,257 @@
-class HttpError extends Error {
-  status!: number
-  error!: string
+interface ErrorDetails<T extends string> {
+  error: T
   message: string
+}
+
+interface ErrorDefaults<T extends string> extends ErrorDetails<T> {
+  status: number
+}
+
+export abstract class ServiceError<T extends string> extends Error implements ErrorDetails<T> {
+  static define<T extends string>(options: ErrorDefaults<T>) {
+    return define(options)
+  }
+
+  abstract error: T
+  abstract status: number
+  abstract message: string
   expose = true
 
-  constructor(message?: string) {
+  constructor() {
     super()
-
-    /* Error message without trailing period. */
-    this.message = message ? message.replace(/\.?$/, "") : "Unknown reason"
-
     Error.captureStackTrace(this, this.constructor)
     Object.freeze(this.stack)
   }
 
-  toJSON() {
+  toJSON(): ErrorDetails<T> {
     return {error: this.error, message: this.message}
   }
 
-  toString() {
+  toString(): string {
     return `${this.status} ${this.message}`
   }
 }
 
-function defineError(status: number, error: string) {
-  return class extends HttpError {
-    status: number = status
-    error: string = error
+function define<T extends string>({
+  status = 500,
+  error,
+  message = "Internal error",
+}: ErrorDefaults<T>) {
+  message = addPeriod(message)
+  return class HttpError extends ServiceError<typeof error> {
+    static defaultMessage: string = message
 
-    constructor(message: string = error) {
-      super(message)
+    status: number = status
+    error: typeof error = error
+    message: string = message
+
+    constructor(msg?: string) {
+      super()
+      if (msg) this.message = addPeriod(msg)
     }
   }
 }
 
 /* https://github.com/nodejs/node/blob/master/lib/_http_server.js */
 /* tslint:disable:variable-name */
-export const BadRequest = defineError(400, "Bad request")
-export const Unauthorized = defineError(401, "Unauthorized")
-export const PaymentRequired = defineError(402, "Payment required")
-export const Forbidden = defineError(403, "Forbidden")
-export const NotFound = defineError(404, "Not found")
-export const MethodNotAllowed = defineError(405, "Method not allowed")
-export const NotAcceptable = defineError(406, "Not acceptable")
-export const ProxyAuthenticationRequired = defineError(407, "Proxy authentication required")
-export const RequestTimeout = defineError(408, "Request timeout")
-export const Conflict = defineError(409, "Conflict")
-export const Gone = defineError(410, "Gone")
-export const LengthRequired = defineError(411, "Length required")
-export const PreconditionFailed = defineError(412, "Precondition failed")
-export const RequestEntityTooLarge = defineError(413, "Request entity too large")
-export const RequestURITooLong = defineError(414, "Request URI too long")
-export const UnsupportedMediaType = defineError(415, "Unsupported media type")
-export const RangeNotSatisfiable = defineError(416, "Range not satisfiable")
-export const ExpectationFailed = defineError(417, "Expectation failed")
-export const ImATeapot = defineError(418, "I'm a teapot")
-export const MisdirectedRequest = defineError(421, "Misdirected request")
-export const UnprocessableEntity = defineError(422, "Unprocessable entity")
-export const Locked = defineError(423, "Locked")
-export const FailedDependency = defineError(424, "Failed dependency")
-export const UpgradeRequired = defineError(426, "Upgrade required")
-export const PreconditionRequired = defineError(428, "Precondition required")
-export const TooManyRequests = defineError(429, "Too many requests")
-export const RequestHeaderFieldsTooLarge = defineError(431, "Request header fields too large")
-export const UnavailableForLegalReasons = defineError(451, "Unavailable for legal reasons")
+export const BadRequest = define({
+  status: 400,
+  error: "invalid_request",
+  message: "Request is invalid",
+})
 
-export const InternalServerError = defineError(500, "Internal server error")
-export const NotImplemented = defineError(501, "Not implemented")
-export const BadGateway = defineError(502, "Bad gateway")
-export const ServiceUnavailable = defineError(503, "Service unavailable")
-export const GatewayTimeout = defineError(504, "Gateway timeout")
+export const Unauthorized = define({
+  status: 401,
+  error: "unauthorized",
+  message: "Unauthorized",
+})
+
+export const PaymentRequired = define({
+  status: 402,
+  error: "payment_required",
+  message: "Payment required",
+})
+
+export const Forbidden = define({
+  status: 403,
+  error: "forbidden",
+  message: "Forbidden",
+})
+
+export const NotFound = define({
+  status: 404,
+  error: "not_found",
+  message: "Not found",
+})
+
+export const MethodNotAllowed = define({
+  status: 405,
+  error: "method_not_allowed",
+  message: "Method not allowed",
+})
+
+export const NotAcceptable = define({
+  status: 406,
+  error: "not_acceptable",
+  message: "Not acceptable",
+})
+
+export const ProxyAuthenticationRequired = define({
+  status: 407,
+  error: "proxy_authentication_required",
+  message: "Proxy authentication required",
+})
+
+export const RequestTimeout = define({
+  status: 408,
+  error: "request_timeout",
+  message: "Request timeout",
+})
+
+export const Conflict = define({
+  status: 409,
+  error: "conflict",
+  message: "Conflict",
+})
+
+export const Gone = define({
+  status: 410,
+  error: "gone",
+  message: "Gone",
+})
+
+export const LengthRequired = define({
+  status: 411,
+  error: "length_required",
+  message: "Length required",
+})
+
+export const PreconditionFailed = define({
+  status: 412,
+  error: "precondition_failed",
+  message: "Precondition failed",
+})
+
+export const RequestEntityTooLarge = define({
+  status: 413,
+  error: "request_entity_too_large",
+  message: "Request entity too large",
+})
+
+export const RequestURITooLong = define({
+  status: 414,
+  error: "request_uri_too_long",
+  message: "Request URI too long",
+})
+
+export const UnsupportedMediaType = define({
+  status: 415,
+  error: "unsupported_media_type",
+  message: "Unsupported media type",
+})
+
+export const RangeNotSatisfiable = define({
+  status: 416,
+  error: "range_not_satisfiable",
+  message: "Range not satisfiable",
+})
+
+export const ExpectationFailed = define({
+  status: 417,
+  error: "expectation_failed",
+  message: "Expectation failed",
+})
+
+export const ImATeapot = define({
+  status: 418,
+  error: "im_a_teapot",
+  message: "I'm a teapot",
+})
+
+export const MisdirectedRequest = define({
+  status: 421,
+  error: "misdirected_request",
+  message: "Misdirected request",
+})
+
+export const UnprocessableEntity = define({
+  status: 422,
+  error: "unprocessable_entity",
+  message: "Unprocessable entity",
+})
+
+export const Locked = define({
+  status: 423,
+  error: "locked",
+  message: "Locked",
+})
+
+export const FailedDependency = define({
+  status: 424,
+  error: "failed_dependency",
+  message: "Failed dependency",
+})
+
+export const UpgradeRequired = define({
+  status: 426,
+  error: "upgrade_required",
+  message: "Upgrade required",
+})
+
+export const PreconditionRequired = define({
+  status: 428,
+  error: "precondition_required",
+  message: "Precondition required",
+})
+
+export const TooManyRequests = define({
+  status: 429,
+  error: "too_many_requests",
+  message: "Too many requests",
+})
+
+export const RequestHeaderFieldsTooLarge = define({
+  status: 431,
+  error: "request_header_fields_too_large",
+  message: "Request header fields too large",
+})
+
+export const UnavailableForLegalReasons = define({
+  status: 451,
+  error: "unavailable_for_legal_reasons",
+  message: "Unavailable for legal reasons",
+})
+
+export const InternalServerError = define({
+  status: 500,
+  error: "internal_error",
+  message: "Internal server error",
+})
+
+export const NotImplemented = define({
+  status: 501,
+  error: "not_implemented",
+  message: "Not implemented",
+})
+
+export const BadGateway = define({
+  status: 502,
+  error: "bad_gateway",
+  message: "Bad gateway",
+})
+
+export const ServiceUnavailable = define({
+  status: 503,
+  error: "service_unavailable",
+  message: "Service unavailable",
+})
+
+export const GatewayTimeout = define({
+  status: 504,
+  error: "gateway_timeout",
+  message: "Gateway timeout",
+})
+
+function addPeriod(message: string): string {
+  return message.replace(/([^!?.])$/, "$1.")
+}

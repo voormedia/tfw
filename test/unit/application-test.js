@@ -229,7 +229,7 @@ describe("application", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString(), '{"error":"Not found","message":"Endpoint does not exist"}')
+        assert.equal(this.body.toString(), '{"error":"not_found","message":"This endpoint does not exist."}')
       })
 
       it("should return http not found", function() {
@@ -367,7 +367,7 @@ describe("application", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Bad handler"}')
+        assert.equal(this.body.toString(), '{"error":"internal_error","message":"Invalid endpoint handler."}')
       })
 
       it("should return http internal error", function() {
@@ -397,7 +397,7 @@ describe("application", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString(), '{"error":"Too many requests","message":"Too many requests"}')
+        assert.equal(this.body.toString(), '{"error":"too_many_requests","message":"Too many requests."}')
       })
 
       it("should return error status", function() {
@@ -432,7 +432,7 @@ describe("application", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Internal server error"}')
+        assert.equal(this.body.toString(), '{"error":"internal_error","message":"Internal server error."}')
       })
 
       it("should return http internal error", function() {

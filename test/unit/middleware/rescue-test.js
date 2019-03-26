@@ -81,7 +81,7 @@ describe("rescue", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"Payment required","message":"Payment required"}')
+      assert.equal(this.body.toString(), '{"error":"payment_required","message":"Payment required."}')
     })
 
     it("should save error", function() {
@@ -114,7 +114,7 @@ describe("rescue", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Internal server error"}')
+      assert.equal(this.body.toString(), '{"error":"internal_error","message":"Internal server error."}')
     })
 
     it("should save error", function() {
@@ -148,7 +148,7 @@ describe("rescue", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Internal server error"}')
+      assert.equal(this.body.toString(), '{"error":"internal_error","message":"Internal server error."}')
     })
 
     it("should save error", function() {
@@ -182,7 +182,7 @@ describe("rescue", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Internal server error"}')
+      assert.equal(this.body.toString(), '{"error":"internal_error","message":"Internal server error."}')
     })
 
     it("should save error", function() {
@@ -216,7 +216,7 @@ describe("rescue", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"Internal server error","message":"Internal server error"}')
+      assert.equal(this.body.toString(), '{"error":"internal_error","message":"Internal server error."}')
     })
 
     it("should save error", function() {

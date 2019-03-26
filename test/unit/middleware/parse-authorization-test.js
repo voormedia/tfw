@@ -162,7 +162,7 @@ describe("parse authorization", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"Bad request","message":"Bad authorization header"}')
+      assert.equal(this.body.toString(), '{"error":"invalid_request","message":"Invalid authorization header."}')
     })
 
     it("should return http unsupported media type", function() {
@@ -185,7 +185,7 @@ describe("parse authorization", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"Bad request","message":"Bad authorization header"}')
+      assert.equal(this.body.toString(), '{"error":"invalid_request","message":"Invalid authorization header."}')
     })
 
     it("should return http unsupported media type", function() {

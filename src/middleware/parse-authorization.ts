@@ -15,7 +15,7 @@ export default function parseAuthorization(): Middleware {
         /* https://tools.ietf.org/html/rfc7617#section-2.1:
            "The user-id and password MUST NOT contain any control characters" */
         if (decoded.search(/[\x00-\x1F]/) >= 0) {
-          throw new BadRequest("Bad authorization header")
+          throw new BadRequest("Invalid authorization header.")
         }
 
         const [username, password] = decoded.split(":")

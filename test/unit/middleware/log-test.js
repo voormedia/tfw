@@ -218,7 +218,7 @@ describe("log", function() {
       })
 
       it("should log message", function() {
-        assert.equal(this.entry.message, "Failure")
+        assert.equal(this.entry.message, "Failure.")
       })
 
       it("should log request method", function() {
@@ -238,7 +238,7 @@ describe("log", function() {
       })
 
       it("should log response size", function() {
-        assert.equal(this.entry.httpRequest.responseSize, 199)
+        assert.equal(this.entry.httpRequest.responseSize, 193)
       })
 
       it("should log remote ip", function() {
@@ -363,7 +363,7 @@ describe("log", function() {
       })
 
       it("should log response size", function() {
-        assert.equal(this.entry.httpRequest.responseSize, 213)
+        assert.equal(this.entry.httpRequest.responseSize, 207)
       })
 
       it("should log remote ip", function() {

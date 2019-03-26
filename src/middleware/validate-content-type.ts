@@ -11,7 +11,7 @@ export default function validateContentType(expected: string): Middleware {
          application/octet-stream: https://tools.ietf.org/html/rfc7231#section-3.1.1.5 */
       const {type} = contentType.parse(this.request.headers["content-type"] || "application/octet-stream")
       if (type !== expected) {
-        throw new UnsupportedMediaType(`Please use ${expected} content type`)
+        throw new UnsupportedMediaType(`Request requires '${expected}' content type`)
       }
     }
 

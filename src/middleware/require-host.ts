@@ -8,6 +8,6 @@ export default function requireHost(...hosts: string[]): Middleware {
 
     if (host && hosts.includes(host)) return next()
 
-    throw new NotFound("Endpoint does not exist")
+    throw new NotFound("This endpoint does not exist.")
   }
 }

@@ -83,7 +83,7 @@ describe("shutdown", function() {
       })
 
       it("should render error", function() {
-        assert.equal(this.body.toString(), '{"error":"Service unavailable","message":"Please retry the request"}')
+        assert.equal(this.body.toString(), '{"error":"service_unavailable","message":"Please retry the request."}')
       })
     })
 
