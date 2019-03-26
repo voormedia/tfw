@@ -41,7 +41,7 @@ export function createValidator(schema: object): Validator {
 
         case "enum": {
           const expected = (error.params as ajv.EnumParams).allowedValues
-          results.push({path, error: "invalid_value", expected})
+          results.push({path, error: "invalid_option", expected})
           break
         }
 
@@ -192,10 +192,9 @@ function messageForError(result: ValidationResult, length: number = 1): string {
     case "blocked_value":
       return "has a value that is not allowed"
 
-    case "invalid_value": {
-      if (result.expected) {
-        return `should be ${result.expected.length > 1 ? "one of " : ""}${result.expected.map(fmtProp).join(", ")}`
-      }
+    case "invalid_option": {
+      const expected = result.expected
+      return `should be ${expected.length > 1 ? "one of " : ""}${expected.map(fmtProp).join(", ")}`
     }
 
     default:
@@ -242,15 +241,14 @@ export interface InvalidLength extends Error {
   suggestion?: string
 }
 
-export interface InvalidChoice extends Error {
-  error: "invalid_choice"
-  expected?: string[]
+export interface InvalidOption extends Error {
+  error: "invalid_option"
+  expected: string[]
   suggestion?: string
 }
 
 export interface InvalidValue extends Error {
   error: "invalid_value"
-  expected?: string[]
   suggestion?: string
 }
 
@@ -275,10 +273,11 @@ export type ValidationResult = (
   UnknownField |
   RequiredField |
   InvalidType |
-  InvalidValue |
   InvalidFormat |
   InvalidRange |
   InvalidLength |
+  InvalidOption |
+  InvalidValue |
   BlockedValue |
   OtherFailure
 )

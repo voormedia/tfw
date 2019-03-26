@@ -34,14 +34,13 @@ export interface InvalidLength extends Error {
     expected: RangeExpecation<number>;
     suggestion?: string;
 }
-export interface InvalidChoice extends Error {
-    error: "invalid_choice";
-    expected?: string[];
+export interface InvalidOption extends Error {
+    error: "invalid_option";
+    expected: string[];
     suggestion?: string;
 }
 export interface InvalidValue extends Error {
     error: "invalid_value";
-    expected?: string[];
     suggestion?: string;
 }
 export interface BlockedValue extends Error {
@@ -57,5 +56,5 @@ interface RangeExpecation<T> {
     operator: Operator;
     limit: T;
 }
-export declare type ValidationResult = (UnknownField | RequiredField | InvalidType | InvalidValue | InvalidFormat | InvalidRange | InvalidLength | BlockedValue | OtherFailure);
+export declare type ValidationResult = (UnknownField | RequiredField | InvalidType | InvalidFormat | InvalidRange | InvalidLength | InvalidOption | InvalidValue | BlockedValue | OtherFailure);
 export {};
