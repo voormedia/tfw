@@ -3,43 +3,48 @@ export declare type Validator = (body: object) => ValidationResult[];
 export declare function createValidator(schema: object): Validator;
 export declare function createSimpleValidator(schema: object): SimpleValidator;
 export declare function simplifyResults(results: ValidationResult[]): string[];
-export interface Unknown {
+export interface Success {
+    error: undefined;
+}
+interface Error {
+    path?: string;
+    error: string;
+    message?: string;
+}
+export interface UnknownField extends Error {
     error: "unknown";
-    path?: string;
 }
-export interface Required {
+export interface RequiredField extends Error {
     error: "required";
-    path?: string;
 }
-export interface InvalidType {
+export interface InvalidType extends Error {
     error: "invalid_type";
-    path?: string;
     expected: string;
 }
-export interface InvalidValue {
+export interface InvalidValue extends Error {
     error: "invalid_value";
-    path?: string;
-    expected: string[];
+    expected?: string[];
+    suggestion?: string;
 }
-export interface InvalidFormat {
+export interface InvalidFormat extends Error {
     error: "invalid_format";
-    path?: string;
     expected: string;
 }
-export interface InvalidRange {
+export interface InvalidRange extends Error {
     error: "invalid_range";
-    path?: string;
     limit: string | number;
     operator: string;
 }
-export interface InvalidLength {
+export interface InvalidLength extends Error {
     error: "invalid_length";
-    path?: string;
     limit: number;
     operator: string;
 }
-export interface Other {
-    error: "other";
-    path?: string;
+export interface BlockedValue extends Error {
+    error: "blocked_value";
 }
-export declare type ValidationResult = (Unknown | Required | InvalidType | InvalidValue | InvalidFormat | InvalidRange | InvalidLength | Other);
+export interface OtherFailure extends Error {
+    error: "other";
+}
+export declare type ValidationResult = (Success | UnknownField | RequiredField | InvalidType | InvalidValue | InvalidFormat | InvalidRange | InvalidLength | BlockedValue | OtherFailure);
+export {};

@@ -37,8 +37,8 @@ describe("validate body", function() {
         error: "invalid_request",
         message: "Request is invalid: 'foo' should be string; request body requires key 'bar'.",
         details: [
-          {error: "invalid_type", path: "foo", expected: "string"},
-          {error: "required", path: "bar"},
+          {path: "foo", error: "invalid_type", expected: "string"},
+          {path: "bar", error: "required"},
         ],
       }))
     })
@@ -55,8 +55,8 @@ describe("validate body", function() {
         error: "invalid_request",
         message: "Request is invalid: request body requires keys 'foo', 'bar'.",
         details: [
-          {error: "required", path: "foo"},
-          {error: "required", path: "bar"},
+          {path: "foo", error: "required"},
+          {path: "bar", error: "required"},
         ],
       }))
     })
@@ -131,8 +131,8 @@ describe("validate body", function() {
         error: "invalid_request",
         message: "Request is invalid: 'foo' should be string; 'bar' should be at least 1.",
         details: [
-          {error: "invalid_type", path: "foo", expected: "string"},
-          {error: "invalid_range", path: "bar", limit: 1, operator: ">="},
+          {path: "foo", error: "invalid_type", expected: "string"},
+          {path: "bar", error: "invalid_range", limit: 1, operator: ">="},
         ],
       }))
     })

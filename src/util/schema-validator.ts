@@ -29,31 +29,31 @@ export function createValidator(schema: object): Validator {
       switch (error.keyword) {
         case "type": {
           const expected = (error.params as ajv.TypeParams).type.split(",")[0]
-          results.push({error: "invalid_type", path, expected})
+          results.push({path, error: "invalid_type", expected})
           break
         }
 
         case "format": {
           const expected = (error.params as ajv.FormatParams).format
-          results.push({error: "invalid_format", path, expected})
+          results.push({path, error: "invalid_format", expected})
           break
         }
 
         case "enum": {
           const expected = (error.params as ajv.EnumParams).allowedValues
-          results.push({error: "invalid_value", path, expected})
+          results.push({path, error: "invalid_value", expected})
           break
         }
 
         case "additionalProperties": {
           const unknown = (error.params as ajv.AdditionalPropertiesParams).additionalProperty
-          results.push({error: "unknown", path: path ? `${path}.${unknown}` : unknown})
+          results.push({path: path ? `${path}.${unknown}` : unknown, error: "unknown"})
           break
         }
 
         case "required": {
           const required = (error.params as ajv.RequiredParams).missingProperty
-          results.push({error: "required", path: path ? `${path}.${required}` : required})
+          results.push({path: path ? `${path}.${required}` : required, error: "required"})
           break
         }
 
@@ -62,19 +62,19 @@ export function createValidator(schema: object): Validator {
         case "maximum":
         case "exclusiveMaximum": {
           const {limit, comparison: operator} = (error.params as ajv.ComparisonParams)
-          results.push({error: "invalid_range", path, limit, operator})
+          results.push({path, error: "invalid_range", limit, operator})
           break
         }
 
         case "minLength": {
           const limit = (error.params as ajv.LimitParams).limit
-          results.push({error: "invalid_length", path, limit, operator: ">="})
+          results.push({path, error: "invalid_length", limit, operator: ">="})
           break
         }
 
         case "maxLength": {
           const limit = (error.params as ajv.LimitParams).limit
-          results.push({error: "invalid_length", path, limit, operator: "<="})
+          results.push({path, error: "invalid_length", limit, operator: "<="})
           break
         }
 
@@ -82,7 +82,7 @@ export function createValidator(schema: object): Validator {
         case "if": break
 
         default: {
-          results.push({error: "other", path})
+          results.push({path, error: "other"})
         }
       }
     }
@@ -121,6 +121,9 @@ export function simplifyResults(results: ValidationResult[]): string[] {
   const unknowns = new Map<string, string[]>()
   for (const result of results) {
     switch (result.error) {
+      case undefined:
+        break
+
       case "unknown":
       case "required": {
         const [key, ...parts] = (result.path || "").split(".").reverse()
@@ -163,7 +166,11 @@ function messageForError(result: ValidationResult, length: number = 1): string {
       return `should be ${result.expected}`
 
     case "invalid_value":
-      return `should be ${result.expected.length > 1 ? "one of " : ""}${result.expected.map(fmtProp).join(", ")}`
+      if (result.expected) {
+        return `should be ${result.expected.length > 1 ? "one of " : ""}${result.expected.map(fmtProp).join(", ")}`
+      } else {
+        return "is not valid"
+      }
 
     case "invalid_format":
       let format = result.expected
@@ -181,76 +188,77 @@ function messageForError(result: ValidationResult, length: number = 1): string {
     case "invalid_length":
       return `should be ${fmtOperator(result.operator)} ${result.limit} ${fmtPlural("character", result.limit)}`
 
+    case "blocked_value":
+      return "has a value that is not allowed"
+
     default:
       return "failed constraint"
   }
 }
 
-export interface Unknown {
+export interface Success {
+  error: undefined
+}
+
+interface Error {
+  path?: string
+  error: string
+  message?: string
+}
+
+export interface UnknownField extends Error {
   error: "unknown"
-  path?: string
 }
 
-export interface Required {
+export interface RequiredField extends Error {
   error: "required"
-  path?: string
 }
 
-export interface InvalidType {
+export interface InvalidType extends Error {
   error: "invalid_type"
-  path?: string
   expected: string
 }
 
-export interface InvalidValue {
+export interface InvalidValue extends Error {
   error: "invalid_value"
-  path?: string
-  expected: string[]
+  expected?: string[]
+  suggestion?: string
 }
 
-export interface InvalidFormat {
+export interface InvalidFormat extends Error {
   error: "invalid_format"
-  path?: string
   expected: string
 }
 
-export interface InvalidRange {
+export interface InvalidRange extends Error {
   error: "invalid_range"
-  path?: string
   limit: string | number
   operator: string
 }
 
-export interface InvalidLength {
+export interface InvalidLength extends Error {
   error: "invalid_length"
-  path?: string
   limit: number
   operator: string
 }
 
-export interface Other {
-  error: "other"
-  path?: string
+export interface BlockedValue extends Error {
+  error: "blocked_value"
 }
 
-interface GroupedErrors {
-  unknown: Unknown[]
-  required: Required[]
-  invalid_type: InvalidType[]
-  invalid_value: InvalidValue[]
-  invalid_format: InvalidFormat[]
-  invalid_range: InvalidRange[]
-  invalid_length: InvalidLength[]
-  other: Other[]
+export interface OtherFailure extends Error {
+  error: "other"
 }
 
 export type ValidationResult = (
-  Unknown |
-  Required |
+  Success |
+  UnknownField |
+  RequiredField |
   InvalidType |
   InvalidValue |
   InvalidFormat |
   InvalidRange |
   InvalidLength |
-  Other
+  BlockedValue |
+  OtherFailure
 )

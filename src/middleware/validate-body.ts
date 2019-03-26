@@ -4,6 +4,8 @@ import {BadRequest} from "../errors"
 
 import {Body, Context, Middleware, Next} from "../middleware"
 
+export {ValidationResult}
+
 export interface ValidationOptions {
   schema: object,
   details?: boolean,
