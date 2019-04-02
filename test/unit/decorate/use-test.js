@@ -2,69 +2,149 @@ import {route, write} from "src/middleware"
 import {use, mount, GET} from "src/decorate"
 
 describe("use", function() {
-  describe("with handler", function() {
-    before(async function() {
-      function middleware(next) {
-        this.body += "middleware "
-        return next()
-      }
-
-      class app {
-        @GET("/foo")
-        @use(middleware)
-        handle() {
-          this.body += "ok"
+  describe("single", function() {
+    describe("with handler", function() {
+      before(async function() {
+        function middleware(next) {
+          this.body += "middleware "
+          return next()
         }
-      }
 
-      const {res, body} = await test.request(
-        test.createStack(write(), route(app.prototype.router)),
-        {path: "/foo"}
-      )
+        class app {
+          @GET("/foo")
+          @use(middleware)
+          handle() {
+            this.body += "ok"
+          }
+        }
 
-      this.res = res
-      this.body = body
+        const {res, body} = await test.request(
+          test.createStack(write(), route(app.prototype.router)),
+          {path: "/foo"}
+        )
+
+        this.res = res
+        this.body = body
+      })
+
+      it("should call middleware", function() {
+        assert.equal(this.body.toString(), "middleware ok")
+      })
     })
 
-    it("should call middleware", function() {
-      assert.equal(this.body.toString(), "middleware ok")
+    describe("with router", function() {
+      before(async function() {
+        function middleware(next) {
+          this.body += "middleware "
+          return next()
+        }
+
+        class mounted {
+          @GET("/foo")
+          handle() {
+            this.body += "ok"
+          }
+        }
+
+        @use(middleware)
+        @mount("/sub", mounted)
+        class app {
+          @GET("/foo")
+          handle() {
+            this.body += "ok"
+          }
+        }
+
+        const {res, body} = await test.request(
+          test.createStack(write(), route(app.prototype.router)),
+          {path: "/sub/foo"}
+        )
+
+        this.res = res
+        this.body = body
+      })
+
+      it("should call middleware", function() {
+        assert.equal(this.body.toString(), "middleware ok")
+      })
     })
   })
 
-  describe("with router", function() {
-    before(async function() {
-      function middleware(next) {
-        this.body += "middleware "
-        return next()
-      }
-
-      class mounted {
-        @GET("/foo")
-        handle() {
-          this.body += "ok"
+  describe("multiple", function() {
+    describe("with handler", function() {
+      before(async function() {
+        function middleware1(next) {
+          this.body += "middleware1 "
+          return next()
         }
-      }
 
-      @use(middleware)
-      @mount("/sub", mounted)
-      class app {
-        @GET("/foo")
-        handle() {
-          this.body += "ok"
+        function middleware2(next) {
+          this.body += "middleware2 "
+          return next()
         }
-      }
 
-      const {res, body} = await test.request(
-        test.createStack(write(), route(app.prototype.router)),
-        {path: "/sub/foo"}
-      )
+        class app {
+          @GET("/foo")
+          @use(middleware1, middleware2)
+          handle() {
+            this.body += "ok"
+          }
+        }
 
-      this.res = res
-      this.body = body
+        const {res, body} = await test.request(
+          test.createStack(write(), route(app.prototype.router)),
+          {path: "/foo"}
+        )
+
+        this.res = res
+        this.body = body
+      })
+
+      it("should call middleware", function() {
+        assert.equal(this.body.toString(), "middleware1 middleware2 ok")
+      })
     })
 
-    it("should call middleware", function() {
-      assert.equal(this.body.toString(), "middleware ok")
+    describe("with router", function() {
+      before(async function() {
+        function middleware1(next) {
+          this.body += "middleware1 "
+          return next()
+        }
+
+        function middleware2(next) {
+          this.body += "middleware2 "
+          return next()
+        }
+
+        class mounted {
+          @GET("/foo")
+          handle() {
+            this.body += "ok"
+          }
+        }
+
+        @use(middleware1, middleware2)
+        @mount("/sub", mounted)
+        class app {
+          @GET("/foo")
+          handle() {
+            this.body += "ok"
+          }
+        }
+
+        const {res, body} = await test.request(
+          test.createStack(write(), route(app.prototype.router)),
+          {path: "/sub/foo"}
+        )
+
+        this.res = res
+        this.body = body
+      })
+
+      it("should call middleware", function() {
+        assert.equal(this.body.toString(), "middleware1 middleware2 ok")
+      })
     })
   })
 

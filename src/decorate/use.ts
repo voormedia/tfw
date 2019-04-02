@@ -6,40 +6,42 @@ type Decorator = (
   descriptor?: PropertyDescriptor,
 ) => void
 
-export function use(middleware: Middleware): Decorator {
-  /* tslint:disable-next-line: strict-type-predicates */
-  if (typeof middleware !== "function") {
-    throw new TypeError("Middleware must be function")
-  }
+export function use(...middlewares: Middleware[]): Decorator {
+  for (const middleware of middlewares) {
+    /* tslint:disable-next-line: strict-type-predicates */
+    if (typeof middleware !== "function") {
+      throw new TypeError("Middleware must be function")
+    }
 
-  if (middleware.length !== 1) {
-    throw new TypeError("Middleware must take exactly 1 argument")
+    if (middleware.length !== 1) {
+      throw new TypeError("Middleware must take exactly 1 argument")
+    }
   }
 
   const fn = (object: any, key?: string, descriptor?: PropertyDescriptor) => {
     if (descriptor) {
-      attach(descriptor.value, middleware)
+      attach(descriptor.value, middlewares)
       return descriptor
     } else {
-      attachRecursively(object.prototype, middleware)
+      attachRecursively(object.prototype, middlewares)
     }
   }
 
-  Object.defineProperty(fn, "name", {value: middleware.name})
+  Object.defineProperty(fn, "name", {value: middlewares.map(mw => mw.name).join("/")})
   return fn
 }
 
-function attachRecursively(object: any, middleware: Middleware) {
+function attachRecursively(object: any, middlewares: Middleware[]) {
   if (object.router) {
     for (const handler of object.router.handlers) {
-      attach(handler, middleware)
+      attach(handler, middlewares)
     }
   }
 }
 
-function attach(handler: any, middleware: Middleware) {
+function attach(handler: any, middlewares: Middleware[]) {
   if (typeof handler === "function") {
-    stackify(handler).unshift(middleware)
+    stackify(handler).unshift(...middlewares)
   } else {
     throw new TypeError("Expected descriptor to be a function")
   }
