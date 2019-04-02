@@ -210,7 +210,7 @@ describe("require authorization", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"invalid_request","message":"Invalid authorization header."}')
+      assert.equal(this.body.toString(), '{"error":"invalid_authorization","message":"Invalid authorization header."}')
     })
 
     it("should return http unsupported media type", function() {
@@ -236,7 +236,7 @@ describe("require authorization", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"invalid_request","message":"Invalid authorization header."}')
+      assert.equal(this.body.toString(), '{"error":"invalid_authorization","message":"Invalid authorization header."}')
     })
 
     it("should return http unsupported media type", function() {

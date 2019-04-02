@@ -5,7 +5,7 @@ import AbstractTask from "./util/abstract-task"
 import Logger from "./util/logger"
 
 import ClosableServer from "./app/closable-server"
-import dispatch from "./app/dispatch"
+import dispatch from "./decorate/dispatch"
 
 import {log, rescue, route, shutdown, Stack, write} from "./middleware"
 

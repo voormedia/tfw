@@ -1,7 +1,7 @@
-import compose from "./compose"
+import compose from "../app/compose"
 
+import {Context, Request, Response} from "../app/context"
 import {Stack} from "../middleware"
-import {Context, Request, Response} from "./context"
 
 export default function dispatch(initialStack: Stack) {
   return function dispatch(request: Request, response: Response): void {

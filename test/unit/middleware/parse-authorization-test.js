@@ -24,6 +24,10 @@ describe("parse authorization", function() {
     it("should assign password", function() {
       assert.equal(this.ctx.data.password, "OpenSesame")
     })
+
+    it("should not assign token", function() {
+      assert.equal(this.ctx.data.token, undefined)
+    })
   })
 
   describe("with username", function() {
@@ -48,6 +52,10 @@ describe("parse authorization", function() {
 
     it("should assign blank password", function() {
       assert.equal(this.ctx.data.password, "")
+    })
+
+    it("should not assign token", function() {
+      assert.equal(this.ctx.data.token, undefined)
     })
   })
 
@@ -74,6 +82,10 @@ describe("parse authorization", function() {
     it("should assign password", function() {
       assert.equal(this.ctx.data.password, "OpenSesame")
     })
+
+    it("should not assign token", function() {
+      assert.equal(this.ctx.data.token, undefined)
+    })
   })
 
   describe("without header", function() {
@@ -94,6 +106,10 @@ describe("parse authorization", function() {
 
     it("should not assign password", function() {
       assert.equal(this.ctx.data.password, undefined)
+    })
+
+    it("should not assign token", function() {
+      assert.equal(this.ctx.data.token, undefined)
     })
   })
 
@@ -120,9 +136,13 @@ describe("parse authorization", function() {
     it("should not assign password", function() {
       assert.equal(this.ctx.data.password, undefined)
     })
+
+    it("should not assign token", function() {
+      assert.equal(this.ctx.data.token, undefined)
+    })
   })
 
-  describe("with non basic authorization", function() {
+  describe("with bearer authorization", function() {
     before(async function() {
       let ctx
       await test.request(
@@ -145,6 +165,33 @@ describe("parse authorization", function() {
     it("should not assign password", function() {
       assert.equal(this.ctx.data.password, undefined)
     })
+
+    it("should assign token", function() {
+      assert.equal(this.ctx.data.token, "cn389ncoiwuencr")
+    })
+  })
+
+  describe("with unknown authorization type", function() {
+    before(async function() {
+      const {res, body} = await test.request(
+        test.createStack(write(), rescue(), parseAuthorization()), {
+          headers: {
+            "Authorization": "Foo"
+          }
+        }
+      )
+
+      this.res = res
+      this.body = body
+    })
+
+    it("should render error", function() {
+      assert.equal(this.body.toString(), '{"error":"invalid_authorization","message":"Unsupported authorization header."}')
+    })
+
+    it("should return http unsupported media type", function() {
+      assert.equal(this.res.statusCode, 400)
+    })
   })
 
   describe("with null byte in credentials", function() {
@@ -162,7 +209,7 @@ describe("parse authorization", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"invalid_request","message":"Invalid authorization header."}')
+      assert.equal(this.body.toString(), '{"error":"invalid_authorization","message":"Invalid authorization header."}')
     })
 
     it("should return http unsupported media type", function() {
@@ -185,7 +232,7 @@ describe("parse authorization", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"invalid_request","message":"Invalid authorization header."}')
+      assert.equal(this.body.toString(), '{"error":"invalid_authorization","message":"Invalid authorization header."}')
     })
 
     it("should return http unsupported media type", function() {

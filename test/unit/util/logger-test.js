@@ -34,7 +34,7 @@ describe("log", function() {
       })
 
       it("should log service name", function() {
-        assert.equal(this.entry.serviceContext.service, "mocha")
+        assert.include(["mocha", "vscode-mocha-test-adapter"], this.entry.serviceContext.service)
       })
 
       it("should log service version", function() {
