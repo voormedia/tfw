@@ -81,7 +81,7 @@ export const Forbidden = define({
 export const NotFound = define({
   status: 404,
   error: "not_found",
-  message: "Not found",
+  message: "Resource not found",
 })
 
 export const MethodNotAllowed = define({
