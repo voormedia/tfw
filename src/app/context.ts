@@ -22,8 +22,6 @@ export class Context {
     this.stack = stack
     this.request = request
     this.response = response
-
-    Object.seal(this)
   }
 
   get(header: string): string | undefined {
