@@ -60,7 +60,7 @@ export function requireTLS() {
 }
 
 export function validateBody(options: ValidationOptions) {
-  return use(validateBodyMiddleware(options))
+  return use(parseBodyMiddleware(), validateBodyMiddleware(options))
 }
 
 export function validateContentType(expected: string) {
