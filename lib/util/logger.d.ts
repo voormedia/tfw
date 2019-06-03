@@ -26,6 +26,7 @@ export interface LogEntry {
 }
 export interface LogContext {
     httpRequest?: HttpRequest;
+    [other: string]: any;
 }
 export declare class Logger {
     static readonly formatter: (entry: LogEntry) => string;

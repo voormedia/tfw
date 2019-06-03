@@ -50,6 +50,7 @@ export interface LogEntry {
 
 export interface LogContext {
   httpRequest?: HttpRequest,
+  [other: string]: any
 }
 
 export class Logger {
