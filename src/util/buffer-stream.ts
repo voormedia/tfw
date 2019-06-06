@@ -1,4 +1,5 @@
 import {Writable} from "stream"
+import {inspect} from "util"
 
 export class BufferStream extends Writable {
   private readonly buffers: Buffer[] = []
@@ -14,7 +15,7 @@ export class BufferStream extends Writable {
     this.buffers.length = 0
   }
 
-  inspect() {
+  [inspect.custom]() {
     return Buffer.concat(this.buffers).toString()
   }
 

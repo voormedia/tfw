@@ -1,3 +1,5 @@
+/// <reference types="node" />
+import { inspect } from "util";
 import Route from "./route";
 export default class Router {
     private readonly tree;
@@ -10,5 +12,5 @@ export default class Router {
     };
     readonly routes: Route[];
     readonly handlers: object[];
-    inspect(): string;
+    [inspect.custom](): string;
 }

@@ -1,3 +1,5 @@
+/// <reference types="node" />
+import { inspect } from "util";
 import "./util/polyfill";
 import Router from "./router";
 import AbstractTask from "./util/abstract-task";
@@ -20,7 +22,7 @@ export declare class Application extends AbstractTask {
     start(): Promise<void>;
     stop(): Promise<void>;
     kill(): Promise<void>;
-    inspect(): {
+    [inspect.custom](): {
         router: Router;
         server: string;
         stack: import("./middleware").Middleware[];

@@ -1,4 +1,5 @@
 import {IncomingMessage as Request, ServerResponse as Response} from "http"
+import {inspect} from "util"
 import {Stack} from "../middleware"
 
 export {Request, Response}
@@ -52,7 +53,7 @@ export class Context {
     return this.response.headersSent
   }
 
-  inspect() {
+  [inspect.custom]() {
     return {
       data: this.data,
       req: "<node req>",

@@ -1,3 +1,4 @@
+import {inspect} from "util"
 import Context from "src/app/context"
 
 describe("context", function() {
@@ -7,8 +8,8 @@ describe("context", function() {
 
   describe("inspect", function() {
     it("should include relevant details", function() {
-      assert.equal(JSON.stringify(this.context.inspect()),
-        '{"data":{},"req":"<node req>","res":"<node res>","stack":[]}')
+      assert.equal(inspect(this.context),
+        "{ data: {}, req: '<node req>', res: '<node res>', stack: [] }")
     })
   })
 })

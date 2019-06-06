@@ -1,3 +1,5 @@
+import {inspect} from "util"
+
 import "./util/polyfill"
 
 import Router from "./router"
@@ -98,7 +100,7 @@ export class Application extends AbstractTask {
     })
   }
 
-  inspect() {
+  [inspect.custom]() {
     return {
       router: this.router,
       server: "<node server>",

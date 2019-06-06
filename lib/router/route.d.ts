@@ -1,3 +1,5 @@
+/// <reference types="node" />
+import { inspect } from "util";
 import Node from "./node";
 export declare class RouteError extends Error {
     constructor(route: Route, message: string);
@@ -13,6 +15,6 @@ export default class Route {
     prefix(prefix: string): Route;
     readonly method: string;
     readonly path: string;
-    inspect(): string;
+    [inspect.custom](): string;
     toString(): string;
 }

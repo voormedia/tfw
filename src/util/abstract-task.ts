@@ -1,3 +1,5 @@
+import {inspect} from "util"
+
 import hostPkg from "./host-pkg"
 import Logger from "./logger"
 
@@ -54,7 +56,7 @@ export abstract class AbstractTask {
     /* Left up to implementation how to further deal with this scenario. */
   }
 
-  abstract inspect(): any
+  abstract [inspect.custom](): any
 }
 
 export default AbstractTask

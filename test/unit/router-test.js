@@ -1,3 +1,4 @@
+import {inspect} from "util"
 import Router from "src/router"
 
 describe("router", function() {
@@ -232,7 +233,7 @@ describe("router", function() {
       router.define("delete", "foo/baz", {})
       router.define("patch", "foo/qux", {})
 
-      assert.equal(router.inspect(), [
+      assert.equal(inspect(router), [
         "[ PATCH /foo/qux,",
         "  DELETE /foo/baz,",
         "  GET /foo/bar ]",

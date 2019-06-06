@@ -1,3 +1,5 @@
+import {inspect} from "util"
+
 import "./util/polyfill"
 
 import AbstractTask from "./util/abstract-task"
@@ -43,7 +45,7 @@ export class Task extends AbstractTask {
   }
 
   /* tslint:disable-next-line: prefer-function-over-method */
-  inspect(): any {
+  [inspect.custom](): any {
     return {}
   }
 }

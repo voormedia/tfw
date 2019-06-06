@@ -1,3 +1,5 @@
+/// <reference types="node" />
+import { inspect } from "util";
 import "./util/polyfill";
 import AbstractTask from "./util/abstract-task";
 import Logger from "./util/logger";
@@ -10,6 +12,6 @@ export declare class Task extends AbstractTask {
     start(): Promise<void>;
     stop(): Promise<void>;
     run(): Promise<void>;
-    inspect(): any;
+    [inspect.custom](): any;
 }
 export default Task;

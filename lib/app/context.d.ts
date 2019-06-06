@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { IncomingMessage as Request, ServerResponse as Response } from "http";
+import { inspect } from "util";
 import { Stack } from "../middleware";
 export { Request, Response };
 export declare type Body = Buffer | object | string;
@@ -20,7 +21,7 @@ export declare class Context {
     set(header: string, value: string | number): void;
     status: number;
     readonly sent: boolean;
-    inspect(): {
+    [inspect.custom](): {
         data: Data;
         req: string;
         res: string;

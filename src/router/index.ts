@@ -1,3 +1,5 @@
+import {inspect} from "util"
+
 import Node from "./node"
 import Route, {RouteError} from "./route"
 import Tree from "./tree"
@@ -43,8 +45,9 @@ export default class Router {
     return Array.from(handlers)
   }
 
-  inspect(): string {
-    const routes = this.routes.map(route => route.inspect())
+  [inspect.custom](): string {
+    /* tslint:disable-next-line: no-unnecessary-callback-wrapper */
+    const routes = this.routes.map(route => inspect(route))
     return `[ ${routes.join(",\n  ")} ]`
   }
 }

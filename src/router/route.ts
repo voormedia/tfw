@@ -1,3 +1,5 @@
+import {inspect} from "util"
+
 import Node from "./node"
 
 export class RouteError extends Error {
@@ -53,7 +55,7 @@ export default class Route {
     return "/" + this.parts.slice(1).map(part => part.toString()).join("/")
   }
 
-  inspect(): string {
+  [inspect.custom](): string {
     return this.toString()
   }
 
