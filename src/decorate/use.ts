@@ -22,9 +22,9 @@ export function use(...middlewares: Middleware[]): Decorator {
     if (descriptor) {
       attach(descriptor.value, middlewares)
       return descriptor
-    } else {
-      attachRecursively(object.prototype, middlewares)
     }
+
+    attachRecursively(object.prototype, middlewares)
   }
 
   Object.defineProperty(fn, "name", {value: middlewares.map(mw => mw.name).join("/")})

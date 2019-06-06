@@ -37,11 +37,7 @@ function validate(validator: Validator, body: Body, {
 
   const errors = validator(body as object)
   if (errors.length) {
-    if (details) {
-      throw new ValidationError(...errors)
-    } else {
-      throw new BadRequest(message)
-    }
+    throw details ? new ValidationError(...errors) : new BadRequest(message)
   }
 }
 

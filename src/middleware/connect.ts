@@ -11,13 +11,13 @@ export default function connect(fn: ConnectMiddleware): Middleware {
         if (err) {
           reject(err)
           return
-        } else {
-          try {
-            await next()
-            resolve()
-          } catch (err) {
-            reject(err)
-          }
+        }
+
+        try {
+          await next()
+          resolve()
+        } catch (err) {
+          reject(err)
         }
       })
     })

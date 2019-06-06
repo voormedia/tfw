@@ -16,9 +16,9 @@ export default function shutdown(grace: number = 25): Middleware {
       const server = (this.request.socket as any).server as ClosableServer
       if (server.closing) {
         throw new ServiceUnavailable("Please retry the request")
-      } else {
-        return new Promise<void>(() => {})
       }
+
+      return new Promise<void>(() => {})
     }
 
     try {

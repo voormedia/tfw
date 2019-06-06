@@ -28,7 +28,7 @@ export default class Router {
   }
 
   get routes(): Route[] {
-    const routes = new Set
+    const routes = new Set<Route>()
     for (const [ , path] of this.tree.traverse()) {
       routes.add(Route.create(path))
     }
@@ -36,7 +36,7 @@ export default class Router {
   }
 
   get handlers(): object[] {
-    const handlers = new Set
+    const handlers = new Set<object>()
     for (const [node] of this.tree.traverse()) {
       if (node.handler) handlers.add(node.handler)
     }

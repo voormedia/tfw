@@ -16,10 +16,10 @@ export default function exposeAllErrors(): Middleware {
         (err as any).expose = true
 
         throw err
-      } else {
-        /* Wrap anything that's not an Error but that pretends to be one. */
-        throw new InternalServerError(err.message || err.Message || err)
       }
+
+      /* Wrap anything that's not an Error but that pretends to be one. */
+      throw new InternalServerError(err.message || err.Message || err)
     }
   }
 }

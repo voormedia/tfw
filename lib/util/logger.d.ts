@@ -33,7 +33,7 @@ export declare class Logger {
     static readonly console: Console;
     static readonly service: ServiceContext;
     static JSON: {
-        (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string;
+        (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string;
         (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string;
     };
     static PRETTY: (entry: LogEntry) => string;
