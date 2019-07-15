@@ -18,6 +18,7 @@ export declare class Context {
     get(header: string): string | undefined;
     readonly method: string;
     readonly url: string;
+    readonly remoteIp: string;
     set(header: string, value: string | number): void;
     status: number;
     readonly sent: boolean;

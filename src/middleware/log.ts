@@ -41,15 +41,10 @@ export default function log(logger: Logger): Middleware {
 
       const userAgent = this.get("user-agent")
       const referer = this.get("referer")
+      const remoteIp = this.remoteIp
 
       const [sec, nano] = process.hrtime(startTime)
       const latency = `${(sec + nano * 1e-9).toFixed(3)}s`
-
-      let remoteIp = socket.remoteAddress
-      const forwarded = this.get("x-forwarded-for")
-      if (forwarded) {
-        remoteIp = forwarded.split(",").shift()
-      }
 
       const httpRequest: HttpRequest = {
         latency,

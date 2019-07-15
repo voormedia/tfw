@@ -37,6 +37,13 @@ export class Context {
     return this.request.url!
   }
 
+  get remoteIp(): string {
+    const forwarded = this.get("x-forwarded-for")
+    return forwarded ?
+      forwarded.split(",").shift()! :
+      this.request.socket.remoteAddress!
+  }
+
   set(header: string, value: string | number) {
     this.response.setHeader(header, value)
   }
