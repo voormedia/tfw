@@ -114,6 +114,11 @@ describe("schema validator", function() {
         const errors = createSimpleValidator(this.schema)({foo: "//example.com/foo/bar", bar: "y"})
         assert.deepEqual(errors, ["'foo' should be formatted as url", "'bar' should be formatted as email address"])
       })
+
+      it("should not exhaust resources", function() {
+        const errors = createSimpleValidator(this.schema)({foo: "https://google-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", bar: "john+doe@foo.example.com"})
+        assert.deepEqual(errors, ["'foo' should be formatted as url"])
+      })
     })
 
     describe("succeeding", function() {
