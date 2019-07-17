@@ -4,9 +4,9 @@ import { Middleware } from "../middleware";
 export { ValidationResult };
 export interface ValidationOptions {
     schema: object;
-    details?: boolean;
     optional?: boolean;
-    message?: string;
+    details?: boolean;
+    toError?(details: ValidationResult[]): Error;
 }
 export default function validateBody(options: ValidationOptions): Middleware;
 export declare class ValidationError extends BadRequest {
