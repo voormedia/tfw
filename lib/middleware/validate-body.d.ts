@@ -6,7 +6,7 @@ export interface ValidationOptions {
     schema: object;
     optional?: boolean;
     details?: boolean;
-    toError?(details: ValidationResult[]): Error;
+    message?: string;
 }
 export default function validateBody(options: ValidationOptions): Middleware;
 export declare class ValidationError extends BadRequest {

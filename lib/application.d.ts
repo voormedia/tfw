@@ -11,6 +11,7 @@ export interface ApplicationOptions {
     logger?: Logger;
     router?: Router;
     terminationGrace?: number;
+    before?(app: Application): void;
 }
 export declare class Application extends AbstractTask {
     static start(options?: ApplicationOptions): Application;

@@ -16,6 +16,7 @@ export interface ApplicationOptions {
   logger?: Logger,
   router?: Router,
   terminationGrace?: number,
+  before?(app: Application): void,
 }
 
 export class Application extends AbstractTask {
@@ -42,6 +43,7 @@ export class Application extends AbstractTask {
       router = new Router,
       logger = new Logger,
       terminationGrace = 25,
+      before = () => {},
     } = options
 
     this.port = port
@@ -58,6 +60,7 @@ export class Application extends AbstractTask {
     ]
 
     Object.freeze(this)
+    before(this)
   }
 
   async start(): Promise<void> {

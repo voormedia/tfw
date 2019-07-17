@@ -9,17 +9,11 @@ export interface ValidationOptions {
   schema: object,
   optional?: boolean,
   details?: boolean,
-  toError?(details: ValidationResult[]): Error,
+  message?: string,
 }
 
 export default function validateBody(options: ValidationOptions): Middleware {
   const validator = createValidator(options.schema)
-
-  /* TODO: This should probably be deprecated and any caller should provide
-     a custom toError() function to create a new error instance. */
-  if (options.details === false && !options.toError) {
-    options.toError = () => new BadRequest()
-  }
 
   return async function validateBody(this: Context, next: Next) {
     validate(validator, this.data.body as Body, options)
@@ -29,7 +23,8 @@ export default function validateBody(options: ValidationOptions): Middleware {
 
 function validate(validator: Validator, body: Body, {
   optional = false,
-  toError = details => new ValidationError(...details),
+  details = true,
+  message,
 }: ValidationOptions) {
   /* Don't validate non-JSON bodies if the request schema is optional. */
   /* tslint:disable-next-line: strict-type-predicates */
@@ -43,7 +38,7 @@ function validate(validator: Validator, body: Body, {
   const errors = validator(body as object)
 
   if (errors.length) {
-    throw toError(errors)
+    throw details ? new ValidationError(...errors) : new BadRequest(message)
   }
 }
 
