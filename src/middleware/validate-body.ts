@@ -38,14 +38,14 @@ function validate(validator: Validator, body: Body, {
   const errors = validator(body as object)
 
   if (errors.length) {
-    throw details ? new ValidationError(...errors) : new BadRequest(message)
+    throw details ? new ValidationError(errors) : new BadRequest(message)
   }
 }
 
 export class ValidationError extends BadRequest {
   details: ValidationResult[]
 
-  constructor(...details: ValidationResult[]) {
+  constructor(details: ValidationResult[]) {
     super(`${BadRequest.defaultMessage.replace(/\.$/, ":")} ${simplifyResults(details).join("; ")}`)
     this.details = details
   }
