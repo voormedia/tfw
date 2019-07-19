@@ -2,7 +2,7 @@ export declare type SimpleValidator = (body: object) => string[];
 export declare type Validator = (body: object) => ValidationResult[];
 export declare function createValidator(schema: object): Validator;
 export declare function createSimpleValidator(schema: object): SimpleValidator;
-export declare function simplifyResults(results: ValidationResult[]): string[];
+export declare function simplifyResults(results: ValidationResult[], maxErrors?: number): string[];
 interface Error {
     path?: string;
     error: string;

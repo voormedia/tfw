@@ -162,10 +162,11 @@ const fmtOperator = (input: string) => {
   }
 }
 
-export function simplifyResults(results: ValidationResult[]): string[] {
+export function simplifyResults(results: ValidationResult[], maxErrors: number = 100): string[] {
   const simplified: string[] = []
   const requireds = new Map<string, string[]>()
   const unknowns = new Map<string, string[]>()
+
   for (const result of results) {
     switch (result.error) {
       case undefined:
@@ -196,6 +197,10 @@ export function simplifyResults(results: ValidationResult[]): string[] {
 
   for (const [path, keys] of unknowns) {
     simplified.push(`${path} has unknown key${keys.length > 1 ? "s" : ""} ${keys.join(", ")}`)
+  }
+
+  if (simplified.length > maxErrors) {
+    return [...simplified.slice(0, maxErrors), "..."]
   }
 
   return simplified
