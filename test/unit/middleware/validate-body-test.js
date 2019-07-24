@@ -191,7 +191,7 @@ describe("validate body", function() {
       }
 
       const data = {}
-      for (let i = 0; i < 10000; i++) {
+      for (let i = 0; i < 500; i++) {
         data[`k${i}`] = ""
       }
 

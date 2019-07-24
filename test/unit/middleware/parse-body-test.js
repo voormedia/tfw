@@ -171,4 +171,29 @@ describe("parse body", function() {
       assert.equal(this.res.statusCode, 400)
     })
   })
+
+  describe("with too large body", function() {
+    before(async function() {
+      const {res, body} = await test.request(
+        test.createStack(write(), rescue(), parseBody()), {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          method: "POST",
+          body: Buffer.alloc(10100)
+        }
+      )
+
+      this.res = res
+      this.body = body
+    })
+
+    it("should render error", function() {
+      assert.equal(this.body.toString(), '{"error":"request_entity_too_large","message":"Request body of type \'application/json\' cannot be longer than 10 KB."}')
+    })
+
+    it("should return http request entity too large", function() {
+      assert.equal(this.res.statusCode, 413)
+    })
+  })
 })

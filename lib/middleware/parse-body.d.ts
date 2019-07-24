@@ -1,2 +1,5 @@
 import { Middleware } from "../middleware";
-export default function parseBody(): Middleware;
+export interface BodyOptions {
+    maxLength?: number;
+}
+export default function parseBody({ maxLength }?: BodyOptions): Middleware;

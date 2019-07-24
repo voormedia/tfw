@@ -1,12 +1,27 @@
 import * as contentType from "content-type"
 import * as querystring from "querystring"
 
-import {BadRequest, UnsupportedMediaType} from "../errors"
+import {
+  BadRequest,
+  RequestEntityTooLarge,
+  UnsupportedMediaType,
+} from "../errors"
 
 import {Request} from "../app/context"
 import {Context, Middleware, Next} from "../middleware"
 
-export default function parseBody(): Middleware {
+export interface BodyOptions {
+  maxLength?: number,
+}
+
+export default function parseBody({maxLength = 10000}: BodyOptions = {}): Middleware {
+  const kb = Math.round(maxLength / 1000)
+  class BodyTooLarge extends RequestEntityTooLarge {
+    constructor(type: string) {
+      super(`Request body of type '${type}' cannot be longer than ${kb} KB`)
+    }
+  }
+
   return async function parseBody(this: Context, next: Next) {
     const buffers: Buffer[] = []
 
@@ -39,6 +54,10 @@ export default function parseBody(): Middleware {
 
       switch (type) {
         case "application/x-www-form-urlencoded":
+          if (body.length > maxLength) {
+            throw new BodyTooLarge(type)
+          }
+
           try {
             /* Validate query string? */
             this.data.body = querystring.parse(body.toString(), undefined, undefined, {maxKeys: 0})
@@ -49,6 +68,10 @@ export default function parseBody(): Middleware {
           break
 
         case "application/json":
+          if (body.length > maxLength) {
+            throw new BodyTooLarge(type)
+          }
+
           try {
             this.data.body = JSON.parse(body.toString())
           } catch (err) {
@@ -72,6 +95,9 @@ function guessType(req: Request, body: Buffer) {
     "image/gif":        Buffer.from([0x47, 0x49, 0x46]),
     "image/jpeg":       Buffer.from([0xFF, 0xD8, 0xFF]),
     "image/png":        Buffer.from([0x89, 0x50, 0x4E, 0x47]),
+    "image/vnd.adobe.photoshop": Buffer.from([0x38, 0x42, 0x50, 0x53]),
+    "image/tiff":       Buffer.from([0x49, 0x49, 0x2A, 0x00]),
+    // "image/tiff":       Buffer.from([0x4D, 0x4D, 0x00, 0x2A]), // big endian
     /* TODO: Assume '{"' means we have JSON? */
     // "application/json": Buffer.from([0x7b, 0x22]),
   }
