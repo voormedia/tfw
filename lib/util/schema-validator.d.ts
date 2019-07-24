@@ -1,12 +1,17 @@
 export declare type SimpleValidator = (body: object) => string[];
 export declare type Validator = (body: object) => ValidationResult[];
-export declare function createValidator(schema: object): Validator;
+export declare function createValidator(schema: object, { maxErrors }?: {
+    maxErrors?: number;
+}): Validator;
 export declare function createSimpleValidator(schema: object): SimpleValidator;
-export declare function simplifyResults(results: ValidationResult[], maxErrors?: number): string[];
+export declare function simplifyResults(results: ValidationResult[]): string[];
 interface Error {
     path?: string;
     error: string;
     message?: string;
+}
+export interface TooManyErrors extends Error {
+    error: "too_many_errors";
 }
 export interface UnknownField extends Error {
     error: "unknown_field";
@@ -56,5 +61,5 @@ interface RangeExpecation<T> {
     operator: Operator;
     limit: T;
 }
-export declare type ValidationResult = (UnknownField | RequiredField | InvalidType | InvalidFormat | InvalidRange | InvalidLength | InvalidOption | InvalidValue | BlockedValue | OtherFailure);
+export declare type ValidationResult = (TooManyErrors | UnknownField | RequiredField | InvalidType | InvalidFormat | InvalidRange | InvalidLength | InvalidOption | InvalidValue | BlockedValue | OtherFailure);
 export {};

@@ -13,7 +13,7 @@ export declare class ValidationError extends BadRequest {
     details: ValidationResult[];
     constructor(details: ValidationResult[]);
     toJSON(): {
-        details: (import("../util/schema-validator").UnknownField | import("../util/schema-validator").RequiredField | import("../util/schema-validator").InvalidType | import("../util/schema-validator").InvalidFormat | import("../util/schema-validator").InvalidRange | import("../util/schema-validator").InvalidLength | import("../util/schema-validator").InvalidOption | import("../util/schema-validator").InvalidValue | import("../util/schema-validator").BlockedValue | import("../util/schema-validator").OtherFailure)[];
+        details: (import("../util/schema-validator").TooManyErrors | import("../util/schema-validator").UnknownField | import("../util/schema-validator").RequiredField | import("../util/schema-validator").InvalidType | import("../util/schema-validator").InvalidFormat | import("../util/schema-validator").InvalidRange | import("../util/schema-validator").InvalidLength | import("../util/schema-validator").InvalidOption | import("../util/schema-validator").InvalidValue | import("../util/schema-validator").BlockedValue | import("../util/schema-validator").OtherFailure)[];
         error: "invalid_request";
         message: string;
     };

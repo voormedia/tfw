@@ -63,14 +63,19 @@ instance.addFormat(
    adding the select and switch keywords. */
 instance.validateSchema({})
 
-export function createValidator(schema: object): Validator {
+export function createValidator(schema: object, {maxErrors = 50}: {maxErrors?: number} = {}): Validator {
   const validate = instance.compile(schema)
 
   return body => {
-    if (validate(body)) return []
+    if (validate(body) || !validate.errors) return []
 
     const results: ValidationResult[] = []
-    for (const error of validate.errors!) {
+    for (const [i, error] of validate.errors.entries()) {
+      if (i > maxErrors) {
+        results.push({error: "too_many_errors"})
+        break
+      }
+
       const path = fmtPath(error.dataPath)
       switch (error.keyword) {
         case "type": {
@@ -162,7 +167,7 @@ const fmtOperator = (input: string) => {
   }
 }
 
-export function simplifyResults(results: ValidationResult[], maxErrors: number = 100): string[] {
+export function simplifyResults(results: ValidationResult[]): string[] {
   const simplified: string[] = []
   const requireds = new Map<string, string[]>()
   const unknowns = new Map<string, string[]>()
@@ -177,13 +182,19 @@ export function simplifyResults(results: ValidationResult[], maxErrors: number =
         const [key, ...parts] = (result.path || "").split(".").reverse()
         const parent = parts.length ? `'${parts.reverse().join(".")}'` : "request body"
         const map = result.error === "unknown_field" ? unknowns : requireds
+
         if (map.has(parent)) {
           map.get(parent)!.push(`'${key}'`)
         } else {
           map.set(parent, [`'${key}'`])
         }
+
         break
       }
+
+      case "too_many_errors":
+        simplified.unshift("too many errors, some have been omitted")
+        break
 
       default:
         const path = result.path ? `'${result.path}'` : "request body"
@@ -197,10 +208,6 @@ export function simplifyResults(results: ValidationResult[], maxErrors: number =
 
   for (const [path, keys] of unknowns) {
     simplified.push(`${path} has unknown key${keys.length > 1 ? "s" : ""} ${keys.join(", ")}`)
-  }
-
-  if (simplified.length > maxErrors) {
-    return [...simplified.slice(0, maxErrors), "..."]
   }
 
   return simplified
@@ -258,6 +265,10 @@ interface Error {
   path?: string
   error: string
   message?: string
+}
+
+export interface TooManyErrors extends Error {
+  error: "too_many_errors"
 }
 
 export interface UnknownField extends Error {
@@ -321,6 +332,7 @@ interface RangeExpecation<T> {
 }
 
 export type ValidationResult = (
+  TooManyErrors |
   UnknownField |
   RequiredField |
   InvalidType |
