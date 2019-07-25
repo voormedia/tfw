@@ -95,6 +95,59 @@ describe("parse body", function() {
         assert.deepEqual(this.ctx.data.body, Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x00, 0x00]))
       })
     })
+
+    describe("with binary content", function() {
+      before(async function() {
+        const {res, body} = await test.request(
+          test.createStack(write(), rescue(), parseBody()), {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            method: "POST",
+            body: Buffer.from([0x40, 0x50, 0x60, 0x10, 0x20])
+          }
+        )
+
+        this.res = res
+        this.body = body
+      })
+
+      it("should render error", function() {
+        assert.equal(this.body.toString(), '{"error":"invalid_request","message":"Request body of type \'application/x-www-form-urlencoded\' contains invalid byte 0x10."}')
+      })
+
+      it("should return http bad request", function() {
+        assert.equal(this.res.statusCode, 400)
+      })
+    })
+
+    describe("with large binary content", function() {
+      before(async function() {
+        const buf = Buffer.alloc(100000, 0x20)
+        buf[buf.length - 1] = 0
+
+        const {res, body} = await test.request(
+          test.createStack(write(), rescue(), parseBody()), {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            method: "POST",
+            body: buf
+          }
+        )
+
+        this.res = res
+        this.body = body
+      })
+
+      it("should render error", function() {
+        assert.equal(this.body.toString(), '{"error":"invalid_request","message":"Request body of type \'application/x-www-form-urlencoded\' contains invalid byte 0x0."}')
+      })
+
+      it("should return http bad request", function() {
+        assert.equal(this.res.statusCode, 400)
+      })
+    })
   })
 
   describe("with bad content type", function() {
@@ -180,7 +233,7 @@ describe("parse body", function() {
             "Content-Type": "application/json"
           },
           method: "POST",
-          body: Buffer.alloc(10100)
+          body: Buffer.alloc(100100)
         }
       )
 
@@ -189,7 +242,7 @@ describe("parse body", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"request_entity_too_large","message":"Request body of type \'application/json\' cannot be longer than 10 KB."}')
+      assert.equal(this.body.toString(), '{"error":"request_entity_too_large","message":"Request body of type \'application/json\' cannot be longer than 100 KB."}')
     })
 
     it("should return http request entity too large", function() {

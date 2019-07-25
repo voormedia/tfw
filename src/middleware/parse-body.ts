@@ -14,14 +14,7 @@ export interface BodyOptions {
   maxLength?: number,
 }
 
-export default function parseBody({maxLength = 10000}: BodyOptions = {}): Middleware {
-  const kb = Math.round(maxLength / 1000)
-  class BodyTooLarge extends RequestEntityTooLarge {
-    constructor(type: string) {
-      super(`Request body of type '${type}' cannot be longer than ${kb} KB`)
-    }
-  }
-
+export default function parseBody({maxLength = 100000}: BodyOptions = {}): Middleware {
   return async function parseBody(this: Context, next: Next) {
     const buffers: Buffer[] = []
 
@@ -54,9 +47,8 @@ export default function parseBody({maxLength = 10000}: BodyOptions = {}): Middle
 
       switch (type) {
         case "application/x-www-form-urlencoded":
-          if (body.length > maxLength) {
-            throw new BodyTooLarge(type)
-          }
+          validateLength(body, type, maxLength)
+          validateAsciiText(body, type)
 
           try {
             /* Validate query string? */
@@ -68,9 +60,7 @@ export default function parseBody({maxLength = 10000}: BodyOptions = {}): Middle
           break
 
         case "application/json":
-          if (body.length > maxLength) {
-            throw new BodyTooLarge(type)
-          }
+          validateLength(body, type, maxLength)
 
           try {
             this.data.body = JSON.parse(body.toString())
@@ -89,7 +79,7 @@ export default function parseBody({maxLength = 10000}: BodyOptions = {}): Middle
 }
 
 function guessType(req: Request, body: Buffer) {
-  /* Detect GIF and PDF to provide better error messages. */
+  /* Detect multiple formats to provide better error messages. */
   const magic: {[key: string]: Buffer} = {
     "application/pdf":  Buffer.from([0x25, 0x50, 0x44, 0x46]),
     "image/gif":        Buffer.from([0x47, 0x49, 0x46]),
@@ -110,4 +100,33 @@ function guessType(req: Request, body: Buffer) {
   }
 
   return req.headers["content-type"] || "application/octet-stream"
+}
+
+function validateLength(buf: Buffer, type: string, maxLength: number) {
+  if (buf.length > maxLength) {
+    throw new BodyTooLarge(type, maxLength)
+  }
+}
+
+function validateAsciiText(buf: Buffer, type: string) {
+  /* tslint:disable-next-line: prefer-for-of -- for-of is much slower! */
+  for (let i = 0; i < buf.length; i++) {
+    const byte = buf[i]
+    if (byte < 0x20 || byte > 0x7E) {
+      throw new InvalidCharacters(type, byte)
+    }
+  }
+}
+
+class BodyTooLarge extends RequestEntityTooLarge {
+  constructor(type: string, maxLength: number) {
+    const kb = Math.round(maxLength / 1000)
+    super(`Request body of type '${type}' cannot be longer than ${kb} KB`)
+  }
+}
+
+class InvalidCharacters extends BadRequest {
+  constructor(type: string, char: number) {
+    super(`Request body of type '${type}' contains invalid byte 0x${char.toString(16)}`)
+  }
 }
