@@ -247,6 +247,9 @@ function messageForError(result: ValidationResult, length: number = 1): string {
       return `should be ${fmtOperator(operator)} ${limit} ${fmtPlural("character", limit)}`
     }
 
+    case "duplicate_value":
+      return "has a value that is already in use"
+
     case "blocked_value":
       return "has a value that is not allowed"
 
@@ -314,6 +317,11 @@ export interface InvalidValue extends Error {
   suggestion?: string
 }
 
+export interface DuplicateValue extends Error {
+  error: "duplicate_value"
+  suggestion?: string
+}
+
 export interface BlockedValue extends Error {
   error: "blocked_value"
   suggestion?: string
@@ -341,6 +349,7 @@ export type ValidationResult = (
   InvalidLength |
   InvalidOption |
   InvalidValue |
+  DuplicateValue |
   BlockedValue |
   OtherFailure
 )

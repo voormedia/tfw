@@ -48,6 +48,10 @@ export interface InvalidValue extends Error {
     error: "invalid_value";
     suggestion?: string;
 }
+export interface DuplicateValue extends Error {
+    error: "duplicate_value";
+    suggestion?: string;
+}
 export interface BlockedValue extends Error {
     error: "blocked_value";
     suggestion?: string;
@@ -61,5 +65,5 @@ interface RangeExpecation<T> {
     operator: Operator;
     limit: T;
 }
-export declare type ValidationResult = (TooManyErrors | UnknownField | RequiredField | InvalidType | InvalidFormat | InvalidRange | InvalidLength | InvalidOption | InvalidValue | BlockedValue | OtherFailure);
+export declare type ValidationResult = (TooManyErrors | UnknownField | RequiredField | InvalidType | InvalidFormat | InvalidRange | InvalidLength | InvalidOption | InvalidValue | DuplicateValue | BlockedValue | OtherFailure);
 export {};
