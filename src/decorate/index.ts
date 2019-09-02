@@ -10,7 +10,7 @@ import allowCorsMiddleware, {AllowCorsOptions} from "../middleware/allow-cors"
 import connectMiddleware, {ConnectMiddleware} from "../middleware/connect"
 import exposeAllErrorsMiddleware from "../middleware/expose-all-errors"
 import parseAuthorizationMiddleware from "../middleware/parse-authorization"
-import parseBodyMiddleware from "../middleware/parse-body"
+import parseBodyMiddleware, {BodyOptions} from "../middleware/parse-body"
 import parseQueryMiddleware from "../middleware/parse-query"
 import parseSessionMiddleware, {SessionOptions} from "../middleware/parse-session"
 import requireAuthorizationMiddleware, {Credentials} from "../middleware/require-authorization"
@@ -35,10 +35,6 @@ export function parseAuthorization() {
   return use(parseAuthorizationMiddleware())
 }
 
-export function parseBody() {
-  return use(parseBodyMiddleware())
-}
-
 export function parseQuery() {
   return use(parseQueryMiddleware())
 }
@@ -59,8 +55,8 @@ export function requireTLS() {
   return use(requireTLSMiddleware())
 }
 
-export function validateBody(options: ValidationOptions) {
-  return use(parseBodyMiddleware(), validateBodyMiddleware(options))
+export function validateBody(options: ValidationOptions & BodyOptions) {
+  return use(parseBodyMiddleware(options), validateBodyMiddleware(options))
 }
 
 export function validateContentType(expected: string) {
