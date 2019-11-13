@@ -3,6 +3,7 @@
     "module": "commonjs",
     "target": "es2017",
     "outDir": "lib",
+    "lib": ["es6"],
     "declaration": true,
     "strict": true,
     "sourceMap": true,

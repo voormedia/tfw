@@ -46,4 +46,4 @@ export type Next = () => Promise<void>
 export type Middleware = (next: Next) => Promise<void>
 export type Stack = Middleware[]
 export type Context = MiddlewareContext
-export type Body = Body
+export {Body}

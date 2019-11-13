@@ -26,7 +26,7 @@ export declare class Application extends AbstractTask {
     [inspect.custom](): {
         router: Router;
         server: string;
-        stack: import("./middleware").Middleware[];
+        stack: Stack;
     };
 }
 export default Application;

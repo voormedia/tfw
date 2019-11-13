@@ -22,4 +22,4 @@ export declare type Next = () => Promise<void>;
 export declare type Middleware = (next: Next) => Promise<void>;
 export declare type Stack = Middleware[];
 export declare type Context = MiddlewareContext;
-export declare type Body = Body;
+export { Body };

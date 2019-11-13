@@ -10,7 +10,7 @@ export default class Router {
         handler?: object;
         params?: object;
     };
-    readonly routes: Route[];
-    readonly handlers: object[];
+    get routes(): Route[];
+    get handlers(): object[];
     [inspect.custom](): string;
 }

@@ -13,8 +13,8 @@ export default class Route {
     parts: Node[];
     constructor(parts: Node[]);
     prefix(prefix: string): Route;
-    readonly method: string;
-    readonly path: string;
+    get method(): string;
+    get path(): string;
     [inspect.custom](): string;
     toString(): string;
 }

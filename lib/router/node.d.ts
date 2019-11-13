@@ -9,6 +9,6 @@ export default class Node {
     clone(): Node;
     find(part: string): Node | undefined;
     insert(node: Node): Node;
-    readonly key: string;
+    get key(): string;
     toString(): string;
 }

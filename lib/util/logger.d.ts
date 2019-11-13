@@ -1,3 +1,4 @@
+/// <reference types="node" />
 export interface HttpRequest {
     requestMethod: string;
     requestUrl: string;
@@ -29,9 +30,9 @@ export interface LogContext {
     [other: string]: any;
 }
 export declare class Logger {
-    static readonly formatter: (entry: LogEntry) => string;
-    static readonly console: Console;
-    static readonly service: ServiceContext;
+    static get formatter(): (entry: LogEntry) => string;
+    static get console(): Console;
+    static get service(): ServiceContext;
     static JSON: {
         (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string;
         (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string;

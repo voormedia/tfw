@@ -1,13 +1,13 @@
 export class Timer {
   time: number
-  timer?: number
+  timer?: NodeJS.Timeout
 
   constructor(time: number) {
     this.time = time
   }
 
   clear() {
-    clearTimeout(this.timer)
+    if (this.timer) clearTimeout(this.timer)
   }
 
   async sleep(): Promise<void> {

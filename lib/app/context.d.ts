@@ -16,17 +16,17 @@ export declare class Context {
     data: Data;
     constructor(stack: Stack, request: Request, response: Response);
     get(header: string): string | undefined;
-    readonly method: string;
-    readonly url: string;
-    readonly remoteIp: string;
+    get method(): string;
+    get url(): string;
+    get remoteIp(): string;
     set(header: string, value: string | number): void;
-    status: number;
-    readonly sent: boolean;
+    set status(value: number);
+    get sent(): boolean;
     [inspect.custom](): {
         data: Data;
         req: string;
         res: string;
-        stack: import("../middleware").Middleware[];
+        stack: Stack;
     };
 }
 export default Context;
