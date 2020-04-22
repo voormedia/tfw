@@ -24,7 +24,7 @@ function error(this: Context, err: Error) {
   this.data.error = err
 
   if (!(err as any).expose) {
-    if (process.env.NODE_ENV === "test") throw err
+    if (process.env.NODE_ENV === "test" && !process.env.NODE_RESCUE_TEST) throw err
     err = new InternalServerError
   }
 
