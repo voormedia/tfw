@@ -88,6 +88,9 @@ function guessType(req: Request, body: Buffer) {
     "image/vnd.adobe.photoshop": Buffer.from([0x38, 0x42, 0x50, 0x53]),
     "image/tiff":       Buffer.from([0x49, 0x49, 0x2A, 0x00]),
     // "image/tiff":       Buffer.from([0x4D, 0x4D, 0x00, 0x2A]), // big endian
+    "image/webp":       Buffer.from([0x52, 0x49, 0x46, 0x46]),
+    "font/woff":        Buffer.from([0x77, 0x4F, 0x46, 0x46]),
+    "font/woff2":       Buffer.from([0x77, 0x4F, 0x46, 0x32]),
     /* TODO: Assume '{"' means we have JSON? */
     // "application/json": Buffer.from([0x7b, 0x22]),
   }
