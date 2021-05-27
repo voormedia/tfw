@@ -19,7 +19,7 @@ export declare abstract class ServiceError<T extends string> extends Error imple
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T_1 extends string>(options: ErrorDefaults<T>): any;
+        define<T extends string>(options: ErrorDefaults<T>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -44,19 +44,19 @@ export declare const BadRequest: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -77,19 +77,19 @@ export declare const Unauthorized: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -110,19 +110,19 @@ export declare const PaymentRequired: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -143,19 +143,19 @@ export declare const Forbidden: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -176,19 +176,19 @@ export declare const NotFound: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -209,19 +209,19 @@ export declare const MethodNotAllowed: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -242,19 +242,19 @@ export declare const NotAcceptable: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -275,19 +275,19 @@ export declare const ProxyAuthenticationRequired: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -308,19 +308,19 @@ export declare const RequestTimeout: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -341,19 +341,19 @@ export declare const Conflict: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -374,19 +374,19 @@ export declare const Gone: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -407,19 +407,19 @@ export declare const LengthRequired: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -440,19 +440,19 @@ export declare const PreconditionFailed: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -473,19 +473,19 @@ export declare const RequestEntityTooLarge: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -506,19 +506,19 @@ export declare const RequestURITooLong: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -539,19 +539,19 @@ export declare const UnsupportedMediaType: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -572,19 +572,19 @@ export declare const RangeNotSatisfiable: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -605,19 +605,19 @@ export declare const ExpectationFailed: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -638,19 +638,19 @@ export declare const ImATeapot: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -671,19 +671,19 @@ export declare const MisdirectedRequest: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -704,19 +704,19 @@ export declare const UnprocessableEntity: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -737,19 +737,19 @@ export declare const Locked: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -770,19 +770,19 @@ export declare const FailedDependency: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -803,19 +803,19 @@ export declare const UpgradeRequired: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -836,19 +836,19 @@ export declare const PreconditionRequired: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -869,19 +869,19 @@ export declare const TooManyRequests: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -902,19 +902,19 @@ export declare const RequestHeaderFieldsTooLarge: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -935,19 +935,19 @@ export declare const UnavailableForLegalReasons: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -968,19 +968,19 @@ export declare const InternalServerError: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -1001,19 +1001,19 @@ export declare const NotImplemented: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -1034,19 +1034,19 @@ export declare const BadGateway: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -1067,19 +1067,19 @@ export declare const ServiceUnavailable: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;
@@ -1100,19 +1100,19 @@ export declare const GatewayTimeout: {
         stack?: string | undefined;
     };
     defaultMessage: string;
-    define<T extends string>(options: ErrorDefaults<T>): {
+    define<T_1 extends string>(options: ErrorDefaults<T_1>): {
         new (msg?: string | undefined): {
             status: number;
-            error: T;
+            error: T_1;
             message: string;
             expose: boolean;
-            toJSON(): ErrorDetails<T>;
+            toJSON(): ErrorDetails<T_1>;
             toString(): string;
             name: string;
             stack?: string | undefined;
         };
         defaultMessage: string;
-        define<T extends string>(options: ErrorDefaults<T>): any;
+        define<T_1 extends string>(options: ErrorDefaults<T_1>): any;
         captureStackTrace(targetObject: Object, constructorOpt?: Function | undefined): void;
         prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
         stackTraceLimit: number;

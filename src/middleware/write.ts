@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import {ServerResponse} from "http"
-import {Readable} from "stream"
+import {Stream} from "stream"
 
 import {Body, Context, Middleware, Next} from "../middleware"
 
@@ -31,7 +31,7 @@ function send(response: ServerResponse, body: Body) {
     response.end()
   } else if (body instanceof Buffer) {
     response.end(body)
-  } else if (body instanceof Readable) {
+  } else if (body instanceof Stream) {
     body.pipe(response)
   } else if (typeof body === "string") {
     response.end(body, "utf8")
