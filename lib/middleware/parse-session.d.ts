@@ -1,7 +1,7 @@
 import { Middleware } from "../middleware";
 export interface SessionOptions {
-    keys?: string[];
+    keys?: Array<string | undefined>;
     maxAge?: number;
     name?: string;
 }
-export default function parseSession({ name, keys, maxAge }?: SessionOptions): Middleware;
+export default function parseSession({ name, keys: inputKeys, maxAge }?: SessionOptions): Middleware;

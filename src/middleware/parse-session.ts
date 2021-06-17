@@ -5,7 +5,7 @@ import {TLSSocket} from "tls"
 import {Context, Middleware, Next} from "../middleware"
 
 export interface SessionOptions {
-  keys?: string[],
+  keys?: Array<string | undefined>,
   maxAge?: number,
   name?: string,
 }
@@ -22,7 +22,17 @@ function encode(input: object): string {
 
 const day = 24 * 60 * 60 * 1000
 
-export default function parseSession({name = "sess", keys, maxAge = day * 90}: SessionOptions = {}): Middleware {
+const isDefined = <T>(item: T | undefined): item is T => item !== undefined
+
+export default function parseSession({name = "sess", keys: inputKeys = [], maxAge = day * 90}: SessionOptions = {}): Middleware {
+  /* Allow 'undefined' keys to be passed so they can be read straight away from
+     an environment variable. */
+  const keys = inputKeys.filter(isDefined)
+
+  if (!keys.length) {
+    throw new Error("No session keys were provided")
+  }
+
   return async function parseSession(this: Context, next: Next) {
     let session: object | undefined
     let cookie: string | undefined

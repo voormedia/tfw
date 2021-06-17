@@ -7,27 +7,15 @@ describe("parse session", function() {
     timekeeper.freeze(new Date(1330688329321))
   })
 
-  // describe("with cookie", function() {
-  //   before(async function() {
-  //     let ctx
-  //     await test.request(
-  //       test.createStack(write(), rescue(), parseSession(), function() {
-  //         ctx = this
-  //       }), {
-  //         headers: {
-  //           "Cookie": "foo=bar; baz=qux"
-  //         },
-  //         method: "GET",
-  //       }
-  //     )
-  //
-  //     this.ctx = ctx
-  //   })
-  //
-  //   it("should assign cookie value", function() {
-  //     assert.deepEqual(this.ctx.data.cookies.get("foo"), "bar")
-  //   })
-  // })
+  describe("without valid keys", function() {
+    it("should throw error when empty", function() {
+      assert.throws(() => parseSession({keys: []}))
+    })
+
+    it("should throw error when undefined", function() {
+      assert.throws(() => parseSession({keys: [undefined]}))
+    })
+  })
 
   describe("without session cookie", function() {
     before(async function() {
