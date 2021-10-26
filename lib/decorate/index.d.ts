@@ -10,7 +10,7 @@ import { SessionOptions } from "../middleware/parse-session";
 import { Credentials } from "../middleware/require-authorization";
 import { ValidationOptions } from "../middleware/validate-body";
 export declare function allowCors(options: AllowCorsOptions): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
-export declare function bufferBody(options: ValidationOptions & BodyOptions): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
+export declare function bufferBody(): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function connect(middleware: ConnectMiddleware): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function exposeAllErrors(): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function parseAuthorization(): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;

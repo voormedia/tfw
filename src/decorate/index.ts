@@ -24,7 +24,7 @@ export function allowCors(options: AllowCorsOptions) {
   return use(allowCorsMiddleware(options))
 }
 
-export function bufferBody(options: ValidationOptions & BodyOptions) {
+export function bufferBody() {
   return use(bufferBodyMiddleware())
 }
 
