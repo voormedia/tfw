@@ -9,6 +9,12 @@ const instance = new Ajv({
 })
 
 instance.addFormat(
+  "uuid",
+  /* uuid: http://tools.ietf.org/html/rfc4122 */
+  /^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i,
+)
+
+instance.addFormat(
   "email",
   /* https://github.com/ajv-validator/ajv-formats/blob/master/src/formats.ts */
   /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i,
