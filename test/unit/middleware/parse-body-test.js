@@ -1,4 +1,4 @@
-import {write, rescue, parseBody} from "src/middleware"
+import {write, rescue, bufferBody, parseBody} from "src/middleware"
 
 describe("parse body", function() {
   describe("with json content type", function() {
@@ -6,7 +6,7 @@ describe("parse body", function() {
       before(async function() {
         let ctx
         await test.request(
-          test.createStack(write(), rescue(), parseBody(), function() {
+          test.createStack(write(), rescue(), bufferBody(), parseBody(), function() {
             ctx = this
           }), {
             headers: {
@@ -29,7 +29,7 @@ describe("parse body", function() {
       before(async function() {
         let ctx
         await test.request(
-          test.createStack(write(), rescue(), parseBody(), function() {
+          test.createStack(write(), rescue(), bufferBody(), parseBody(), function() {
             ctx = this
           }), {
             headers: {
@@ -54,7 +54,7 @@ describe("parse body", function() {
       before(async function() {
         let ctx
         await test.request(
-          test.createStack(write(), rescue(), parseBody(), function() {
+          test.createStack(write(), rescue(), bufferBody(), parseBody(), function() {
             ctx = this
           }), {
             headers: {
@@ -77,7 +77,7 @@ describe("parse body", function() {
       before(async function() {
         let ctx
         await test.request(
-          test.createStack(write(), rescue(), parseBody(), function() {
+          test.createStack(write(), rescue(), bufferBody(), parseBody(), function() {
             ctx = this
           }), {
             headers: {
@@ -99,7 +99,7 @@ describe("parse body", function() {
     describe("with binary content", function() {
       before(async function() {
         const {res, body} = await test.request(
-          test.createStack(write(), rescue(), parseBody()), {
+          test.createStack(write(), rescue(), bufferBody(), parseBody()), {
             headers: {
               "Content-Type": "application/x-www-form-urlencoded"
             },
@@ -127,7 +127,7 @@ describe("parse body", function() {
         buf[buf.length - 1] = 0
 
         const {res, body} = await test.request(
-          test.createStack(write(), rescue(), parseBody()), {
+          test.createStack(write(), rescue(), bufferBody(), parseBody()), {
             headers: {
               "Content-Type": "application/x-www-form-urlencoded"
             },
@@ -153,7 +153,7 @@ describe("parse body", function() {
   describe("with bad content type", function() {
     before(async function() {
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseBody()), {
+        test.createStack(write(), rescue(), bufferBody(), parseBody()), {
           headers: {
             "Content-Type": "some strange header; foo; bar; baz"
           },
@@ -178,7 +178,7 @@ describe("parse body", function() {
   describe("with bad charset", function() {
     before(async function() {
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseBody()), {
+        test.createStack(write(), rescue(), bufferBody(), parseBody()), {
           headers: {
             "Content-Type": "application/json; charset=utf-16"
           },
@@ -203,7 +203,7 @@ describe("parse body", function() {
   describe("with bad json", function() {
     before(async function() {
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseBody()), {
+        test.createStack(write(), rescue(), bufferBody(), parseBody()), {
           headers: {
             "Content-Type": "application/json"
           },
@@ -228,7 +228,7 @@ describe("parse body", function() {
   describe("with too large body", function() {
     before(async function() {
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseBody()), {
+        test.createStack(write(), rescue(), bufferBody(), parseBody()), {
           headers: {
             "Content-Type": "application/json"
           },

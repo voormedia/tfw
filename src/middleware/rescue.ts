@@ -14,7 +14,7 @@ export default function rescue(): Middleware {
     try {
       await next()
     } catch (err) {
-      error.call(this, err)
+      error.call(this, err as Error)
       return
     }
   }

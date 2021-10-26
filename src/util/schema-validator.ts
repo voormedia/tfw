@@ -1,11 +1,18 @@
-import * as ajv from "ajv"
+import Ajv, {DefinedError} from "ajv"
 
 export type SimpleValidator = (body: object) => string[]
 export type Validator = (body: object) => ValidationResult[]
 
-const instance = ajv({
+const instance = new Ajv({
   allErrors: true,
+  strictTypes: false,
 })
+
+instance.addFormat(
+  "email",
+  /* https://github.com/ajv-validator/ajv-formats/blob/master/src/formats.ts */
+  /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i,
+)
 
 instance.addFormat(
   "rfc2822-datetime",
@@ -59,10 +66,6 @@ instance.addFormat(
   ),
 )
 
-/* Force default metadata schema to be computed to avoid warnings when
-   adding the select and switch keywords. */
-instance.validateSchema({})
-
 export function createValidator(schema: object, {maxErrors = 50}: {maxErrors?: number} = {}): Validator {
   const validate = instance.compile(schema)
 
@@ -70,40 +73,41 @@ export function createValidator(schema: object, {maxErrors = 50}: {maxErrors?: n
     if (validate(body) || !validate.errors) return []
 
     const results: ValidationResult[] = []
-    for (const [i, error] of validate.errors.entries()) {
+    for (const [i, error] of (validate.errors as DefinedError[]).entries()) {
       if (i > maxErrors) {
         results.push({error: "too_many_errors"})
         break
       }
 
-      const path = fmtPath(error.dataPath)
+      const path = fmtPath(error.instancePath)
       switch (error.keyword) {
         case "type": {
-          const expected = (error.params as ajv.TypeParams).type.split(",")[0]
+          let expected = error.params.type
+          if (expected as any instanceof Array) expected = expected[0]
           results.push({path, error: "invalid_type", expected})
           break
         }
 
         case "format": {
-          const expected = (error.params as ajv.FormatParams).format
+          const expected = error.params.format
           results.push({path, error: "invalid_format", expected})
           break
         }
 
         case "enum": {
-          const expected = (error.params as ajv.EnumParams).allowedValues
+          const expected = error.params.allowedValues
           results.push({path, error: "invalid_option", expected})
           break
         }
 
         case "additionalProperties": {
-          const unknown = (error.params as ajv.AdditionalPropertiesParams).additionalProperty
+          const unknown = error.params.additionalProperty
           results.push({path: path ? `${path}.${unknown}` : unknown, error: "unknown_field"})
           break
         }
 
         case "required": {
-          const required = (error.params as ajv.RequiredParams).missingProperty
+          const required = error.params.missingProperty
           results.push({path: path ? `${path}.${required}` : required, error: "required_field"})
           break
         }
@@ -112,20 +116,20 @@ export function createValidator(schema: object, {maxErrors = 50}: {maxErrors?: n
         case "exclusiveMinimum":
         case "maximum":
         case "exclusiveMaximum": {
-          const {limit, comparison} = (error.params as ajv.ComparisonParams)
+          const {limit, comparison} = error.params
           const expected: RangeExpecation<string | number> = {operator: comparison as Operator, limit}
           results.push({path, error: "invalid_range", expected})
           break
         }
 
         case "minLength": {
-          const limit = (error.params as ajv.LimitParams).limit
+          const limit = error.params.limit
           results.push({path, error: "invalid_length", expected: {operator: ">=", limit}})
           break
         }
 
         case "maxLength": {
-          const limit = (error.params as ajv.LimitParams).limit
+          const limit = error.params.limit
           results.push({path, error: "invalid_length", expected: {operator: "<=", limit}})
           break
         }

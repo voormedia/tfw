@@ -19,7 +19,7 @@ export default function exposeAllErrors(): Middleware {
       }
 
       /* Wrap anything that's not an Error but that pretends to be one. */
-      throw new InternalServerError(err.message || err.Message || err)
+      throw new InternalServerError((err as any).message || (err as any).Message || err)
     }
   }
 }

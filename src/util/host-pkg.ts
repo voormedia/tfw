@@ -7,13 +7,10 @@ interface Pkg {
 }
 
 function determinePkg(): Pkg {
-  let pkg
-  let mod: NodeModule | null = module
-  do {
-    mod = mod.parent
-    if (!mod) return {name: "<unknown>"}
-  } while (mod.id !== ".")
+  const mod = require.main
+  if (!mod) return {name: "<unknown>"}
 
+  let pkg
   let dir = mod.filename
   do {
     dir = path.dirname(dir)

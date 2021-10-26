@@ -13,6 +13,7 @@ export {
 }
 
 import allowCors from "./allow-cors"
+import bufferBody from "./buffer-body"
 import connect from "./connect"
 import exposeAllErrors from "./expose-all-errors"
 import parseAuthorization from "./parse-authorization"
@@ -27,6 +28,7 @@ import validateContentType from "./validate-content-type"
 
 export {
   allowCors,
+  bufferBody,
   connect,
   exposeAllErrors,
   parseAuthorization,

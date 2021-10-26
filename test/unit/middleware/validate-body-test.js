@@ -1,4 +1,4 @@
-import {write, rescue, parseBody, validateBody} from "src/middleware"
+import {write, rescue, bufferBody, parseBody, validateBody} from "src/middleware"
 
 describe("validate body", function() {
   describe("with schema", function() {
@@ -18,6 +18,7 @@ describe("validate body", function() {
       this.app = test.createStack(
         write(),
         rescue(),
+        bufferBody(),
         parseBody(),
         validateBody(options),
         function() {},
@@ -37,8 +38,8 @@ describe("validate body", function() {
         error: "invalid_request",
         message: "Request is invalid: 'foo' should be a string; request body requires key 'bar'.",
         details: [
-          {path: "foo", error: "invalid_type", expected: "string"},
           {path: "bar", error: "required_field"},
+          {path: "foo", error: "invalid_type", expected: "string"},
         ],
       }))
     })
@@ -77,7 +78,7 @@ describe("validate body", function() {
       }
 
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseBody(), validateBody(options), function() {}), {
+        test.createStack(write(), rescue(), bufferBody(), parseBody(), validateBody(options), function() {}), {
           headers: {
             "Content-Type": "application/json; charset=utf-8"
           },
@@ -113,7 +114,7 @@ describe("validate body", function() {
       }
 
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseBody(), validateBody(options), function() {}), {
+        test.createStack(write(), rescue(), bufferBody(), parseBody(), validateBody(options), function() {}), {
           headers: {
             "Content-Type": "application/json; charset=utf-8"
           },
@@ -153,7 +154,7 @@ describe("validate body", function() {
       }
 
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseBody(), validateBody(options), function() {}), {
+        test.createStack(write(), rescue(), bufferBody(), parseBody(), validateBody(options), function() {}), {
           headers: {
             "Content-Type": "application/json; charset=utf-8"
           },
@@ -185,7 +186,6 @@ describe("validate body", function() {
           properties: {
             foo: { type: "string" },
           },
-          required: ["foo"],
           additionalProperties: false,
         },
       }
@@ -196,7 +196,7 @@ describe("validate body", function() {
       }
 
       const {res, body} = await test.request(
-        test.createStack(write(), rescue(), parseBody(), validateBody(options), function() {}), {
+        test.createStack(write(), rescue(), bufferBody(), parseBody(), validateBody(options), function() {}), {
           headers: {
             "Content-Type": "application/json; charset=utf-8"
           },

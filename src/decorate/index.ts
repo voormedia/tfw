@@ -7,6 +7,7 @@ export * from "./when"
 import {use} from "./use"
 
 import allowCorsMiddleware, {AllowCorsOptions} from "../middleware/allow-cors"
+import bufferBodyMiddleware from "../middleware/buffer-body"
 import connectMiddleware, {ConnectMiddleware} from "../middleware/connect"
 import exposeAllErrorsMiddleware from "../middleware/expose-all-errors"
 import parseAuthorizationMiddleware from "../middleware/parse-authorization"
@@ -21,6 +22,10 @@ import validateContentTypeMiddleware from "../middleware/validate-content-type"
 
 export function allowCors(options: AllowCorsOptions) {
   return use(allowCorsMiddleware(options))
+}
+
+export function bufferBody(options: ValidationOptions & BodyOptions) {
+  return use(bufferBodyMiddleware())
 }
 
 export function connect(middleware: ConnectMiddleware) {
@@ -56,7 +61,7 @@ export function requireTLS() {
 }
 
 export function validateBody(options: ValidationOptions & BodyOptions) {
-  return use(parseBodyMiddleware(options), validateBodyMiddleware(options))
+  return use(bufferBodyMiddleware(), parseBodyMiddleware(options), validateBodyMiddleware(options))
 }
 
 export function validateContentType(expected: string) {

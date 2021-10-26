@@ -90,7 +90,7 @@ export class Logger {
       minute: "2-digit",
       second: "2-digit",
       hour12: false,
-    }
+    } as const
 
     const styles = {
       DEBUG: black + bold,

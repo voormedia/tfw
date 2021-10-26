@@ -4,6 +4,7 @@ describe("schema validator", function() {
   describe("type", function() {
     before(function() {
       this.schema = {
+        type: "object",
         properties: {
           foo: {type: ["object", "array"]},
         },
@@ -21,8 +22,10 @@ describe("schema validator", function() {
   describe("required", function() {
     before(function() {
       this.schema = {
+        type: "object",
         properties: {
           foo: {
+            type: "object",
             properties: {
               "bar": {type: "string"},
               "baz": {type: "number"},
@@ -51,6 +54,7 @@ describe("schema validator", function() {
   describe("additional properties", function() {
     before(function() {
       this.schema = {
+        type: "object",
         properties: {
           foo: {
             additionalProperties: false,
@@ -77,6 +81,7 @@ describe("schema validator", function() {
   describe("enum", function() {
     before(function() {
       this.schema = {
+        type: "object",
         properties: {
           foo: {enum: ["bar", "baz", "qux"]},
           bar: {enum: ["baz"]},
@@ -102,6 +107,7 @@ describe("schema validator", function() {
   describe("format", function() {
     before(function() {
       this.schema = {
+        type: "object",
         properties: {
           foo: {format: "url"},
           bar: {format: "email"},
@@ -132,6 +138,7 @@ describe("schema validator", function() {
   describe("format for rfc 2822 date", function() {
     before(function() {
       this.schema = {
+        type: "object",
         properties: {
           date: {format: "rfc2822-datetime"},
         },
@@ -167,6 +174,7 @@ describe("schema validator", function() {
   describe("minimum", function() {
     before(function() {
       this.schema = {
+        type: "object",
         properties: {
           foo: {exclusiveMinimum: 1},
           bar: {minimum: 1},
@@ -185,6 +193,7 @@ describe("schema validator", function() {
   describe("maximum", function() {
     before(function() {
       this.schema = {
+        type: "object",
         properties: {
           foo: {exclusiveMaximum: 1},
           bar: {maximum: 1},
@@ -203,6 +212,7 @@ describe("schema validator", function() {
   describe("min length", function() {
     before(function() {
       this.schema = {
+        type: "object",
         properties: {
           foo: {minLength: 3},
         },
@@ -220,6 +230,7 @@ describe("schema validator", function() {
   describe("max length", function() {
     before(function() {
       this.schema = {
+        type: "object",
         properties: {
           foo: {maxLength: 3},
         },
@@ -237,6 +248,7 @@ describe("schema validator", function() {
   describe("if then else", function() {
     before(function() {
       this.schema = {
+        type: "object",
         properties: {
           foo: {enum: ["bar", "baz"]},
           bar: {},

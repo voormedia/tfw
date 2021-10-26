@@ -1,5 +1,5 @@
 import * as contentType from "content-type"
-import * as querystring from "querystring"
+import {URLSearchParams} from "url"
 
 import {
   BadRequest,
@@ -16,19 +16,9 @@ export interface BodyOptions {
 
 export default function parseBody({maxLength = 100000}: BodyOptions = {}): Middleware {
   return async function parseBody(this: Context, next: Next) {
-    const buffers: Buffer[] = []
+    const body = this.data.body
 
-    this.request.on("data", (chunk: Buffer) => {
-      buffers.push(chunk)
-    })
-
-    await new Promise<void>(resolve => {
-      this.request.on("end", resolve)
-    })
-
-    const body = Buffer.concat(buffers)
-
-    if (body.length) {
+    if (body && body.length) {
       let parsed
       try {
         /* Guess the type of the content based on magic headers.
@@ -52,7 +42,8 @@ export default function parseBody({maxLength = 100000}: BodyOptions = {}): Middl
 
           try {
             /* Validate query string? */
-            this.data.body = querystring.parse(body.toString(), undefined, undefined, {maxKeys: 0})
+            const params = new URLSearchParams(body.toString())
+            this.data.body = Object.fromEntries(params)
           } catch (err) {
             /* TODO: Throw error to client? */
             this.data.body = Object.create(null)
@@ -65,12 +56,11 @@ export default function parseBody({maxLength = 100000}: BodyOptions = {}): Middl
           try {
             this.data.body = JSON.parse(body.toString())
           } catch (err) {
-            throw new BadRequest(err.message)
+            throw new BadRequest((err as any).message)
           }
           break
 
         default:
-          this.data.body = body
       }
     }
 

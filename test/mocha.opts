@@ -1,9 +1,0 @@
-test/unit/**/*.js
---use_strict
---require ts-node/register
---require babel-register
---require test
---recursive
---timeout 4000
---exit
---reporter list
