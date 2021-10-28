@@ -14,6 +14,7 @@ import parseAuthorizationMiddleware from "../middleware/parse-authorization"
 import parseBodyMiddleware, {BodyOptions} from "../middleware/parse-body"
 import parseQueryMiddleware from "../middleware/parse-query"
 import parseSessionMiddleware, {SessionOptions} from "../middleware/parse-session"
+import rateLimitMiddleware, {RateLimitOptions} from "../middleware/rate-limit"
 import requireAuthorizationMiddleware, {Credentials} from "../middleware/require-authorization"
 import requireHostMiddleware from "../middleware/require-host"
 import requireTLSMiddleware from "../middleware/require-tls"
@@ -46,6 +47,10 @@ export function parseQuery() {
 
 export function parseSession(options: SessionOptions) {
   return use(parseSessionMiddleware(options))
+}
+
+export function rateLimit(options: RateLimitOptions) {
+  return use(rateLimitMiddleware(options))
 }
 
 export function requireAuthorization(realm: string, credentials: Credentials) {

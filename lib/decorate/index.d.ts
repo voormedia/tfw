@@ -7,6 +7,7 @@ import { AllowCorsOptions } from "../middleware/allow-cors";
 import { ConnectMiddleware } from "../middleware/connect";
 import { BodyOptions } from "../middleware/parse-body";
 import { SessionOptions } from "../middleware/parse-session";
+import { RateLimitOptions } from "../middleware/rate-limit";
 import { Credentials } from "../middleware/require-authorization";
 import { ValidationOptions } from "../middleware/validate-body";
 export declare function allowCors(options: AllowCorsOptions): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
@@ -16,6 +17,7 @@ export declare function exposeAllErrors(): (object: any, key?: string | undefine
 export declare function parseAuthorization(): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function parseQuery(): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function parseSession(options: SessionOptions): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
+export declare function rateLimit(options: RateLimitOptions): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function requireAuthorization(realm: string, credentials: Credentials): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function requireHost(...hosts: string[]): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function requireTLS(): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;

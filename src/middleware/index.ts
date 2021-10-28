@@ -20,6 +20,7 @@ import parseAuthorization from "./parse-authorization"
 import parseBody from "./parse-body"
 import parseQuery from "./parse-query"
 import parseSession from "./parse-session"
+import rateLimit from "./rate-limit"
 import requireAuthorization from "./require-authorization"
 import requireHost from "./require-host"
 import requireTLS from "./require-tls"
@@ -35,6 +36,7 @@ export {
   parseBody,
   parseQuery,
   parseSession,
+  rateLimit,
   requireAuthorization,
   requireHost,
   requireTLS,
