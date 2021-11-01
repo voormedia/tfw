@@ -15,6 +15,7 @@ export declare function bufferBody(): (object: any, key?: string | undefined, de
 export declare function connect(middleware: ConnectMiddleware): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function exposeAllErrors(): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function parseAuthorization(): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
+export declare function parseBody(): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function parseQuery(): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function parseSession(options: SessionOptions): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;
 export declare function rateLimit(options: RateLimitOptions): (object: any, key?: string | undefined, descriptor?: PropertyDescriptor | undefined) => void;

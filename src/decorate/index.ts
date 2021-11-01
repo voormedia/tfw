@@ -41,6 +41,10 @@ export function parseAuthorization() {
   return use(parseAuthorizationMiddleware())
 }
 
+export function parseBody() {
+  return use(bufferBodyMiddleware(), parseBodyMiddleware())
+}
+
 export function parseQuery() {
   return use(parseQueryMiddleware())
 }
