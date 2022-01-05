@@ -59,7 +59,7 @@ describe("log", function() {
       })
 
       it("should log remote ip", function() {
-        assert.equal(this.entry.httpRequest.remoteIp, "::ffff:127.0.0.1")
+        assert.include(["::ffff:127.0.0.1", "::1"], this.entry.httpRequest.remoteIp)
       })
 
       it("should log latency", function() {
@@ -181,7 +181,7 @@ describe("log", function() {
       })
 
       it("should log remote ip", function() {
-        assert.equal(this.entry.httpRequest.remoteIp, "::ffff:127.0.0.1")
+        assert.include(["::ffff:127.0.0.1", "::1"], this.entry.httpRequest.remoteIp)
       })
 
       it("should log latency", function() {
@@ -242,7 +242,7 @@ describe("log", function() {
       })
 
       it("should log remote ip", function() {
-        assert.equal(this.entry.httpRequest.remoteIp, "::ffff:127.0.0.1")
+        assert.include(["::ffff:127.0.0.1", "::1"], this.entry.httpRequest.remoteIp)
       })
 
       it("should log latency", function() {
@@ -305,7 +305,7 @@ describe("log", function() {
       })
 
       it("should log remote ip", function() {
-        assert.equal(this.entry.httpRequest.remoteIp, "::ffff:127.0.0.1")
+        assert.include(["::ffff:127.0.0.1", "::1"], this.entry.httpRequest.remoteIp)
       })
 
       it("should log latency", function() {
@@ -367,7 +367,7 @@ describe("log", function() {
       })
 
       it("should log remote ip", function() {
-        assert.equal(this.entry.httpRequest.remoteIp, "::ffff:127.0.0.1")
+        assert.include(["::ffff:127.0.0.1", "::1"], this.entry.httpRequest.remoteIp)
       })
 
       it("should log latency", function() {
