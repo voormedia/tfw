@@ -1,12 +1,18 @@
+export enum NodeType {
+  BRANCH,
+  LEAF,
+  PREFIX,
+}
+
 export default class Node {
   name: string
   pattern: RegExp | undefined = undefined
 
   children: Map<string, Node> = new Map
   patterns: Map<string, Node> = new Map
+  handlers: Map<string, object> = new Map
 
-  handler: object | undefined = undefined
-  leaf = false
+  type = NodeType.BRANCH
 
   constructor(name: string = "", pattern?: RegExp) {
     this.name = name
@@ -41,6 +47,10 @@ export default class Node {
 
   get key(): string {
     return this.pattern ? this.pattern.source : this.name
+  }
+
+  get leaf(): boolean {
+    return this.type !== NodeType.BRANCH
   }
 
   toString(): string {

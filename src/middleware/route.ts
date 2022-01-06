@@ -11,10 +11,11 @@ export default function route(router: Router): Middleware {
       method = "GET"
     }
 
-    const {handler, params} = router.match(method, url)
+    const {handler, params, path} = router.match(method, url)
 
     if (handler) {
       this.data.params = params
+      this.data.path = path
 
       if ((handler as any).stack) {
         this.stack.push(...(handler as any).stack)

@@ -1,7 +1,13 @@
+import proxyHandler from "./util/proxy-handler"
 import routerify from "./util/routerify"
 
 export interface RouteOptions {
   method: string,
+}
+
+export interface ProxyOptions {
+  methods?: string[]
+  prepend?: boolean
 }
 
 type Decorator = (
@@ -23,6 +29,17 @@ export function mount(pattern: string, controller: any) {
   return (object: any) => {
     const router = routerify(controller.prototype)
     routerify(object.prototype).mount(pattern, router)
+  }
+}
+
+const DEFAULT_METHODS = ["get", "post", "put", "patch", "delete", "head", "options"]
+
+export function proxy(pattern: string, target: string, {methods = DEFAULT_METHODS, prepend = true}: ProxyOptions = {}) {
+  return (object: any) => {
+    const handler = proxyHandler(target, {prepend})
+    for (const method of methods) {
+      routerify(object.prototype).define(method, pattern, handler, {prefix: true})
+    }
   }
 }
 

@@ -1,8 +1,18 @@
 import {inspect} from "util"
 
-import Node from "./node"
+import Node, {NodeType} from "./node"
 import Route, {RouteError} from "./route"
 import Tree from "./tree"
+
+export interface DefineOptions {
+  prefix?: boolean
+}
+
+export interface RouterMatch {
+  handler?: object
+  params?: object
+  path?: string
+}
 
 export default class Router {
   private readonly tree: Tree = new Tree
@@ -11,54 +21,72 @@ export default class Router {
     Object.freeze(this)
   }
 
-  define(method: string, pattern: string, handler?: object) {
-    const route = Route.parse(method, pattern)
-    define(this.tree.insert(route), route, handler)
+  define(method: string, pattern: string, handler: object, {prefix}: DefineOptions = {}) {
+    method = method.toUpperCase()
+    const route = Route.parse(pattern)
+    const type = prefix ? NodeType.PREFIX : NodeType.LEAF
+    define(this.tree.insert(method, route), route, method, handler, type)
   }
 
   mount(pattern: string, router: Router) {
-    for (const [{handler}, path] of router.tree.traverse()) {
+    for (const [{handlers, type}, path] of router.tree.traverse()) {
       const route = Route.create(path).prefix(pattern)
-      define(this.tree.insert(route), route, handler)
+      for (const [method, handler] of handlers) {
+        define(this.tree.insert(method, route), route, method, handler, type)
+      }
     }
   }
 
-  match(method: string, url: string): {handler?: object; params?: object} {
-    const {node, params} = this.tree.match(parse(method, url))
+  match(method: string, url: string): RouterMatch {
+    method = method.toUpperCase()
+    const {node, params, path} = this.tree.match(parse(url))
     if (!node) return {}
-    return {handler: node.handler || undefined, params}
+
+    const handler = node.handlers.get(method)
+    if (!handler) return {}
+
+    return {handler, params, path}
   }
 
-  get routes(): Route[] {
-    const routes = new Set<Route>()
-    for (const [ , path] of this.tree.traverse()) {
-      routes.add(Route.create(path))
+  get routes(): Array<[string, Route]> {
+    const routes = new Set<[string, Route]>()
+    for (const [{handlers}, path] of this.tree.traverse()) {
+      for (const method of handlers.keys()) {
+        routes.add([method, Route.create(path)])
+      }
     }
+
     return Array.from(routes)
   }
 
   get handlers(): object[] {
     const handlers = new Set<object>()
     for (const [node] of this.tree.traverse()) {
-      if (node.handler) handlers.add(node.handler)
+      for (const handler of node.handlers.values()) {
+        handlers.add(handler)
+      }
     }
+
     return Array.from(handlers)
   }
 
   [inspect.custom](): string {
     /* tslint:disable-next-line: no-unnecessary-callback-wrapper */
-    const routes = this.routes.map(route => inspect(route))
+    const routes = this.routes.map(([method, route]) => `${method} ${route.toString()}`)
     return `[ ${routes.join(",\n  ")} ]`
   }
 }
 
-function define(node: Node, route: Route, handler?: object) {
-  if (node.leaf) throw new RouteError(route, "already exists")
-  node.leaf = true
-  node.handler = handler
+function define(node: Node, route: Route, method: string, handler: object, type: NodeType) {
+  if (node.leaf && node.handlers.has(method)) {
+    throw new RouteError(method, route, "already exists")
+  }
+
+  node.type = type
+  node.handlers.set(method, handler)
 }
 
-function parse(method: string, url: string) {
+function parse(url: string) {
   /* Remove leading slash. */
   if (url[0] === "/") url = url.slice(1)
 
@@ -66,6 +94,5 @@ function parse(method: string, url: string) {
   url = url.split("?").shift()!
 
   /* Split url into path segments. */
-  const parts = url.split("/").filter(part => part !== "")
-  return [method.toUpperCase()].concat(parts)
+  return url.split("/").filter(part => part !== "")
 }

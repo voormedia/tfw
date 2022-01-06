@@ -1,5 +1,11 @@
-import Node from "./node"
+import Node, { NodeType } from "./node"
 import Route, {RouteError} from "./route"
+
+export interface NodeMatch {
+  node?: Node
+  params?: object
+  path?: string
+}
 
 export default class Tree {
   private readonly root: Node = new Node
@@ -8,27 +14,38 @@ export default class Tree {
     Object.freeze(this)
   }
 
-  match(parts: string[]): {node?: Node; params?: object} {
+  match(parts: string[]): NodeMatch {
     /* Create object without prototype. */
     const params = Object.create(null)
 
     let node: Node | undefined = this.root
+    let prefix = false
+    let path = "/"
+
     for (const part of parts) {
-      node = node.find(part)
-      if (!node) break
+      const next: Node | undefined = node.find(part)
+      if (!next) {
+        prefix = true
+        break
+      }
+
+      node = next
       if (node.pattern) params[node.name] = part
+      path = path.concat("/", part)
     }
 
-    if (!node || !node.leaf) return {}
-    return {node, params}
+    if (!node || node.type === NodeType.BRANCH) return {}
+    if (prefix && node.type !== NodeType.PREFIX) return {}
+
+    return {node, params, path}
   }
 
-  insert(route: Route): Node {
+  insert(method: string, route: Route): Node {
     let node = this.root
     for (const part of route.parts) {
       node = node.insert(part.clone())
       if (node.name !== part.name) {
-        throw new RouteError(route, `redefines existing parameter {${node.name}} as {${part.name}}`)
+        throw new RouteError(method, route, `redefines existing parameter {${node.name}} as {${part.name}}`)
       }
     }
 

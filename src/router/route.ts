@@ -3,8 +3,8 @@ import {inspect} from "util"
 import Node from "./node"
 
 export class RouteError extends Error {
-  constructor(route: Route, message: string) {
-    super(`Route '${route.toString()}' ${message}`)
+  constructor(method: string, route: Route, message: string) {
+    super(`Route '${method} ${route.toString()}' ${message}`)
 
     Error.captureStackTrace(this, this.constructor)
     Object.freeze(this)
@@ -21,10 +21,8 @@ export class ParseError extends Error {
 }
 
 export default class Route {
-  static parse(method: string, route: string): Route {
-    method = method.toUpperCase()
-    const parts = [new Node(method)].concat(parse(route))
-    return new Route(parts)
+  static parse(route: string): Route {
+    return new Route(parse(route))
   }
 
   static create(path: Node[]): Route {
@@ -42,17 +40,11 @@ export default class Route {
   }
 
   prefix(prefix: string): Route {
-    const path = this.parts.slice(1)
-    const parts = [this.parts[0]].concat(parse(prefix)).concat(path)
-    return new Route(parts)
-  }
-
-  get method(): string {
-    return this.parts[0].toString()
+    return new Route(parse(prefix).concat(this.parts))
   }
 
   get path(): string {
-    return "/" + this.parts.slice(1).map(part => part.toString()).join("/")
+    return "/" + this.parts.map(part => part.toString()).join("/")
   }
 
   [inspect.custom](): string {
@@ -60,7 +52,7 @@ export default class Route {
   }
 
   toString(): string {
-    return `${this.method} ${this.path}`
+    return this.path
   }
 }
 

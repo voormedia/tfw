@@ -8,7 +8,7 @@ describe("router", function() {
       router.define("get", "/", {})
 
       assert.sameDeepMembers(router.routes.map(route => route.toString()), [
-        "GET /",
+        "GET,/",
       ])
     })
 
@@ -19,9 +19,9 @@ describe("router", function() {
       router.define("get", "foo/qux", {})
 
       assert.sameDeepMembers(router.routes.map(route => route.toString()), [
-        "GET /foo/bar",
-        "GET /foo/baz",
-        "GET /foo/qux",
+        "GET,/foo/bar",
+        "GET,/foo/baz",
+        "GET,/foo/qux",
       ])
     })
 
@@ -32,9 +32,9 @@ describe("router", function() {
       router.define("get", "/foo/qux", {})
 
       assert.sameDeepMembers(router.routes.map(route => route.toString()), [
-        "GET /foo/bar",
-        "GET /foo/baz",
-        "GET /foo/qux",
+        "GET,/foo/bar",
+        "GET,/foo/baz",
+        "GET,/foo/qux",
       ])
     })
 
@@ -44,8 +44,8 @@ describe("router", function() {
       router.define("get", "foo/{id}/qux", {})
 
       assert.sameDeepMembers(router.routes.map(route => route.toString()), [
-        "GET /foo/{id}",
-        "GET /foo/{id}/qux",
+        "GET,/foo/{id}",
+        "GET,/foo/{id}/qux",
       ])
     })
 
@@ -88,10 +88,10 @@ describe("router", function() {
       router1.mount("/foo", router2)
 
       assert.sameDeepMembers(router1.routes.map(route => route.toString()), [
-        "GET /foo",
-        "GET /foo/bar",
-        "GET /foo/baz",
-        "GET /foo/qux",
+        "GET,/foo",
+        "GET,/foo/bar",
+        "GET,/foo/baz",
+        "GET,/foo/qux",
       ])
     })
 
@@ -171,6 +171,21 @@ describe("router", function() {
       assert.deepEqual(params, {id: "baz"})
     })
 
+    it("should not find deep route without prefix match", function() {
+      const router = new Router
+      router.define("get", "foo/bar", 1, {prefix: false})
+
+      assert.deepEqual(router.match("get", "/foo/bar/baz/qux"), {})
+    })
+
+    it("should find deep route with prefix match", function() {
+      const router = new Router
+      router.define("get", "foo/bar", 1, {prefix: true})
+
+      const {handler} = router.match("get", "/foo/bar/baz/qux")
+      assert.deepEqual(handler, 1)
+    })
+
     it("should not find partial route", function() {
       const router = new Router
       router.define("get", "foo/bar", 1)
@@ -208,9 +223,9 @@ describe("router", function() {
       router.define("patch", "foo/qux", {})
 
       assert.deepEqual(router.routes.map(route => route.toString()), [
-        "PATCH /foo/qux",
-        "DELETE /foo/baz",
-        "GET /foo/bar",
+        "PATCH,/foo/qux",
+        "DELETE,/foo/baz",
+        "GET,/foo/bar",
       ])
     })
   })
