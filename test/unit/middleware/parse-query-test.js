@@ -65,6 +65,25 @@ describe("parse query", function() {
         assert.deepEqual(this.ctx.data.params, {foo: "bar", baz: "qux", id: "quux"})
       })
     })
+
+    describe("with nested search query", function() {
+      before(async function() {
+        let ctx
+        await test.request(
+          test.createStack(write(), rescue(), route(router), parseQuery(), function() {
+            ctx = this
+          }), {
+            path: "/foo/bar?foo=bar&baz=/qux?foo=bar&id=quux"
+          }
+        )
+
+        this.ctx = ctx
+      })
+
+      it("should assign params", function() {
+        assert.deepEqual(this.ctx.data.params, {foo: "bar", baz: "/qux?foo=bar", id: "quux"})
+      })
+    })
   })
 
   describe("without router", function() {
