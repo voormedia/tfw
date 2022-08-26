@@ -84,7 +84,8 @@ describe("log", function() {
             path: "/foo",
             body: "foobar",
             headers: {
-              "x-forwarded-for": "185.110.132.232, 35.186.220.41"
+              "x-forwarded-for": "185.110.132.232, 35.186.220.41",
+              "x-request-id": "f0000000000000000000000000000000",
             },
           }
         )
@@ -109,7 +110,7 @@ describe("log", function() {
       })
 
       it("should log request size", function() {
-        assert.equal(this.entry.httpRequest.requestSize, 138)
+        assert.equal(this.entry.httpRequest.requestSize, 186)
       })
 
       it("should log response status", function() {
@@ -126,6 +127,10 @@ describe("log", function() {
 
       it("should log latency", function() {
         assert.match(this.entry.httpRequest.latency, /\d+\.\d{3}s/)
+      })
+
+      it("should log trace id", function() {
+        assert.equal(this.entry["logging.googleapis.com/trace"], "f0000000000000000000000000000000")
       })
 
       it("should log additional data", function() {

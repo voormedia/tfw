@@ -1,3 +1,4 @@
+import {randomBytes} from "crypto"
 import {IncomingMessage as Request, ServerResponse as Response} from "http"
 import {inspect} from "util"
 import {Stack} from "../middleware"
@@ -18,6 +19,8 @@ export class Context {
 
   body: Body | AsyncBody = ""
   data: Data = Object.create(null) as Data
+
+  #traceId?: string
 
   constructor(stack: Stack, request: Request, response: Response) {
     this.stack = stack
@@ -42,6 +45,28 @@ export class Context {
     return forwarded ?
       forwarded.split(",").shift()! :
       this.request.socket.remoteAddress!
+  }
+
+  get traceId(): string {
+    const findOrGenerate = () => {
+      /* Request ID as forwarded by nginx. */
+      const requestId = this.get("x-request-id")
+      if (requestId) return requestId
+
+      /* Trace context from GCP load balancers contains trace context in the
+         form: <trace-id>/<span-id>. */
+      const traceId = this.get("x-cloud-trace-context")?.split("/", 1)[0]
+      if (traceId) return traceId
+
+      /* Generate a request ID if none is forwarded to us. */
+      return randomBytes(16).toString("hex")
+    }
+
+    if (!this.#traceId) {
+      this.#traceId = findOrGenerate()
+    }
+
+    return this.#traceId
   }
 
   set(header: string, value: string | number) {

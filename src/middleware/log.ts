@@ -59,7 +59,11 @@ export default function log(logger: Logger): Middleware {
         // TODO add protocol
       }
 
-      const logContext: LogContext = {...this.data.log, httpRequest}
+      const logContext: LogContext = {
+        ...this.data.log,
+        httpRequest,
+        "logging.googleapis.com/trace": this.traceId,
+      }
 
       if (status >= 500 && this.data.error) {
         /* An error was thrown somewhere. */

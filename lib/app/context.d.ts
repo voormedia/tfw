@@ -9,6 +9,7 @@ export interface Data {
     [key: string]: any;
 }
 export declare class Context {
+    #private;
     stack: Stack;
     request: Request;
     response: Response;
@@ -19,6 +20,7 @@ export declare class Context {
     get method(): string;
     get url(): string;
     get remoteIp(): string;
+    get traceId(): string;
     set(header: string, value: string | number): void;
     set status(value: number);
     get sent(): boolean;
