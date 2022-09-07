@@ -26,6 +26,9 @@ export default function proxy(target: string, {prepend}: ProxyOptions): Middlewa
 
     this.request.pipe(proxy, {end: true})
 
-    return new Promise(resolve => proxy.on("end", resolve))
+    return new Promise((resolve, reject) => {
+      proxy.on("end", resolve)
+      proxy.on("error", reject)
+    })
   }
 }
