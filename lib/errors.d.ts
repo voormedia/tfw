@@ -1,9 +1,9 @@
 /// <reference types="node" />
-interface ErrorDetails<T extends string> {
+export interface ErrorDetails<T extends string> {
     error: T;
     message: string;
 }
-interface ErrorDefaults<T extends string> extends ErrorDetails<T> {
+export interface ErrorDefaults<T extends string> extends ErrorDetails<T> {
     status: number;
 }
 export declare abstract class ServiceError<T extends string> extends Error implements ErrorDetails<T> {
@@ -1121,4 +1121,3 @@ export declare const GatewayTimeout: {
     prepareStackTrace?: ((err: Error, stackTraces: NodeJS.CallSite[]) => any) | undefined;
     stackTraceLimit: number;
 };
-export {};

@@ -1,9 +1,9 @@
-interface ErrorDetails<T extends string> {
+export interface ErrorDetails<T extends string> {
   error: T
   message: string
 }
 
-interface ErrorDefaults<T extends string> extends ErrorDetails<T> {
+export interface ErrorDefaults<T extends string> extends ErrorDetails<T> {
   status: number
 }
 
