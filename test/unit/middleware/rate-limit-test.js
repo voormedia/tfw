@@ -56,4 +56,30 @@ describe("rate limit", function() {
       assert.equal(this.exec, false)
     })
   })
+
+  describe("when not ok and ignored", function() {
+    before(async function() {
+      let exec = false
+      const {res, body} = await test.request(
+        test.createStack(
+          write(),
+          rescue(),
+          rateLimit({if: () => false, consume: () => false, message: "No soup for you!"}),
+          function() {exec = true},
+        )
+      )
+
+      this.res = res
+      this.body = body
+      this.exec = exec
+    })
+
+    it("should render body", function() {
+      assert.equal(this.body.toString(), '')
+    })
+
+    it("should execute handler", function() {
+      assert.equal(this.exec, true)
+    })
+  })
 })
