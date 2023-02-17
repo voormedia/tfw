@@ -9,7 +9,7 @@
     "moduleResolution": "node",
     "types": ["node", "mocha"],
     "resolveJsonModule": true,
-    "outDir": "dist",
+    "outDir": "lib",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

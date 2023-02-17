@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "test": "tsc",
-    "build": "rm -rf dist && tsc --project tsconfig.build.json"
+    "build": "rm -rf lib && tsc --project tsconfig.build.json"
   },
   "dependencies": {
     "ajv": "^8.6",
