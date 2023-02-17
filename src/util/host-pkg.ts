@@ -7,11 +7,8 @@ interface Pkg {
 }
 
 function determinePkg(): Pkg {
-  const mod = require.main
-  if (!mod) return {name: "<unknown>"}
-
   let pkg
-  let dir = mod.filename
+  let dir = process.argv[1]
   do {
     dir = path.dirname(dir)
     if (dir === "/") return {name: "<unknown>"}
