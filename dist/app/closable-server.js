@@ -1,0 +1,42 @@
+import { Server } from "http";
+export class ClosableServer extends Server {
+    closing = false;
+    sockets = new Map();
+    constructor() {
+        super();
+        this.on("connection", (socket) => {
+            this.sockets.set(socket, 0);
+            socket.on("close", () => {
+                this.sockets.delete(socket);
+            });
+        });
+        this.on("request", (request, response) => {
+            const socket = request.socket;
+            this.sockets.set(socket, +this.sockets.get(socket) + 1);
+            if (this.closing) {
+                response.setHeader("Connection", "close");
+            }
+            response.on("finish", () => {
+                const pending = +this.sockets.get(socket) - 1;
+                this.sockets.set(socket, pending);
+                if (this.closing && pending === 0) {
+                    socket.end();
+                }
+            });
+        });
+    }
+    close(callback) {
+        super.close(callback);
+        this.closing = true;
+        process.nextTick(() => {
+            for (const [socket, pending] of this.sockets) {
+                if (pending === 0) {
+                    socket.end();
+                }
+            }
+        });
+        return this;
+    }
+}
+export default ClosableServer;
+//# sourceMappingURL=closable-server.js.map

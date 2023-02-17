@@ -47,7 +47,7 @@ describe("require host", function() {
           const body = []
           const socket = net.connect(options)
           socket.on("error", reject)
-          socket.on("data", ::body.push)
+          socket.on("data", data => body.push(data))
           socket.on("end", () => {
             app.stop()
             resolve(Buffer.concat(body))

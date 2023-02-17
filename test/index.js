@@ -48,7 +48,7 @@ const test = {
       const handle = res => {
         const body = []
         if (app.stop) app.stop()
-        res.on("data", ::body.push)
+        res.on("data", data => body.push(data))
         res.on("end", () => resolve({res, body: Buffer.concat(body)}))
       }
 

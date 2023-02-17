@@ -1,4 +1,4 @@
-import * as Cookies from "cookies"
+import {default as Cookies} from "cookies"
 import {Socket} from "net"
 import {TLSSocket} from "tls"
 
