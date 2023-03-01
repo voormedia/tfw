@@ -1,1 +1,1 @@
-export * from "./dist/task"
+export * from "./lib/task"

@@ -1,1 +1,1 @@
-export * from "./dist/decorate"
+export * from "./lib/decorate"

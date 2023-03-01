@@ -1,1 +1,1 @@
-export * from "./dist/middleware"
+export * from "./lib/middleware"
