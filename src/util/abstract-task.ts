@@ -3,7 +3,9 @@ import {inspect} from "util"
 import hostPkg from "./host-pkg"
 import Logger from "./logger"
 
-const description = `${hostPkg.name} service ${process.env.HOSTNAME || ""}`.trim()
+const description = `${hostPkg.name} service ${
+  process.env.HOSTNAME || ""
+}`.trim()
 
 export abstract class AbstractTask {
   description: string = description
@@ -36,11 +38,14 @@ export abstract class AbstractTask {
         process.exit(1)
       })
 
-      proc.on("unhandledRejection", async (err: Error, promise: Promise<any>) => {
-        this.logger.critical(`unhandled ${err.stack || err.toString()}`)
-        await this.kill()
-        process.exit(2)
-      })
+      proc.on(
+        "unhandledRejection",
+        async (err: Error, promise: Promise<any>) => {
+          this.logger.critical(`unhandled ${err.stack || err.toString()}`)
+          await this.kill()
+          process.exit(2)
+        },
+      )
     }
 
     this.logger.notice(`starting ${this.description}`)

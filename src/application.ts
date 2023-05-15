@@ -12,11 +12,11 @@ import dispatch from "./decorate/dispatch"
 import {log, rescue, route, shutdown, Stack, write} from "./middleware"
 
 export interface ApplicationOptions {
-  port?: number,
-  logger?: Logger,
-  router?: Router,
-  terminationGrace?: number,
-  before?(app: Application): void,
+  port?: number
+  logger?: Logger
+  router?: Router
+  terminationGrace?: number
+  before?(app: Application): void
 }
 
 export class Application extends AbstractTask {
@@ -24,7 +24,9 @@ export class Application extends AbstractTask {
   static start(options: ApplicationOptions = {}) {
     const app = new this(options)
     process.nextTick(() => {
-      app.start().catch(err => {throw err})
+      app.start().catch(err => {
+        throw err
+      })
     })
     return app
   }
@@ -40,10 +42,10 @@ export class Application extends AbstractTask {
 
     const {
       port = 3000,
-      router = new Router,
-      logger = new Logger,
+      router = new Router(),
+      logger = new Logger(),
       terminationGrace = 25,
-      before = () => {},
+      before = () => undefined,
     } = options
 
     this.port = port

@@ -16,6 +16,7 @@ export default function parseAuthorization(): Middleware {
 
             /* https://tools.ietf.org/html/rfc7617#section-2.1:
                 "The user-id and password MUST NOT contain any control characters" */
+            // eslint-disable-next-line no-control-regex
             if (decoded.search(/[\x00-\x1F]/) >= 0) {
               throw new InvalidAuthorization()
             }

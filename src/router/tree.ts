@@ -1,4 +1,4 @@
-import Node, { NodeType } from "./node"
+import Node, {NodeType} from "./node"
 import Route, {RouteError} from "./route"
 
 export interface NodeMatch {
@@ -8,7 +8,7 @@ export interface NodeMatch {
 }
 
 export default class Tree {
-  private readonly root: Node = new Node
+  private readonly root: Node = new Node()
 
   constructor() {
     Object.freeze(this)
@@ -45,7 +45,11 @@ export default class Tree {
     for (const part of route.parts) {
       node = node.insert(part.clone())
       if (node.name !== part.name) {
-        throw new RouteError(method, route, `redefines existing parameter {${node.name}} as {${part.name}}`)
+        throw new RouteError(
+          method,
+          route,
+          `redefines existing parameter {${node.name}} as {${part.name}}`,
+        )
       }
     }
 

@@ -6,23 +6,25 @@ import AbstractTask from "./util/abstract-task"
 import Logger from "./util/logger"
 
 export interface TaskOptions {
-  logger?: Logger,
+  logger?: Logger
 }
 
 export class Task extends AbstractTask {
   /* Start a new task with the given options in next tick. */
   static start(options: TaskOptions = {}) {
     const task = new this(options)
-    process.nextTick(() => {task.start().catch(err => {throw err})})
+    process.nextTick(() => {
+      task.start().catch(err => {
+        throw err
+      })
+    })
     return task
   }
 
   constructor(options: TaskOptions = {}) {
     super()
 
-    const {
-      logger = new Logger,
-    } = options
+    const {logger = new Logger()} = options
 
     this.logger = logger
 
@@ -42,6 +44,7 @@ export class Task extends AbstractTask {
 
   /* tslint:disable-next-line: prefer-function-over-method */
   async run(): Promise<void> {
+    return undefined
   }
 
   /* tslint:disable-next-line: prefer-function-over-method */

@@ -5,11 +5,11 @@ import {Context, Middleware, Next} from "../middleware"
 import {HttpRequest, LogContext, Logger} from "../util/logger"
 
 type StatsSocket = Socket & {
-  bytesReadPreviously?: number;
-  bytesWrittenPreviously?: number;
+  bytesReadPreviously?: number
+  bytesWrittenPreviously?: number
 }
 
-const statusCodes: Map<number, string> = new Map
+const statusCodes: Map<number, string> = new Map()
 for (const [code, description] of Object.entries(STATUS_CODES)) {
   statusCodes.set(parseInt(code, 10), description!.toLowerCase())
 }
@@ -73,7 +73,10 @@ export default function log(logger: Logger): Middleware {
         } else {
           /* This was an internal error, not supposed to be exposed. Log the
              entire stack trace so we can debug later. */
-          logger.error(this.data.error.stack || this.data.error.toString(), logContext)
+          logger.error(
+            this.data.error.stack || this.data.error.toString(),
+            logContext,
+          )
         }
       } else {
         /* No error was thrown, or error was in 4xx range. */

@@ -2,7 +2,7 @@ import proxyHandler from "./util/proxy-handler"
 import routerify from "./util/routerify"
 
 export interface RouteOptions {
-  method: string,
+  method: string
 }
 
 export interface ProxyOptions {
@@ -32,13 +32,27 @@ export function mount(pattern: string, controller: any) {
   }
 }
 
-const DEFAULT_METHODS = ["get", "post", "put", "patch", "delete", "head", "options"]
+const DEFAULT_METHODS = [
+  "get",
+  "post",
+  "put",
+  "patch",
+  "delete",
+  "head",
+  "options",
+]
 
-export function proxy(pattern: string, target: string, {methods = DEFAULT_METHODS, prepend = true}: ProxyOptions = {}) {
+export function proxy(
+  pattern: string,
+  target: string,
+  {methods = DEFAULT_METHODS, prepend = true}: ProxyOptions = {},
+) {
   return (object: any) => {
     const handler = proxyHandler(target, {prepend})
     for (const method of methods) {
-      routerify(object.prototype).define(method, pattern, handler, {prefix: true})
+      routerify(object.prototype).define(method, pattern, handler, {
+        prefix: true,
+      })
     }
   }
 }

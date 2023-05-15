@@ -1,4 +1,9 @@
-import {createValidator, simplifyResults, ValidationResult, Validator} from "../util/schema-validator"
+import {
+  createValidator,
+  simplifyResults,
+  ValidationResult,
+  Validator,
+} from "../util/schema-validator"
 
 import {BadRequest} from "../errors"
 import {Body, Context, Middleware, Next} from "../middleware"
@@ -6,10 +11,10 @@ import {Body, Context, Middleware, Next} from "../middleware"
 export {ValidationResult}
 
 export interface ValidationOptions {
-  schema: object,
-  optional?: boolean,
-  details?: boolean,
-  message?: string,
+  schema: object
+  optional?: boolean
+  details?: boolean
+  message?: string
 }
 
 export default function validateBody(options: ValidationOptions): Middleware {
@@ -21,11 +26,11 @@ export default function validateBody(options: ValidationOptions): Middleware {
   }
 }
 
-function validate(validator: Validator, body: Body, {
-  optional = false,
-  details = true,
-  message,
-}: ValidationOptions) {
+function validate(
+  validator: Validator,
+  body: Body,
+  {optional = false, details = true, message}: ValidationOptions,
+) {
   /* Don't validate non-JSON bodies if the request schema is optional. */
   /* tslint:disable-next-line: strict-type-predicates */
   if (body === undefined || Buffer.isBuffer(body)) {
@@ -46,7 +51,11 @@ export class ValidationError extends BadRequest {
   details: ValidationResult[]
 
   constructor(details: ValidationResult[]) {
-    super(`${BadRequest.defaultMessage.replace(/\.$/, ":")} ${simplifyResults(details).join("; ")}`)
+    super(
+      `${BadRequest.defaultMessage.replace(/\.$/, ":")} ${simplifyResults(
+        details,
+      ).join("; ")}`,
+    )
     this.details = details
   }
 

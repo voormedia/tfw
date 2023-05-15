@@ -1,19 +1,21 @@
 import {Context, Middleware, Next} from "../middleware"
 
 export interface AllowCorsOptions {
-  origins?: string[],
-  methods?: string[],
-  requestHeaders?: string[],
-  responseHeaders?: string[],
-  allowCredentials?: boolean,
-  maxAge?: number,
+  origins?: string[]
+  methods?: string[]
+  requestHeaders?: string[]
+  responseHeaders?: string[]
+  allowCredentials?: boolean
+  maxAge?: number
 }
 
 export default function allowCors(options: AllowCorsOptions = {}): Middleware {
   const allowAll = !options.origins
   const allowedOrigins = new Set(options.origins)
 
-  const allowedMethodList = (options.methods || ["GET", "POST", "PUT", "PATCH", "DELETE"]).join(", ")
+  const allowedMethodList = (
+    options.methods || ["GET", "POST", "PUT", "PATCH", "DELETE"]
+  ).join(", ")
   const requestHeaderList = (options.requestHeaders || []).join(", ")
   const responseHeaderList = (options.responseHeaders || []).join(", ")
   const allowCredentials = options.allowCredentials
@@ -41,12 +43,17 @@ export default function allowCors(options: AllowCorsOptions = {}): Middleware {
       }
 
       this.set("Access-Control-Allow-Methods", allowedMethodList)
-      if (requestHeaderList) this.set("Access-Control-Allow-Headers", requestHeaderList)
-      if (responseHeaderList) this.set("Access-Control-Expose-Headers", responseHeaderList)
+      if (requestHeaderList)
+        this.set("Access-Control-Allow-Headers", requestHeaderList)
+      if (responseHeaderList)
+        this.set("Access-Control-Expose-Headers", responseHeaderList)
       if (allowCredentials) this.set("Access-Control-Allow-Credentials", "true")
       if (maxAge) this.set("Access-Control-Max-Age", maxAge)
 
-      if (this.method === "OPTIONS" && this.get("access-control-request-method")) {
+      if (
+        this.method === "OPTIONS" &&
+        this.get("access-control-request-method")
+      ) {
         /* Return early if this is a preflight request. */
         this.status = 200
         return Promise.resolve()

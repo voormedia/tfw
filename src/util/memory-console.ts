@@ -6,8 +6,8 @@ export class MemoryConsole extends Console {
   stderr: BufferStream
 
   constructor() {
-    const stdout = new BufferStream
-    const stderr = new BufferStream
+    const stdout = new BufferStream()
+    const stderr = new BufferStream()
     super(stdout, stderr)
 
     this.stdout = stdout

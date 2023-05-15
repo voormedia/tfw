@@ -9,7 +9,9 @@ export default function dispatch(initialStack: Stack) {
     const handler = compose(stack, new Context(stack, request, response))
 
     Promise.resolve(handler()).catch(err => {
-      process.nextTick(() => {throw err})
+      process.nextTick(() => {
+        throw err
+      })
     })
   }
 }

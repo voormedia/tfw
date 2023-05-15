@@ -7,7 +7,10 @@ export interface ProxyOptions {
   prepend: boolean
 }
 
-export default function proxy(target: string, {prepend}: ProxyOptions): Middleware {
+export default function proxy(
+  target: string,
+  {prepend}: ProxyOptions,
+): Middleware {
   const base = target.replace(/\/?$/, "/")
 
   return async function proxy(this: Context) {

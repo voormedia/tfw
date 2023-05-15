@@ -5,7 +5,7 @@ import {ServiceUnavailable} from "../errors"
 import {ClosableServer} from "../app/closable-server"
 import {Context, Middleware, Next} from "../middleware"
 
-export default function shutdown(grace: number = 25): Middleware {
+export default function shutdown(grace = 25): Middleware {
   return async function shutdown(this: Context, next: Next) {
     /* Cancel request if server is stopping, but only after a grace period.
        This allows a request to be handled if there is enough time. */
@@ -18,7 +18,7 @@ export default function shutdown(grace: number = 25): Middleware {
         throw new ServiceUnavailable("Please retry the request")
       }
 
-      return new Promise<void>(() => {})
+      return new Promise<void>(() => undefined)
     }
 
     try {

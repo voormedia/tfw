@@ -15,7 +15,9 @@
   ],
   "scripts": {
     "test": "tsc",
-    "build": "rm -rf lib && tsc --project tsconfig.build.json"
+    "build": "rm -rf lib && tsc --project tsconfig.build.json",
+    "format": "eslint --fix --ignore-pattern '*.d.ts' '**/*.ts'",
+    "lint": "eslint --ignore-pattern '*.d.ts' '**/*.ts'"
   },
   "dependencies": {
     "ajv": "^8.6",
@@ -28,6 +30,8 @@
     "@types/cookies": "^0.7.7",
     "@types/mocha": "^9.0",
     "@types/node": "^16.11",
+    "@typescript-eslint/eslint-plugin": "^5.59.5",
+    "@typescript-eslint/parser": "^5.59.5",
     "app-module-path": "^2.2.0",
     "babel-cli": "^6.10.1",
     "babel-core": "^6.9.0",
@@ -41,8 +45,12 @@
     "babel-plugin-transform-strict-mode": "^6.9.0",
     "benchmark": "^2.1.0",
     "chai": "^4.1.0",
+    "eslint": "^8.40.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "mocha": "^9.0",
     "nyc": "^15.0",
+    "prettier": "^2.8.8",
     "source-map-support": "^0.5.11",
     "timekeeper": ">= 0",
     "ts-node": "^10.0",
@@ -53,7 +61,9 @@
     "spec": "test/unit/**/*.js",
     "use_strict": true,
     "loader": "ts-node/esm",
-    "require": ["test"],
+    "require": [
+      "test"
+    ],
     "recursive": true,
     "timeout": 4000,
     "exit": true,

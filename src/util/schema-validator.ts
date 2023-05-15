@@ -36,43 +36,46 @@ instance.addFormat(
       // User:pass BasicAuth (optional)
       "(?:\\S+(?::\\S*)?@)?" +
       "(?:" +
-        // IP address exclusion
-        // Private & local networks
-        "(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
-        "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
-        "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
-        // IP address dotted notation octets
-        // Excludes loopback network 0.0.0.0
-        // Excludes reserved space >= 224.0.0.0
-        // Excludes network & broadcast addresses
-        // (first & last IP address of each class)
-        "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
-        "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
-        "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
+      // IP address exclusion
+      // Private & local networks
+      "(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
+      "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
+      "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
+      // IP address dotted notation octets
+      // Excludes loopback network 0.0.0.0
+      // Excludes reserved space >= 224.0.0.0
+      // Excludes network & broadcast addresses
+      // (first & last IP address of each class)
+      "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
+      "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
+      "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
       "|" +
-        // Host & domain names, may end with dot
-        // Can be replaced by a shortest alternative
-        // (?![-_])(?:[-\\w\\u00a1-\\uffff]{0,63}[^-_]\\.)+
-        "(?:" +
-          "(?:" +
-            "[a-z0-9\\u00a1-\\uffff]" +
-            "[a-z0-9\\u00a1-\\uffff_-]{0,62}" +
-          ")?" +
-          "[a-z0-9\\u00a1-\\uffff]\\." +
-        ")+" +
-        // TLD identifier name, may end with dot
-        "(?:[a-z\\u00a1-\\uffff]{2,}\\.?)" +
+      // Host & domain names, may end with dot
+      // Can be replaced by a shortest alternative
+      // (?![-_])(?:[-\\w\\u00a1-\\uffff]{0,63}[^-_]\\.)+
+      "(?:" +
+      "(?:" +
+      "[a-z0-9\\u00a1-\\uffff]" +
+      "[a-z0-9\\u00a1-\\uffff_-]{0,62}" +
+      ")?" +
+      "[a-z0-9\\u00a1-\\uffff]\\." +
+      ")+" +
+      // TLD identifier name, may end with dot
+      "(?:[a-z\\u00a1-\\uffff]{2,}\\.?)" +
       ")" +
       // Port number (optional)
       "(?::\\d{2,5})?" +
       // Resource path (optional)
       "(?:[/?#]\\S*)?" +
-    "$",
+      "$",
     "i",
   ),
 )
 
-export function createValidator(schema: object, {maxErrors = 50}: {maxErrors?: number} = {}): Validator {
+export function createValidator(
+  schema: object,
+  {maxErrors = 50}: {maxErrors?: number} = {},
+): Validator {
   const validate = instance.compile(schema)
 
   return body => {
@@ -89,7 +92,7 @@ export function createValidator(schema: object, {maxErrors = 50}: {maxErrors?: n
       switch (error.keyword) {
         case "type": {
           let expected = error.params.type
-          if (expected as any instanceof Array) expected = expected[0]
+          if ((expected as any) instanceof Array) expected = expected[0]
           results.push({path, error: "invalid_type", expected})
           break
         }
@@ -108,13 +111,19 @@ export function createValidator(schema: object, {maxErrors = 50}: {maxErrors?: n
 
         case "additionalProperties": {
           const unknown = error.params.additionalProperty
-          results.push({path: path ? `${path}.${unknown}` : unknown, error: "unknown_field"})
+          results.push({
+            path: path ? `${path}.${unknown}` : unknown,
+            error: "unknown_field",
+          })
           break
         }
 
         case "required": {
           const required = error.params.missingProperty
-          results.push({path: path ? `${path}.${required}` : required, error: "required_field"})
+          results.push({
+            path: path ? `${path}.${required}` : required,
+            error: "required_field",
+          })
           break
         }
 
@@ -123,25 +132,37 @@ export function createValidator(schema: object, {maxErrors = 50}: {maxErrors?: n
         case "maximum":
         case "exclusiveMaximum": {
           const {limit, comparison} = error.params
-          const expected: RangeExpecation<string | number> = {operator: comparison as Operator, limit}
+          const expected: RangeExpecation<string | number> = {
+            operator: comparison as Operator,
+            limit,
+          }
           results.push({path, error: "invalid_range", expected})
           break
         }
 
         case "minLength": {
           const limit = error.params.limit
-          results.push({path, error: "invalid_length", expected: {operator: ">=", limit}})
+          results.push({
+            path,
+            error: "invalid_length",
+            expected: {operator: ">=", limit},
+          })
           break
         }
 
         case "maxLength": {
           const limit = error.params.limit
-          results.push({path, error: "invalid_length", expected: {operator: "<=", limit}})
+          results.push({
+            path,
+            error: "invalid_length",
+            expected: {operator: "<=", limit},
+          })
           break
         }
 
         /* Ignore spurious errors regarding failing if/then/else. */
-        case "if": break
+        case "if":
+          break
 
         default: {
           results.push({path, error: "other_failure"})
@@ -158,22 +179,25 @@ export function createSimpleValidator(schema: object): SimpleValidator {
   return body => simplifyResults(validate(body))
 }
 
-const fmtProp = (prop: string) =>
-  `'${prop}'`
+const fmtProp = (prop: string) => `'${prop}'`
 
-const fmtPath = (path: string) =>
-  path ? path.slice(1) : undefined
+const fmtPath = (path: string) => (path ? path.slice(1) : undefined)
 
 const fmtPlural = (word: string, count: number) =>
   `${word}${count > 1 ? "s" : ""}`
 
 const fmtOperator = (input: string) => {
   switch (input) {
-    case ">=": return "at least"
-    case "<=": return "at most"
-    case ">": return "more than"
-    case "<": return "less than"
-    default: return ""
+    case ">=":
+      return "at least"
+    case "<=":
+      return "at most"
+    case ">":
+      return "more than"
+    case "<":
+      return "less than"
+    default:
+      return ""
   }
 }
 
@@ -190,7 +214,9 @@ export function simplifyResults(results: ValidationResult[]): string[] {
       case "unknown_field":
       case "required_field": {
         const [key, ...parts] = (result.path || "").split(".").reverse()
-        const parent = parts.length ? `'${parts.reverse().join(".")}'` : "request body"
+        const parent = parts.length
+          ? `'${parts.reverse().join(".")}'`
+          : "request body"
         const map = result.error === "unknown_field" ? unknowns : requireds
 
         if (map.has(parent)) {
@@ -206,24 +232,29 @@ export function simplifyResults(results: ValidationResult[]): string[] {
         simplified.unshift("too many errors, some have been omitted")
         break
 
-      default:
+      default: {
         const path = result.path ? `'${result.path}'` : "request body"
         simplified.push(`${path} ${messageForError(result)}`)
+      }
     }
   }
 
   for (const [path, keys] of requireds) {
-    simplified.push(`${path} requires key${keys.length > 1 ? "s" : ""} ${keys.join(", ")}`)
+    simplified.push(
+      `${path} requires key${keys.length > 1 ? "s" : ""} ${keys.join(", ")}`,
+    )
   }
 
   for (const [path, keys] of unknowns) {
-    simplified.push(`${path} has unknown key${keys.length > 1 ? "s" : ""} ${keys.join(", ")}`)
+    simplified.push(
+      `${path} has unknown key${keys.length > 1 ? "s" : ""} ${keys.join(", ")}`,
+    )
   }
 
   return simplified
 }
 
-function messageForError(result: ValidationResult, length: number = 1): string {
+function messageForError(result: ValidationResult, length = 1): string {
   switch (result.error) {
     case "unknown_field":
       return `requires ${fmtPlural("key", length)}`
@@ -232,15 +263,21 @@ function messageForError(result: ValidationResult, length: number = 1): string {
       return `has unknown ${fmtPlural("key", length)}`
 
     case "invalid_type": {
-      const a = ["a", "e", "i", "o", "u"].includes(result.expected[0]) ? "an" : "a"
+      const a = ["a", "e", "i", "o", "u"].includes(result.expected[0])
+        ? "an"
+        : "a"
       return `should be ${a} ${result.expected}`
     }
 
     case "invalid_format": {
       let format = result.expected
       switch (format) {
-        case "email": format = "email address"; break
-        case "rfc2822-datetime": format = "rfc 2822 date-time"; break
+        case "email":
+          format = "email address"
+          break
+        case "rfc2822-datetime":
+          format = "rfc 2822 date-time"
+          break
         default:
       }
 
@@ -254,7 +291,10 @@ function messageForError(result: ValidationResult, length: number = 1): string {
 
     case "invalid_length": {
       const {operator, limit} = result.expected
-      return `should be ${fmtOperator(operator)} ${limit} ${fmtPlural("character", limit)}`
+      return `should be ${fmtOperator(operator)} ${limit} ${fmtPlural(
+        "character",
+        limit,
+      )}`
     }
 
     case "duplicate_value":
@@ -265,7 +305,9 @@ function messageForError(result: ValidationResult, length: number = 1): string {
 
     case "invalid_option": {
       const expected = result.expected
-      return `should be ${expected.length > 1 ? "one of " : ""}${expected.map(fmtProp).join(", ")}`
+      return `should be ${expected.length > 1 ? "one of " : ""}${expected
+        .map(fmtProp)
+        .join(", ")}`
     }
 
     default:
@@ -349,17 +391,16 @@ interface RangeExpecation<T> {
   limit: T
 }
 
-export type ValidationResult = (
-  TooManyErrors |
-  UnknownField |
-  RequiredField |
-  InvalidType |
-  InvalidFormat |
-  InvalidRange |
-  InvalidLength |
-  InvalidOption |
-  InvalidValue |
-  DuplicateValue |
-  BlockedValue |
-  OtherFailure
-)
+export type ValidationResult =
+  | TooManyErrors
+  | UnknownField
+  | RequiredField
+  | InvalidType
+  | InvalidFormat
+  | InvalidRange
+  | InvalidLength
+  | InvalidOption
+  | InvalidValue
+  | DuplicateValue
+  | BlockedValue
+  | OtherFailure

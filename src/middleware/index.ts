@@ -4,13 +4,7 @@ import route from "./route"
 import shutdown from "./shutdown"
 import write from "./write"
 
-export {
-  log,
-  route,
-  shutdown,
-  rescue,
-  write,
-}
+export {log, route, shutdown, rescue, write}
 
 import allowCors from "./allow-cors"
 import bufferBody from "./buffer-body"

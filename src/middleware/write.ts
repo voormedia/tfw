@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import {ServerResponse} from "http"
 import {Stream} from "stream"
 

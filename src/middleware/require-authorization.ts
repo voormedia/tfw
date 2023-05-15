@@ -3,9 +3,14 @@ import {Context, Middleware, Next} from "../middleware"
 
 import {Unauthorized} from "../errors"
 
-export interface Credentials {[username: string]: string}
+export interface Credentials {
+  [username: string]: string
+}
 
-export default function requireAuthorization(realm: string, credentials: Credentials): Middleware {
+export default function requireAuthorization(
+  realm: string,
+  credentials: Credentials,
+): Middleware {
   return async function requireAuthorization(this: Context, next: Next) {
     const {username, password} = this.data
     if (username) {
@@ -16,11 +21,15 @@ export default function requireAuthorization(realm: string, credentials: Credent
     }
 
     this.set("WWW-Authenticate", `Basic realm="${realm}"`)
-    throw new Unauthorized
+    throw new Unauthorized()
   }
 }
 
 function safeEqual(a: string | undefined, b: string | undefined): boolean {
-  return a !== undefined && b !== undefined && a.length === b.length &&
+  return (
+    a !== undefined &&
+    b !== undefined &&
+    a.length === b.length &&
     timingSafeEqual(Buffer.from(a), Buffer.from(b))
+  )
 }

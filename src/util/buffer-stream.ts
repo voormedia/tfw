@@ -4,7 +4,11 @@ import {inspect} from "util"
 export class BufferStream extends Writable {
   private readonly buffers: Buffer[] = []
 
-  _write(chunk: Buffer | string, encoding: string, callback: (err?: Error) => void) {
+  _write(
+    chunk: Buffer | string,
+    encoding: string,
+    callback: (err?: Error) => void,
+  ) {
     if (typeof chunk === "string") chunk = Buffer.from(chunk)
     this.buffers.push(chunk)
     callback()

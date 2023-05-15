@@ -7,7 +7,10 @@ export interface ErrorDefaults<T extends string> extends ErrorDetails<T> {
   status: number
 }
 
-export abstract class ServiceError<T extends string> extends Error implements ErrorDetails<T> {
+export abstract class ServiceError<T extends string>
+  extends Error
+  implements ErrorDetails<T>
+{
   static define<T extends string>(options: ErrorDefaults<T>) {
     return define(options)
   }

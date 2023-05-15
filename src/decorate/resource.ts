@@ -1,12 +1,14 @@
 import {route} from "./route"
 
 export interface ResourceOptions {
-  singular: boolean,
+  singular: boolean
 }
 
 type Decorator = (object: any) => void
 
-export function resource({singular}: ResourceOptions = {singular: false}): Decorator {
+export function resource(
+  {singular}: ResourceOptions = {singular: false},
+): Decorator {
   const single = [
     ["show", "GET", "/"],
     ["create", "POST", "/"],

@@ -10,16 +10,18 @@ export default function exposeAllErrors(): Middleware {
       if (err instanceof Error) {
         /* Add specific JSON serialization to the error and make it exposable. */
         if (!(err as any).toJSON) {
-          (err as any).toJSON = toJSON
+          ;(err as any).toJSON = toJSON
         }
 
-        (err as any).expose = true
+        ;(err as any).expose = true
 
         throw err
       }
 
       /* Wrap anything that's not an Error but that pretends to be one. */
-      throw new InternalServerError((err as any).message || (err as any).Message || err)
+      throw new InternalServerError(
+        (err as any).message || (err as any).Message || err,
+      )
     }
   }
 }

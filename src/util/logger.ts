@@ -3,34 +3,33 @@ import hostPkg from "./host-pkg"
 import MemoryConsole from "./memory-console"
 
 export interface HttpRequest {
-  requestMethod: string,
-  requestUrl: string,
-  requestSize: number,
-  status: number,
-  responseSize: number,
-  userAgent?: string,
-  remoteIp?: string,
-  referer?: string,
-  latency?: string,
-  cacheHit?: boolean,
-  cacheValidatedWithOriginServer?: boolean,
+  requestMethod: string
+  requestUrl: string
+  requestSize: number
+  status: number
+  responseSize: number
+  userAgent?: string
+  remoteIp?: string
+  referer?: string
+  latency?: string
+  cacheHit?: boolean
+  cacheValidatedWithOriginServer?: boolean
 }
 
 export interface ServiceContext {
-  service: string,
-  version?: string,
+  service: string
+  version?: string
 }
 
-export type LogSeverity = (
-  "DEBUG" |
-  "INFO" |
-  "NOTICE" |
-  "WARNING" |
-  "ERROR" |
-  "CRITICAL" |
-  "ALERT" |
-  "EMERGENCY"
-)
+export type LogSeverity =
+  | "DEBUG"
+  | "INFO"
+  | "NOTICE"
+  | "WARNING"
+  | "ERROR"
+  | "CRITICAL"
+  | "ALERT"
+  | "EMERGENCY"
 
 export type Message = object | string | undefined
 
@@ -41,26 +40,25 @@ export type Message = object | string | undefined
 /* Note, this also has the contents of jsonPayload, so it can contain
    arbitrary fields! */
 export interface LogEntry {
-  time: Date,
-  message: string,
-  severity: LogSeverity,
-  httpRequest?: HttpRequest,
-  serviceContext?: ServiceContext,
+  time: Date
+  message: string
+  severity: LogSeverity
+  httpRequest?: HttpRequest
+  serviceContext?: ServiceContext
 }
 
 export interface LogContext {
-  httpRequest?: HttpRequest,
+  httpRequest?: HttpRequest
   [other: string]: any
 }
 
 export class Logger {
-
   static get formatter(): (entry: LogEntry) => string {
     return process.env.NODE_ENV === "development" ? Logger.PRETTY : Logger.JSON
   }
 
   static get console(): Console {
-    return process.env.NODE_ENV === "test" ? new MemoryConsole : console
+    return process.env.NODE_ENV === "test" ? new MemoryConsole() : console
   }
 
   static get service(): ServiceContext {
@@ -107,8 +105,11 @@ export class Logger {
 
     let http = ""
     if (entry.httpRequest) {
-      const {remoteIp, requestMethod, requestUrl, status, responseSize} = entry.httpRequest
-      http = `${remoteIp || "unknown"} - ${requestMethod.toUpperCase()} ${requestUrl} ${status} ${responseSize} - `
+      const {remoteIp, requestMethod, requestUrl, status, responseSize} =
+        entry.httpRequest
+      http = `${
+        remoteIp || "unknown"
+      } - ${requestMethod.toUpperCase()} ${requestUrl} ${status} ${responseSize} - `
     }
 
     return `${time} ${styles[entry.severity]}${http}${entry.message}${reset}`
@@ -118,9 +119,11 @@ export class Logger {
   private readonly formatter: (entry: LogEntry) => string
   private readonly service: ServiceContext
 
-  constructor(console: Console = Logger.console,
-              formatter: (entry: LogEntry) => string = Logger.formatter,
-              service: ServiceContext = Logger.service) {
+  constructor(
+    console: Console = Logger.console,
+    formatter: (entry: LogEntry) => string = Logger.formatter,
+    service: ServiceContext = Logger.service,
+  ) {
     this.console = console
     this.formatter = formatter
     this.service = service
@@ -130,8 +133,9 @@ export class Logger {
 
   write(severity: LogSeverity, message: Message, context: LogContext) {
     const entry: LogEntry = {
-      time: new Date,
-      message: typeof message === "object" ? JSON.stringify(message) : String(message),
+      time: new Date(),
+      message:
+        typeof message === "object" ? JSON.stringify(message) : String(message),
       serviceContext: this.service,
       severity,
     }

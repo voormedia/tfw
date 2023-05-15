@@ -8,13 +8,13 @@ export default class Node {
   name: string
   pattern: RegExp | undefined = undefined
 
-  children: Map<string, Node> = new Map
-  patterns: Map<string, Node> = new Map
-  handlers: Map<string, object> = new Map
+  children: Map<string, Node> = new Map()
+  patterns: Map<string, Node> = new Map()
+  handlers: Map<string, object> = new Map()
 
   type = NodeType.BRANCH
 
-  constructor(name: string = "", pattern?: RegExp) {
+  constructor(name = "", pattern?: RegExp) {
     this.name = name
     this.pattern = pattern
 

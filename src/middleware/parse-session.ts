@@ -5,9 +5,9 @@ import {TLSSocket} from "tls"
 import {Context, Middleware, Next} from "../middleware"
 
 export interface SessionOptions {
-  keys?: Array<string | undefined>,
-  maxAge?: number,
-  name?: string,
+  keys?: Array<string | undefined>
+  maxAge?: number
+  name?: string
 }
 
 function decode(input: string): object {
@@ -24,7 +24,11 @@ const day = 24 * 60 * 60 * 1000
 
 const isDefined = <T>(item: T | undefined): item is T => item !== undefined
 
-export default function parseSession({name = "sess", keys: inputKeys = [], maxAge = day * 90}: SessionOptions = {}): Middleware {
+export default function parseSession({
+  name = "sess",
+  keys: inputKeys = [],
+  maxAge = day * 90,
+}: SessionOptions = {}): Middleware {
   /* Allow 'undefined' keys to be passed so they can be read straight away from
      an environment variable. */
   const keys = inputKeys.filter(isDefined)
@@ -37,7 +41,9 @@ export default function parseSession({name = "sess", keys: inputKeys = [], maxAg
     let session: object | undefined
     let cookie: string | undefined
     const socket: TLSSocket | Socket = this.request.socket
-    const secure = (socket as TLSSocket).encrypted || this.request.headers["x-forwarded-proto"] === "https"
+    const secure =
+      (socket as TLSSocket).encrypted ||
+      this.request.headers["x-forwarded-proto"] === "https"
     const cookies = new Cookies(this.request, this.response, {keys, secure})
 
     Object.defineProperty(this.data, "session", {

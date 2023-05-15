@@ -27,7 +27,9 @@ export function use(...middlewares: Middleware[]): Decorator {
     attachRecursively(object.prototype, middlewares)
   }
 
-  Object.defineProperty(fn, "name", {value: middlewares.map(mw => mw.name).join("/")})
+  Object.defineProperty(fn, "name", {
+    value: middlewares.map(mw => mw.name).join("/"),
+  })
   return fn
 }
 

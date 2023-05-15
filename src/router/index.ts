@@ -15,13 +15,18 @@ export interface RouterMatch {
 }
 
 export default class Router {
-  private readonly tree: Tree = new Tree
+  private readonly tree: Tree = new Tree()
 
   constructor() {
     Object.freeze(this)
   }
 
-  define(method: string, pattern: string, handler: object, {prefix}: DefineOptions = {}) {
+  define(
+    method: string,
+    pattern: string,
+    handler: object,
+    {prefix}: DefineOptions = {},
+  ) {
     method = method.toUpperCase()
     const route = Route.parse(pattern)
     const type = prefix ? NodeType.PREFIX : NodeType.LEAF
@@ -72,12 +77,20 @@ export default class Router {
 
   [inspect.custom](): string {
     /* tslint:disable-next-line: no-unnecessary-callback-wrapper */
-    const routes = this.routes.map(([method, route]) => `${method} ${route.toString()}`)
+    const routes = this.routes.map(
+      ([method, route]) => `${method} ${route.toString()}`,
+    )
     return `[ ${routes.join(",\n  ")} ]`
   }
 }
 
-function define(node: Node, route: Route, method: string, handler: object, type: NodeType) {
+function define(
+  node: Node,
+  route: Route,
+  method: string,
+  handler: object,
+  type: NodeType,
+) {
   if (node.leaf && node.handlers.has(method)) {
     throw new RouteError(method, route, "already exists")
   }

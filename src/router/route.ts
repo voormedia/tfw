@@ -58,7 +58,7 @@ export default class Route {
 
 function parse(route: string) {
   const nodes: Node[] = []
-  const params = new Set
+  const params = new Set()
 
   for (const part of route.split("/")) {
     if (!part.length) continue
