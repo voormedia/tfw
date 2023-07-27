@@ -65,5 +65,5 @@ interface RangeExpecation<T> {
     operator: Operator;
     limit: T;
 }
-export type ValidationResult = (TooManyErrors | UnknownField | RequiredField | InvalidType | InvalidFormat | InvalidRange | InvalidLength | InvalidOption | InvalidValue | DuplicateValue | BlockedValue | OtherFailure);
+export type ValidationResult = TooManyErrors | UnknownField | RequiredField | InvalidType | InvalidFormat | InvalidRange | InvalidLength | InvalidOption | InvalidValue | DuplicateValue | BlockedValue | OtherFailure;
 export {};

@@ -4,4 +4,4 @@ export interface SessionOptions {
     maxAge?: number;
     name?: string;
 }
-export default function parseSession({ name, keys: inputKeys, maxAge }?: SessionOptions): Middleware;
+export default function parseSession({ name, keys: inputKeys, maxAge, }?: SessionOptions): Middleware;
