@@ -1,10 +1,12 @@
 /// <reference types="node" />
+/// <reference types="node" />
+/// <reference types="node" />
 import { IncomingMessage as Request, ServerResponse as Response } from "http";
 import { inspect } from "util";
 import { Stack } from "../middleware";
 export { Request, Response };
-export declare type Body = Buffer | object | string;
-declare type AsyncBody = Promise<Body>;
+export type Body = Buffer | object | string;
+type AsyncBody = Promise<Body>;
 export interface Data {
     [key: string]: any;
 }
