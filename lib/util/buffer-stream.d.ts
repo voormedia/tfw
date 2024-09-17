@@ -1,6 +1,4 @@
 /// <reference types="node" />
-/// <reference types="node" />
-/// <reference types="node" />
 import { Writable } from "stream";
 import { inspect } from "util";
 export declare class BufferStream extends Writable {

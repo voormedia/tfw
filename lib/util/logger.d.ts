@@ -15,8 +15,8 @@ export interface ServiceContext {
     service: string;
     version?: string;
 }
-export type LogSeverity = "DEBUG" | "INFO" | "NOTICE" | "WARNING" | "ERROR" | "CRITICAL" | "ALERT" | "EMERGENCY";
-export type Message = object | string | undefined;
+export declare type LogSeverity = "DEBUG" | "INFO" | "NOTICE" | "WARNING" | "ERROR" | "CRITICAL" | "ALERT" | "EMERGENCY";
+export declare type Message = object | string | undefined;
 export interface LogEntry {
     time: Date;
     message: string;

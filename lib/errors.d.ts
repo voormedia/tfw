@@ -17,7 +17,6 @@ export declare abstract class ServiceError<T extends string> extends Error imple
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -34,7 +33,7 @@ export declare abstract class ServiceError<T extends string> extends Error imple
     toString(): string;
 }
 export declare const BadRequest: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "invalid_request";
         message: string;
@@ -43,11 +42,10 @@ export declare const BadRequest: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -56,7 +54,6 @@ export declare const BadRequest: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -69,7 +66,7 @@ export declare const BadRequest: {
     stackTraceLimit: number;
 };
 export declare const Unauthorized: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "unauthorized";
         message: string;
@@ -78,11 +75,10 @@ export declare const Unauthorized: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -91,7 +87,6 @@ export declare const Unauthorized: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -104,7 +99,7 @@ export declare const Unauthorized: {
     stackTraceLimit: number;
 };
 export declare const PaymentRequired: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "payment_required";
         message: string;
@@ -113,11 +108,10 @@ export declare const PaymentRequired: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -126,7 +120,6 @@ export declare const PaymentRequired: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -139,7 +132,7 @@ export declare const PaymentRequired: {
     stackTraceLimit: number;
 };
 export declare const Forbidden: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "forbidden";
         message: string;
@@ -148,11 +141,10 @@ export declare const Forbidden: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -161,7 +153,6 @@ export declare const Forbidden: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -174,7 +165,7 @@ export declare const Forbidden: {
     stackTraceLimit: number;
 };
 export declare const NotFound: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "not_found";
         message: string;
@@ -183,11 +174,10 @@ export declare const NotFound: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -196,7 +186,6 @@ export declare const NotFound: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -209,7 +198,7 @@ export declare const NotFound: {
     stackTraceLimit: number;
 };
 export declare const MethodNotAllowed: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "method_not_allowed";
         message: string;
@@ -218,11 +207,10 @@ export declare const MethodNotAllowed: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -231,7 +219,6 @@ export declare const MethodNotAllowed: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -244,7 +231,7 @@ export declare const MethodNotAllowed: {
     stackTraceLimit: number;
 };
 export declare const NotAcceptable: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "not_acceptable";
         message: string;
@@ -253,11 +240,10 @@ export declare const NotAcceptable: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -266,7 +252,6 @@ export declare const NotAcceptable: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -279,7 +264,7 @@ export declare const NotAcceptable: {
     stackTraceLimit: number;
 };
 export declare const ProxyAuthenticationRequired: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "proxy_authentication_required";
         message: string;
@@ -288,11 +273,10 @@ export declare const ProxyAuthenticationRequired: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -301,7 +285,6 @@ export declare const ProxyAuthenticationRequired: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -314,7 +297,7 @@ export declare const ProxyAuthenticationRequired: {
     stackTraceLimit: number;
 };
 export declare const RequestTimeout: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "request_timeout";
         message: string;
@@ -323,11 +306,10 @@ export declare const RequestTimeout: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -336,7 +318,6 @@ export declare const RequestTimeout: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -349,7 +330,7 @@ export declare const RequestTimeout: {
     stackTraceLimit: number;
 };
 export declare const Conflict: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "conflict";
         message: string;
@@ -358,11 +339,10 @@ export declare const Conflict: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -371,7 +351,6 @@ export declare const Conflict: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -384,7 +363,7 @@ export declare const Conflict: {
     stackTraceLimit: number;
 };
 export declare const Gone: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "gone";
         message: string;
@@ -393,11 +372,10 @@ export declare const Gone: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -406,7 +384,6 @@ export declare const Gone: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -419,7 +396,7 @@ export declare const Gone: {
     stackTraceLimit: number;
 };
 export declare const LengthRequired: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "length_required";
         message: string;
@@ -428,11 +405,10 @@ export declare const LengthRequired: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -441,7 +417,6 @@ export declare const LengthRequired: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -454,7 +429,7 @@ export declare const LengthRequired: {
     stackTraceLimit: number;
 };
 export declare const PreconditionFailed: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "precondition_failed";
         message: string;
@@ -463,11 +438,10 @@ export declare const PreconditionFailed: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -476,7 +450,6 @@ export declare const PreconditionFailed: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -489,7 +462,7 @@ export declare const PreconditionFailed: {
     stackTraceLimit: number;
 };
 export declare const RequestEntityTooLarge: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "request_entity_too_large";
         message: string;
@@ -498,11 +471,10 @@ export declare const RequestEntityTooLarge: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -511,7 +483,6 @@ export declare const RequestEntityTooLarge: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -524,7 +495,7 @@ export declare const RequestEntityTooLarge: {
     stackTraceLimit: number;
 };
 export declare const RequestURITooLong: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "request_uri_too_long";
         message: string;
@@ -533,11 +504,10 @@ export declare const RequestURITooLong: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -546,7 +516,6 @@ export declare const RequestURITooLong: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -559,7 +528,7 @@ export declare const RequestURITooLong: {
     stackTraceLimit: number;
 };
 export declare const UnsupportedMediaType: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "unsupported_media_type";
         message: string;
@@ -568,11 +537,10 @@ export declare const UnsupportedMediaType: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -581,7 +549,6 @@ export declare const UnsupportedMediaType: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -594,7 +561,7 @@ export declare const UnsupportedMediaType: {
     stackTraceLimit: number;
 };
 export declare const RangeNotSatisfiable: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "range_not_satisfiable";
         message: string;
@@ -603,11 +570,10 @@ export declare const RangeNotSatisfiable: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -616,7 +582,6 @@ export declare const RangeNotSatisfiable: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -629,7 +594,7 @@ export declare const RangeNotSatisfiable: {
     stackTraceLimit: number;
 };
 export declare const ExpectationFailed: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "expectation_failed";
         message: string;
@@ -638,11 +603,10 @@ export declare const ExpectationFailed: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -651,7 +615,6 @@ export declare const ExpectationFailed: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -664,7 +627,7 @@ export declare const ExpectationFailed: {
     stackTraceLimit: number;
 };
 export declare const ImATeapot: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "im_a_teapot";
         message: string;
@@ -673,11 +636,10 @@ export declare const ImATeapot: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -686,7 +648,6 @@ export declare const ImATeapot: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -699,7 +660,7 @@ export declare const ImATeapot: {
     stackTraceLimit: number;
 };
 export declare const MisdirectedRequest: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "misdirected_request";
         message: string;
@@ -708,11 +669,10 @@ export declare const MisdirectedRequest: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -721,7 +681,6 @@ export declare const MisdirectedRequest: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -734,7 +693,7 @@ export declare const MisdirectedRequest: {
     stackTraceLimit: number;
 };
 export declare const UnprocessableEntity: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "unprocessable_entity";
         message: string;
@@ -743,11 +702,10 @@ export declare const UnprocessableEntity: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -756,7 +714,6 @@ export declare const UnprocessableEntity: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -769,7 +726,7 @@ export declare const UnprocessableEntity: {
     stackTraceLimit: number;
 };
 export declare const Locked: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "locked";
         message: string;
@@ -778,11 +735,10 @@ export declare const Locked: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -791,7 +747,6 @@ export declare const Locked: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -804,7 +759,7 @@ export declare const Locked: {
     stackTraceLimit: number;
 };
 export declare const FailedDependency: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "failed_dependency";
         message: string;
@@ -813,11 +768,10 @@ export declare const FailedDependency: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -826,7 +780,6 @@ export declare const FailedDependency: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -839,7 +792,7 @@ export declare const FailedDependency: {
     stackTraceLimit: number;
 };
 export declare const UpgradeRequired: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "upgrade_required";
         message: string;
@@ -848,11 +801,10 @@ export declare const UpgradeRequired: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -861,7 +813,6 @@ export declare const UpgradeRequired: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -874,7 +825,7 @@ export declare const UpgradeRequired: {
     stackTraceLimit: number;
 };
 export declare const PreconditionRequired: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "precondition_required";
         message: string;
@@ -883,11 +834,10 @@ export declare const PreconditionRequired: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -896,7 +846,6 @@ export declare const PreconditionRequired: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -909,7 +858,7 @@ export declare const PreconditionRequired: {
     stackTraceLimit: number;
 };
 export declare const TooManyRequests: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "too_many_requests";
         message: string;
@@ -918,11 +867,10 @@ export declare const TooManyRequests: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -931,7 +879,6 @@ export declare const TooManyRequests: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -944,7 +891,7 @@ export declare const TooManyRequests: {
     stackTraceLimit: number;
 };
 export declare const RequestHeaderFieldsTooLarge: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "request_header_fields_too_large";
         message: string;
@@ -953,11 +900,10 @@ export declare const RequestHeaderFieldsTooLarge: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -966,7 +912,6 @@ export declare const RequestHeaderFieldsTooLarge: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -979,7 +924,7 @@ export declare const RequestHeaderFieldsTooLarge: {
     stackTraceLimit: number;
 };
 export declare const UnavailableForLegalReasons: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "unavailable_for_legal_reasons";
         message: string;
@@ -988,11 +933,10 @@ export declare const UnavailableForLegalReasons: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -1001,7 +945,6 @@ export declare const UnavailableForLegalReasons: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -1014,7 +957,7 @@ export declare const UnavailableForLegalReasons: {
     stackTraceLimit: number;
 };
 export declare const InternalServerError: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "internal_error";
         message: string;
@@ -1023,11 +966,10 @@ export declare const InternalServerError: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -1036,7 +978,6 @@ export declare const InternalServerError: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -1049,7 +990,7 @@ export declare const InternalServerError: {
     stackTraceLimit: number;
 };
 export declare const NotImplemented: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "not_implemented";
         message: string;
@@ -1058,11 +999,10 @@ export declare const NotImplemented: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -1071,7 +1011,6 @@ export declare const NotImplemented: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -1084,7 +1023,7 @@ export declare const NotImplemented: {
     stackTraceLimit: number;
 };
 export declare const BadGateway: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "bad_gateway";
         message: string;
@@ -1093,11 +1032,10 @@ export declare const BadGateway: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -1106,7 +1044,6 @@ export declare const BadGateway: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -1119,7 +1056,7 @@ export declare const BadGateway: {
     stackTraceLimit: number;
 };
 export declare const ServiceUnavailable: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "service_unavailable";
         message: string;
@@ -1128,11 +1065,10 @@ export declare const ServiceUnavailable: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -1141,7 +1077,6 @@ export declare const ServiceUnavailable: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;
@@ -1154,7 +1089,7 @@ export declare const ServiceUnavailable: {
     stackTraceLimit: number;
 };
 export declare const GatewayTimeout: {
-    new (msg?: string): {
+    new (msg?: string | undefined): {
         status: number;
         error: "gateway_timeout";
         message: string;
@@ -1163,11 +1098,10 @@ export declare const GatewayTimeout: {
         toString(): string;
         name: string;
         stack?: string | undefined;
-        cause?: unknown;
     };
     defaultMessage: string;
     define<T extends string>(options: ErrorDefaults<T>): {
-        new (msg?: string): {
+        new (msg?: string | undefined): {
             status: number;
             error: T;
             message: string;
@@ -1176,7 +1110,6 @@ export declare const GatewayTimeout: {
             toString(): string;
             name: string;
             stack?: string | undefined;
-            cause?: unknown;
         };
         defaultMessage: string;
         define<T extends string>(options: ErrorDefaults<T>): any;

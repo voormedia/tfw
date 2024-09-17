@@ -81,7 +81,7 @@ describe("task", function() {
     })
 
     it("should log error", function() {
-      assert.include(this.entry.message, "uncaught Error\n    at")
+      assert.include(this.entry.message, "uncaught Error: \n    at")
     })
 
     it("should log with critical severity", function() {
@@ -118,7 +118,7 @@ describe("task", function() {
     })
 
     it("should log error", function() {
-      assert.include(this.entry.message, "unhandled Error\n    at")
+      assert.include(this.entry.message, "unhandled Error: \n    at")
     })
 
     it("should log with critical severity", function() {
