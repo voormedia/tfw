@@ -12,6 +12,7 @@ export {
   write,
 }
 
+import addHeaders from "./add-headers"
 import allowCors from "./allow-cors"
 import bufferBody from "./buffer-body"
 import connect from "./connect"
@@ -28,6 +29,7 @@ import validateBody from "./validate-body"
 import validateContentType from "./validate-content-type"
 
 export {
+  addHeaders,
   allowCors,
   bufferBody,
   connect,

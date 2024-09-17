@@ -1,5 +1,5 @@
-export type SimpleValidator = (body: object) => string[];
-export type Validator = (body: object) => ValidationResult[];
+export declare type SimpleValidator = (body: object) => string[];
+export declare type Validator = (body: object) => ValidationResult[];
 export declare function createValidator(schema: object, { maxErrors }?: {
     maxErrors?: number;
 }): Validator;
@@ -60,10 +60,10 @@ export interface OtherFailure extends Error {
     error: "other_failure";
     suggestion?: string;
 }
-type Operator = "==" | "<=" | ">=" | "<" | ">";
+declare type Operator = "==" | "<=" | ">=" | "<" | ">";
 interface RangeExpecation<T> {
     operator: Operator;
     limit: T;
 }
-export type ValidationResult = (TooManyErrors | UnknownField | RequiredField | InvalidType | InvalidFormat | InvalidRange | InvalidLength | InvalidOption | InvalidValue | DuplicateValue | BlockedValue | OtherFailure);
+export declare type ValidationResult = (TooManyErrors | UnknownField | RequiredField | InvalidType | InvalidFormat | InvalidRange | InvalidLength | InvalidOption | InvalidValue | DuplicateValue | BlockedValue | OtherFailure);
 export {};

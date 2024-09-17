@@ -6,6 +6,7 @@ export * from "./when"
 
 import {use} from "./use"
 
+import addHeadersMiddleware from "../middleware/add-headers"
 import allowCorsMiddleware, {AllowCorsOptions} from "../middleware/allow-cors"
 import bufferBodyMiddleware from "../middleware/buffer-body"
 import connectMiddleware, {ConnectMiddleware} from "../middleware/connect"
@@ -20,6 +21,10 @@ import requireHostMiddleware from "../middleware/require-host"
 import requireTLSMiddleware from "../middleware/require-tls"
 import validateBodyMiddleware, {ValidationOptions} from "../middleware/validate-body"
 import validateContentTypeMiddleware from "../middleware/validate-content-type"
+
+export function addHeaders(headers: Record<string, string | number> = {}) {
+  return use(addHeadersMiddleware(headers))
+}
 
 export function allowCors(options: AllowCorsOptions) {
   return use(allowCorsMiddleware(options))

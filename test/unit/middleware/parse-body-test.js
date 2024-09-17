@@ -217,7 +217,7 @@ describe("parse body", function() {
     })
 
     it("should render error", function() {
-      assert.equal(this.body.toString(), '{"error":"invalid_request","message":"Unexpected token f in JSON at position 1."}')
+      assert.equal(this.body.toString(), '{"error":"invalid_request","message":"Expected property name or \'}\' in JSON at position 1."}')
     })
 
     it("should return http bad request", function() {
